@@ -35,19 +35,16 @@ Research Campus.
     :width: 400px
     :align: center
 
-    A short 7.7 mile walk from main campus!
 
 .. figure:: images/tacc_building.png
     :width: 400px
     :align: center
 
-    One of two TACC buildings located at JJ Pickle.
 
 .. figure:: images/frontera_racks.png
     :width: 400px
     :align: center
 
-    A tall person standing among taller Frontera racks.
 
 
 **TACC at a Glance**
@@ -80,14 +77,12 @@ Research Campus.
     :width: 400px
     :align: center
 
-    Snapshot of a few of TACC's portal projects.
-
 
 **TACC Partnerships**
 
 * NSF: Leadership Class Computing Facility (LCCF)
-* NSF: Extreme Science and Engineering Discovery Environment (XSEDE)
-* UT Research Cyberinfrastructure (UTRC)
+* NSF: Advanced Cyberinfrastructure Coordination Ecosystem: Services & Support (ACCESS)
+* UT System Research Cyberinfrastructure (UTRC)
 * TX Lonestar Education and Research Network (LEARN)
 * Industry, `STAR Program <https://www.tacc.utexas.edu/partnerships/star/partners>`_
 * International, The International Collaboratory for Emerging Technologies
@@ -145,7 +140,8 @@ Without concrete examples, it can seem rather esoteric. The vignette below
 hopefully illustrate how a carefully designed framework can be employed to
 tackle a real-world problem.
 
-**Real-Time Quantitative MRI**
+Application in Biomedical Engineering: Real-Time Quantitative MRI
+_________________________________________________________________
 
 *Problem:* Quantitative analysis of MR images is typically performed after the
 patient has left the scanner. Corrupted or poor quality images can result in
@@ -187,13 +183,13 @@ Source: https://dx.doi.org/10.1109/JBHI.2017.2771299
    and try the exercise below.
 
 
-Engineering Complex Systems on ... Mars?
-----------------------------------------
+Application in Aerospace Engineering: Ingenuity Helicopter
+__________________________________________________________
 
 On April 19, 2021, the helicopter *Ingenuity* (part of NASA's Mars 2020 mission
 along with the rover *Perseverance*) completed the first ever "powered
-controlled extraterrestrial flight by an aircraft". As of January 2022, it has
-made \~18 flights recording pictures, sound, position, and other data during
+controlled extraterrestrial flight by an aircraft". As of January 2023, it has
+made \~38 flights recording pictures, sound, position, and other data during
 flight.
 
 .. figure:: images/ingenuity.png
@@ -203,8 +199,7 @@ flight.
     Source:  https://en.wikipedia.org/wiki/File:Anatomy_of_the_Mars_Helicopter.png
 
 How do *Perseverance* and *Ingenuity* communicate to carry out missions and
-return that sensor data? The source code for the helicopter / rover themselves are
-not public (as far as I can tell), but NASA JPL credited a
+return that sensor data? NASA JPL credited a
 `long list <https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/personalizing-your-profile#list-of-qualifying-repositories-for-mars-2020-helicopter-contributor-badge>`_
 of open source code repositories on GitHub that the helicopter project depends on.
 
@@ -238,33 +233,58 @@ Using your SSH client, please try to log in to the class server **before the
 next class period**:
 
 .. code-block:: console
-   :emphasize-lines: 1,2,3,24
+   :emphasize-lines: 1,2,3,45
 
-   [local]$ ssh username@isp02.tacc.utexas.edu
-   Password:
-   TACC_Token:
-   Last login: Fri Jan 14 09:34:04 2022 from cpe-24-27-53-74.austin.res.rr.com
+   [local]$ ssh username@login-coe332.tacc.utexas.edu
+   (username@login-coe332.tacc.utexas.edu) Password: 
+   (username@login-coe332.tacc.utexas.edu) TACC_Token: 
+   Welcome to Ubuntu 20.04.5 LTS (GNU/Linux 5.4.0-94-generic x86_64)
+   
+    * Documentation:  https://help.ubuntu.com
+    * Management:     https://landscape.canonical.com
+    * Support:        https://ubuntu.com/advantage
+   
+     System information as of Mon 09 Jan 2023 03:19:04 PM CST
+   
+     System load:  0.0                Processes:               217
+     Usage of /:   23.1% of 17.15GB   Users logged in:         0
+     Memory usage: 19%                IPv4 address for ens192: 129.114.4.186
+     Swap usage:   0%
+   
+    * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+      just raised the bar for easy, resilient and secure K8s cluster deployment.
+   
+      https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+   
+   11 updates can be applied immediately.
+   To see these additional updates run: apt list --upgradable
+   
+   
+   *** System restart required ***
    ------------------------------------------------------------------------------
    Welcome to the Texas Advanced Computing Center
       at The University of Texas at Austin
-
+   
    ** Unauthorized use/access is prohibited. **
-
+   
    If you log on to this computer system, you acknowledge your awareness
    of and concurrence with the UT Austin Acceptable Use Policy. The
    University will prosecute violators to the full extent of the law.
-
+   
    TACC Usage Policies:
    http://www.tacc.utexas.edu/user-services/usage-policies/
-
+   
    TACC Support:
    https://portal.tacc.utexas.edu/tacc-consulting
-
+   
    ------------------------------------------------------------------------------
-   Intel(R) Parallel Studio XE 2020 Update 1 for Linux*
-   Copyright (C) 2009-2020 Intel Corporation. All rights reserved.
+   Last login: Wed Jan  4 15:53:14 2023 from 146.6.176.58
    [remote]$ hostname -f
-   isp02.tacc.utexas.edu      # success!
+   login-coe332.tacc.utexas.edu
+
+
+
+
 
 .. note::
 
