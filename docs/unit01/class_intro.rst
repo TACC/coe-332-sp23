@@ -21,7 +21,7 @@ Class Introduction
 **Location:** ASE 1.112 A (in person)
 
 
-**Teaching Assistant:** TBD
+**Teaching Assistant:** Saamaja Naraharisetti
 
 
 **Important Links:**
@@ -297,15 +297,19 @@ and the instructor. They will be conducted in an electronic format for Spring
 employ.
 
  
-**Classroom Safety and COVID-19:**
+**Accessibility, Inclusivity, and Compliance:**
 
-To help preserve our in person learning environment, the university recommends
-the following.
+The university is committed to creating an accessible and inclusive learning
+environment consistent with university policy and federal and state law. Please
+let me know if you experience any barriers to learning so I can work with you to
+ensure you have equal opportunity to participate fully in this course. If you are
+a student with a disability, or think you may have a disability, and need
+accommodations please contact Disability and Access (D&A). Please refer to D&A’s
+website for contact and more information: http://diversity.utexas.edu/disability/.
+If you are already registered with D&A, please deliver your Accommodation Letter
+to me as early as possible in the semester so we can discuss your approved
+accommodations and needs in this course.
 
-* Adhere to university mask guidance.
-* Vaccinations are widely available, free and not billed to health insurance. The vaccine will help protect against the transmission of the virus to others and reduce serious symptoms in those who are vaccinated.
-* Proactive Community Testing remains an important part of the university’s efforts to protect our community. Tests are fast and free.
-* Visit https://protect.utexas.edu/ for more information.
 
 
 
@@ -324,3 +328,4 @@ Important links:
 * Canvas: https://utexas.instructure.com/courses/1354117
 * Class Repo: https://coe-332-sp23.readthedocs.io/
 * Slack: https://tacc-learn.slack.com/
+
