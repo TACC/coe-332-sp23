@@ -22,7 +22,12 @@ access the cloud resources via our SSH clients and TACC account credentials.
    To: {wallen, jstubbs, charlie} [at] tacc [dot] utexas [dot] edu
    From: you
    Subject: COE 332 TACC Account
-   Body: Please include your name, EID, TACC user name
+   Body: Please include your
+         (1) name
+         (2) EID
+         (3) TACC user name
+         (4) area of concentration [e.g. aerospace, biomedical, mechanical, etc]
+         (5) top 1-2 goals for this course
 
 
 About TACC
@@ -90,7 +95,7 @@ Research Campus.
 
 .. attention::
 
-   Did you already e-mail your TACC username to the course instructors?
+   Did you already e-mail your information to the course instructors?
 
 |
 |
