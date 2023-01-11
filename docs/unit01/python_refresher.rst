@@ -13,19 +13,19 @@ To be successful in this class, students should be able to:
 
 Topics covered in this module include:
 
-* Data types and variables (ints, floats, bools, strings, type(), print())
-* Arithmetic operations (+, -, \*, /, \*\*, %, //)
+* Data types and variables (integers, floats, booleans, strings, ``type()``, ``print()``)
+* Arithmetic operations (``+``, ``-``, ``*``, ``/``, ``**``, ``%``, ``//``)
 * Lists and dictionaries (creating, interpreting, appending)
-* Conditionals and control loops (comparison operators, if/elif/else, while, for, break, continue, pass)
+* Conditionals and control loops (comparison operators, ``if``/``elif``/``else``, ``while``, ``for``, ``break``, ``continue``, ``pass``)
 * Functions (defining, passing arguments, returning values)
-* File handling (open, with, read(), readline(), strip(), write())
-* Importing libraries (import, random, names, pip)
+* File handling (``open``, ``with``, ``read()``, ``readline()``, ``strip()``, ``write()``)
+* Importing libraries (``import``, ``random``, ``names``, ``pip``)
 
 
 Log in to the Class Server
 --------------------------
 
-To log in to ``isp02.tacc.utexas.edu``, follow the instructions for your operating
+To log in to ``login-coe332.tacc.utexas.edu``, follow the instructions for your operating
 system or ssh client below.
 
 .. note::
@@ -37,7 +37,7 @@ system or ssh client below.
 .. code-block:: console
 
    Open the application 'Terminal'
-   ssh username@isp02.tacc.utexas.edu
+   type: ssh username@login-coe332.tacc.utexas.edu
    (enter password)
    (enter token)
 
@@ -46,7 +46,7 @@ system or ssh client below.
 .. code-block:: console
 
    Open the application 'PuTTY'
-   enter Host Name: isp02.tacc.utexas.edu
+   enter Host Name: login-coe332.tacc.utexas.edu
    (click 'Open')
    (enter username)
    (enter password)
@@ -76,9 +76,9 @@ Start up the interactive Python interpreter:
 
 .. code-block:: console
 
-   [isp02]$ python3
-   Python 3.6.8 (default, Aug  7 2019, 17:28:10)
-   [GCC 4.8.5 20150623 (Red Hat 4.8.5-39)] on linux
+   [login-coe332]$ python3
+   Python 3.8.10 (default, Nov 14 2022, 12:59:47)
+   [GCC 9.4.0] on linux
    Type "help", "copyright", "credits" or "license" for more information.
    >>>
 
@@ -96,7 +96,7 @@ Assign some values to variables by doing the following:
 
    >>> my_int = 5
    >>> my_float = 5.0
-   >>> my_bool = True      # or False, notice capital letters
+   >>> my_bool = True      # or False, notice the first letter is capitalized
    >>> my_string = 'Hello, world!'
 
 In Python, you don't have to declare type. Python figures out the type
@@ -451,7 +451,7 @@ On the command line, use a text editor to start writing a Python script:
 
 .. code-block:: console
 
-   [isp02]$ vim function_test.py
+   [login-coe332]$ vim function_test.py
 
 
 Enter the following text into the script:
@@ -469,7 +469,7 @@ compiled - just run the raw script with the ``python3`` executable):
 
 .. code-block:: console
 
-   [isp02]$ python3 function_test.py
+   [login-coe332]$ python3 function_test.py
    Hello, world!
 
 
@@ -555,16 +555,15 @@ For example, to read a file do the following:
 
 .. code-block:: text
 
-   1080
+   A
 
-   10-point
+   A'asia
 
-   10th
+   A's
 
-   11-point
+   AATech
 
-   12-point
-
+   AATech's
 
 
 .. tip::
@@ -590,11 +589,11 @@ is the easiest way to solve this problem:
 
 .. code-block:: text
 
-   1080
-   10-point
-   10th
-   11-point
-   12-point
+   A
+   A'asia
+   A's
+   AATech
+   AATech's
 
 
 Read the whole file and store it as a list:
@@ -612,11 +611,11 @@ Read the whole file and store it as a list:
 
 .. code-block:: text
 
-   1080
-   10-point
-   10th
-   11-point
-   12-point
+   A
+   A'asia
+   A's
+   AATech
+   AATech's
 
 
 Write output to a new file on the file system; make sure you are attempting to
@@ -662,6 +661,7 @@ newline characters to your output:
 Now notice that the original line in the output file is gone - it has been
 overwritten. Be careful if you are using write (``w``) vs. append (``a``).
 
+
 Importing Libraries
 -------------------
 
@@ -679,7 +679,7 @@ has a method for generating random numbers called 'random'.
    for i in range(5):
        print(random.random())
 
-.. code-block:: bash
+.. code-block:: console
 
    0.47115888799541383
    0.5202615354150987
@@ -688,7 +688,7 @@ has a method for generating random numbers called 'random'.
    0.025668541754695906
 
 More information about using the ``random`` library can be found in the
-`Python docs <https://docs.python.org/3.6/library/random.html>`_
+`Python docs <https://docs.python.org/3.8/library/random.html>`_
 
 Some libraries that you might want to use are not included in the official
 Python distribution - called the *Python Standard Library*. Libraries written
@@ -699,9 +699,9 @@ For example, if you wanted to download the
 `names <https://pypi.org/project/names/>`_ library and use it in your Python
 code, you would do the following:
 
-.. code-block:: bash
+.. code-block:: console
 
-   [isp02]$ pip3 install --user names
+   [login-coe332]$ pip3 install --user names
    Collecting names
      Downloading https://files.pythonhosted.org/packages/44/4e/f9cb7ef2df0250f4ba3334fbdabaa94f9c88097089763d8e85ada8092f84/names-0.3.0.tar.gz (789kB)
        100% |████████████████████████████████| 798kB 1.1MB/s
@@ -723,7 +723,7 @@ in your own home directory.
        print(names.get_full_name())
 
 
-.. code-block:: bash
+.. code-block:: console
 
    Johnny Campbell
    Lawrence Webb
@@ -738,29 +738,26 @@ Exercises
 Test your understanding of the materials above by attempting the following
 exercises.
 
-* Create a list of ~10 different integers. Write a function (using modulus and
-  conditionals) to determine if each integer is even or odd. Print to screen
-  each digit followed by the word 'even' or 'odd' as appropriate.
+* Use the ``random`` module to generate a list of 10 different random integers
+  between 1 and 100. Write a function (using modulus and conditionals) to determine
+  if each integer is even or odd. Print to screen each integer followed by the word
+  'even' or 'odd' as appropriate.
 * Using nested for loops and if statements, write a program that iterates over
   every integer from 3 to 100 (inclusive) and prints out the number only if it
   is a prime number.
-* Create three lists containing 10 integers each. The first list should contain
-  all the integers sequentially from 1 to 10 (inclusive). The second list
-  should contain the squares of each element in the first list. The third list
-  should contain the cubes of each element in the first list. Print all three
-  lists side-by-side in three columns. E.g. the first row should contain 1, 1, 1
-  and the second row should contain 2, 4, 8.
 * Write a script to read in /usr/share/dict/words and print just the last 10
-  lines of the file. Write another script to only print words beginning with the
-  letters "pyt".
-
+  lines of the file, and print all words beginning with the letters "pyt".
+* Use the ``names`` module to generate a list of 10 different full names. Write
+  a function to determine the length of each name in number of characters. Print
+  to screen each name followed by the length of each name as an integer. Hint:
+  try passing a string into the ``len()`` function.
 
 
 
 Additional Resources
 --------------------
 
-* `The Python Standard Library <https://docs.python.org/3/library/>`_
+* `The Python Standard Library <https://docs.python.org/3.8/library/>`_
 * `PEP 8 Python Style Guide <https://www.python.org/dev/peps/pep-0008/>`_
 * `Python3 environment in a browser <https://www.katacoda.com/scenario-examples/courses/environment-usages/python>`_
 * `Jupyter Notebooks in a browser <https://jupyter.org/try>`_

@@ -203,7 +203,7 @@ The full Final Project description will be posted on the class webpage.
 
 The entire course will be computer based. The instructors will provide a remote
 server for students to work on. Students are expected to have access to a
-personal / lab computer with a web browser and a terminal (or SCP client).
+personal / lab computer with a web browser and a terminal (or SSH client).
 
 
 **Text:**
@@ -328,4 +328,3 @@ Important links:
 * Canvas: https://utexas.instructure.com/courses/1354117
 * Class Repo: https://coe-332-sp23.readthedocs.io/
 * Slack: https://tacc-learn.slack.com/
-

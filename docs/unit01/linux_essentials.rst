@@ -21,7 +21,7 @@ Topics covered in this module include:
 Log in to the Class Server
 --------------------------
 
-To log in to ``isp02.tacc.utexas.edu``, follow the instructions for your operating
+To log in to ``login-coe332.tacc.utexas.edu``, follow the instructions for your operating
 system or ssh client below.
 
 .. note::
@@ -33,7 +33,7 @@ system or ssh client below.
 .. code-block:: console
 
    Open the application 'Terminal'
-   ssh username@isp02.tacc.utexas.edu
+   type: ssh username@login-coe332.tacc.utexas.edu
    (enter password)
    (enter token)
 
@@ -42,7 +42,7 @@ system or ssh client below.
 .. code-block:: console
 
    Open the application 'PuTTY'
-   enter Host Name: isp02.tacc.utexas.edu
+   enter Host Name: login-coe332.tacc.utexas.edu
    (click 'Open')
    (enter username)
    (enter password)
@@ -312,22 +312,22 @@ the single dot ``.`` at the end of the copy command, which indicates that you
 want to cp the file to ``.``, this present location (your home directory).
 
 This ``words`` file is a standard file that can be found on most Linux operating
-systems. It contains 479,828 words, each word on its own line. To see the
-contents of a file, use the ``cat`` command to print it to screen:
+systems. This version contains 654,895 words, each word on its own line. To see
+the contents of a file, use the ``cat`` command to print it to screen:
 
 .. code-block:: console
 
    $ cat words
-   1080
-   10-point
-   10th
-   11-point
-   12-point
-   16-point
-   18-point
-   1st
-   2
-   20-point
+   A
+   A'asia
+   A's
+   AATech
+   AATech's
+   AAeE
+   AAeE's
+   AAgr
+   AAgr's
+   AAvTech
 
 
 This is a long file! Printing everything to screen is much too fast and not very
@@ -383,6 +383,7 @@ that match the pattern. For example:
 
    $ grep "banana" words
    banana
+   banana's
    bananaquit
    bananas
    cassabanana
@@ -405,17 +406,17 @@ a Linux file system, those are easy to determine using the following commands:
    $ whoami
    wallen
    $ hostname -f
-   isp02.tacc.utexas.edu
+   login-coe332.tacc.utexas.edu
 
 Given that information, a user would remotely login to this Linux machine using
 ssh in a Terminal:
 
 .. code-block:: console
 
-   [local]$ ssh wallen@isp02.tacc.utexas.edu
+   [local]$ ssh wallen@login-coe332.tacc.utexas.edu
    (enter password)
    (enter token)
-   [isp02]$
+   [login-coe332]$
 
 Windows users would typically use the program **PuTTY** (or another SSH client)
 to perform this operation. Logging out of a remote system is done using the
@@ -423,30 +424,30 @@ to perform this operation. Logging out of a remote system is done using the
 
 .. code-block:: console
 
-  [isp02]$ logout
+  [login-coe332]$ logout
   [local]$
 
 
-Copying files from your local computer to your home folder on ISP would require
-the ``scp`` command (Windows users use a client "WinSCP"):
+Copying files from your local computer to your home folder on the class server would
+require the ``scp`` command (Windows users use a client "WinSCP"):
 
 .. code-block:: console
 
-   [local]$ scp my_file wallen@isp02.tacc.utexas.edu:/home/wallen/
+   [local]$ scp my_file wallen@login-coe332.tacc.utexas.edu:/home/wallen/
    (enter password)
    (enter token)
 
 In this command, you specify the name of the file you want to transfer
 (``my_file``), the username (``wallen``), the hostname
-(``isp02.tacc.utexas.edu``), and the path you want to put the file
+(``login-coe332.tacc.utexas.edu``), and the path you want to put the file
 (``/home/wallen/``). Take careful notice of the separators including spaces,
 the ``@`` symbol, and the ``:``.
 
-Copy files from ISP to your local computer using the following:
+Copy files from the class server to your local computer using the following:
 
 .. code-block:: console
 
-   [local]$ scp wallen@isp02.tacc.utexas.edu:/home/wallen/my_file ./
+   [local]$ scp wallen@login-coe332.tacc.utexas.edu:/home/wallen/my_file ./
    (enter password)
    (enter token)
 
@@ -671,6 +672,5 @@ Additional Resources
 --------------------
 
 * `Practice Linux commands safely in a web-based emulator <https://bellard.org/jslinux/vm.html?url=alpine-x86.cfg&mem=192>`_
-* `This is a good summary of the important commands you need to know <https://linuxjourney.com/lesson/the-shell>`_
 * `Practice VIM in a web browser <http://openvim.com/>`_
 * Practice VIM on the command line by typing ``vimtutor``
