@@ -738,19 +738,17 @@ Exercises
 Test your understanding of the materials above by attempting the following
 exercises.
 
-* Use the ``random`` module to generate a list of 10 different random integers
-  between 1 and 100. Define a function (using modulus and conditionals) to determine
-  whether a given integer is even or odd. Print to screen each integer followed by
-  the word 'even' or 'odd' as appropriate.
-* Using nested for loops and if statements, write a program that iterates over
-  every integer from 3 to 100 (inclusive) and prints out the number only if it
-  is a prime number.
-* Write a script to read in /usr/share/dict/words and print just the last 10
-  lines of the file, and print all words beginning with the letters "pyt".
-* Use the ``names`` module to generate a list of 10 different full names. Define
-  a function to determine the length of a given name in number of characters. Print
-  to screen each name followed by the length of each name as an integer. Hint:
-  try passing a string into the ``len()`` function.
+* Write a Python script to find and print the **five** longest words in the ``words``
+  file from earlier in this guide. Ties go to the words that would appear first
+  alphabetically.
+* Write a Python script that uses the ``names`` module to print out **five** names
+  that are exactly **eight** characters each (**nine** characters if you include
+  the space). 
+* Write a Python script that use the ``names`` module to generate a list of **five**
+  different full names. Define a function to determine the length of a given
+  name (in number of characters, excluding spaces). Print to screen each name
+  followed by the length of each name as an integer. Hint: try passing a string
+  into the ``len()`` function.
 
 
 
