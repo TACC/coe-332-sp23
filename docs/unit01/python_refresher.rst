@@ -738,17 +738,19 @@ Exercises
 Test your understanding of the materials above by attempting the following
 exercises.
 
-* Write a Python script to find and print the **five** longest words in the ``words``
-  file from earlier in this guide. Ties go to the words that would appear first
-  alphabetically.
-* Write a Python script that uses the ``names`` module to print out **five** names
-  that are exactly **eight** characters each (**nine** characters if you include
-  the space). 
-* Write a Python script that use the ``names`` module to generate a list of **five**
-  different full names. Define a function to determine the length of a given
-  name (in number of characters, excluding spaces). Print to screen each name
-  followed by the length of each name as an integer. Hint: try passing a string
-  into the ``len()`` function.
+#. Write a Python script to find and print the **five** longest words in the ``words``
+   file from earlier in this guide. Ties go to the words that would appear first
+   alphabetically.
+#. Write a Python script that uses the ``names`` module to print out **five** names
+   that are exactly **eight** characters each (**nine** characters if you include
+   the space). 
+#. Write a Python script that use the ``names`` module to generate a list of **five**
+   different full names. Define a function to determine the length of a given
+   name (in number of characters, excluding spaces). Print to screen each name
+   followed by the length of each name as an integer.
+   
+.. tip::
+   Try passing a string into the ``len()`` function.
 
 
 
