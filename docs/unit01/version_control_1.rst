@@ -90,7 +90,7 @@ Log on to the class server and check which version of Git is in your
 
    [login-coe332]$ which git
    /usr/bin/git
-   $ git --version
+   [login-coe332]$ git --version
    git version 2.25.1
 
 When we use Git on a new computer for the first time, we need to configure a few
