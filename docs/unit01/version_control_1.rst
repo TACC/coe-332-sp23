@@ -75,7 +75,7 @@ collaboration among different people.
 Setting up Git
 --------------
 
-Log on to the class ISP server and check which version of Git is in your
+Log on to the class server and check which version of Git is in your
 ``PATH``.
 
 .. note::
@@ -84,14 +84,14 @@ Log on to the class ISP server and check which version of Git is in your
 
 .. code-block:: console
 
-   [local]$ ssh username@isp02.tacc.utexas.edu   # use your account
+   [local]$ ssh username@login-coe332.tacc.utexas.edu   # use your account
    (enter password)
    (enter token)
 
-   [isp02]$ which git
+   [login-coe332]$ which git
    /usr/bin/git
    $ git --version
-   git version 1.8.3.1
+   git version 2.25.1
 
 When we use Git on a new computer for the first time, we need to configure a few
 things. Below are a few examples of configurations we will set as we get started
@@ -105,8 +105,8 @@ what we actually want to do. Here is how we set up our environment:
 
 .. code-block:: console
 
-   [isp02]$ git config --global user.name "Joe Allen"
-   [isp02]$ git config --global user.email "wallen@tacc.utexas.edu"
+   [login-coe332]$ git config --global user.name "YOUR NAME HERE"
+   [login-coe332]$ git config --global user.email "YOUR@EMAIL.HERE"
 
 Please use your own name and email address associated with your GitHub account.
 This user name and email will be connected with your subsequent Git activity,
@@ -131,12 +131,12 @@ and for working with Git (if you haven't done it already):
 
 .. code-block:: console
 
-   [isp02]$ cd ~/
-   [isp02]$ mkdir coe-332    # you may already have a folder for this class
-   [isp02]$ cd coe-332
-   [isp02]$ mkdir my-first-git-repo
-   [isp02]$ cd my-first-git-repo/
-   [isp02]$ pwd
+   [login-coe332]$ cd ~/
+   [login-coe332]$ mkdir coe-332    # you may already have a folder for this class
+   [login-coe332]$ cd coe-332
+   [login-coe332]$ mkdir my-first-git-repo
+   [login-coe332]$ cd my-first-git-repo/
+   [login-coe332]$ pwd
    /home/wallen/coe-332/my-first-git-repo
 
 Then we will use a Git command to initialize this directory as a new Git
@@ -144,7 +144,7 @@ repository - or a place where Git can start to organize versions of our files.
 
 .. code-block:: console
 
-   [isp02]$ git init
+   [login-coe332]$ git init
    Initialized empty Git repository in /home/wallen/coe-332/my-first-git-repo/.git/
 
 If we use ``ls -a``, we can see that Git has created a hidden directory called
@@ -152,7 +152,7 @@ If we use ``ls -a``, we can see that Git has created a hidden directory called
 
 .. code-block:: console
 
-   [isp02]$ ls -a
+   [login-coe332]$ ls -a
    ./  ../  .git/
 
 Use the ``find`` command to get a overview of the contents of the ``.git/``
@@ -160,7 +160,7 @@ directory:
 
 .. code-block:: console
 
-   [isp02]$ find .git/
+   [login-coe332]$ find .git/
    .git
    .git/refs
    .git/refs/heads
@@ -193,7 +193,7 @@ Git to tell us the status of our project:
 
 .. code-block:: console
 
-   [isp02]$ git status
+   [login-coe332]$ git status
    # On branch main
    #
    # Initial commit
@@ -206,8 +206,8 @@ scripts we were working on (or any other files) and check the status again:
 
 .. code-block:: console
 
-   [isp02]$ cp ~/coe-332/python-test/*.py ./
-   [isp02]$ git status
+   [login-coe332]$ cp ~/*.py ./
+   [login-coe332]$ git status
    # On branch master
    #
    # Initial commit
@@ -244,8 +244,8 @@ isn't keeping track of. We can instruct Git to start tracking a file using
 
 .. code-block:: console
 
-   [isp02]$ git add python_test_1.py
-   [isp02]$ git status
+   [login-coe332]$ git add python_test_1.py
+   [login-coe332]$ git status
    # On branch main
    #
    # Initial commit
@@ -271,7 +271,7 @@ run one more command:
 
 .. code-block:: console
 
-   [isp02]$ git commit -m "started tracking first Python script"
+   [login-coe332]$ git commit -m "started tracking first Python script"
    [main (root-commit) 344ec9f] started tracking first Python script
     1 file changed, 29 insertions(+)
     create mode 100644 python_test_1.py
@@ -295,7 +295,7 @@ If we run ``git status`` now:
 
 .. code-block:: console
 
-   [isp02]$ git status
+   [login-coe332]$ git status
    # On branch main
    # Untracked files:
    #   (use "git add <file>..." to include in what will be committed)
@@ -320,7 +320,7 @@ project's history using ``git log``:
 
 .. code-block:: console
 
-   [isp02]$ git log
+   [login-coe332]$ git log
    commit 3d5d6e2c6d23aa4fb3b800b535db6a228759866e
    Author: Joe Allen <wallen@tacc.utexas.edu>
    Date:   Wed Jan 27 23:06:03 2021 -0600
@@ -352,7 +352,7 @@ into the script:
 
 .. code-block:: console
 
-   [isp02]$ vim python_test_1.py
+   [login-coe332]$ vim python_test_1.py
    # make some changes in the script
    # save and quit
 
@@ -361,7 +361,7 @@ has been modified:
 
 .. code-block:: console
 
-   [isp02]$ git status
+   [login-coe332]$ git status
    # On branch main
    # Changes not staged for commit:
    #   (use "git add <file>..." to update what will be committed)
@@ -380,20 +380,20 @@ saving them. We do this using ``git diff``. This shows us the differences
 between the current state of the file and the most recently saved version:
 
 .. code-block:: console
+   :emphasize-lines: 9,10
 
-   [isp02]$ git diff python_test_1.py
+   [login-coe332]$ git diff python_test_1.py
    diff --git a/python_test_1.py b/python_test_1.py
    index 5d986e9..21877cb 100644
    --- a/python_test_1.py
    +++ b/python_test_1.py
-   @@ -18,7 +18,7 @@ def check_char_match(str1, str2):
-        else:
-            return( f'{str1} match FAILS' )
-
+   @@ -18,7 +18,7 @@ 
+    ...
+    ...
    -
    +# random comments inserted here
-    with open('states.json', 'r') as f:
-        states = json.load(f)
+    ...
+    ...
 
 The output is cryptic because it is actually a series of commands for tools like
 editors and ``patch`` telling them how to reconstruct one file given the other.
@@ -414,11 +414,11 @@ After reviewing our change, it's time to commit it:
 
 .. code-block:: console
 
-   [isp02]$ git add python_test_1.py
-   [isp02]$ git commit -m "added a descriptive comment"
+   [login-coe332]$ git add python_test_1.py
+   [login-coe332]$ git commit -m "added a descriptive comment"
    [main 8d5f563] added a descriptive comment
     1 file changed, 1 insertion(+), 1 deletion(-)
-   [isp02]$ git status
+   [login-coe332]$ git status
    # On branch main
    nothing to commit, working directory clean
 
@@ -440,10 +440,10 @@ it for yourself:
 
 .. code-block:: console
 
-   [isp02]$ mkdir directory
-   [isp02]$ git status
-   [isp02]$ git add directory
-   [isp02]$ git status
+   [login-coe332]$ mkdir directory
+   [login-coe332]$ git status
+   [login-coe332]$ git add directory
+   [login-coe332]$ git status
 
 Note, our newly created empty directory ``directory`` does not appear in the
 list of untracked files even if we explicitly add it (*via* ``git add``) to our
@@ -454,7 +454,7 @@ you can add all files in the directory at once by:
 
 .. code-block:: console
 
-   [isp02]$ git add <directory-with-files>
+   [login-coe332]$ git add <directory-with-files>
 
 .. tip::
 
@@ -472,15 +472,15 @@ older versions of things? Let's suppose we accidentally overwrite our file:
 
 .. code-block:: console
 
-   [isp02]$ echo "" > python_test_1.py
-   [isp02]$ cat python_test_1.py
+   [login-coe332]$ echo "" > python_test_1.py
+   [login-coe332]$ cat python_test_1.py
 
 Now ``git status`` tells us that the file has been changed, but those changes
 haven't been staged:
 
 .. code-block:: console
 
-   [isp02]$ git status
+   [login-coe332]$ git status
    # On branch main
    # Changes not staged for commit:
    #   (use "git add <file>..." to update what will be committed)
@@ -497,8 +497,8 @@ to the *most recent commit* of the working directory by using the identifier
 
 .. code-block:: console
 
-   [isp02]$ git checkout HEAD python_test_1.py
-   [isp02]$ cat python_test_1.py
+   [login-coe332]$ git checkout HEAD python_test_1.py
+   [login-coe332]$ cat python_test_1.py
    import random
    ...etc
 
@@ -513,7 +513,7 @@ instead:
 .. code-block:: console
    :emphasize-lines: 14
 
-   [isp02]$ git log
+   [login-coe332]$ git log
    commit 8d5f563fa20060f4fbe2e10ec5cbc3c22fe92559
    Author: Joe Allen <wallen@tacc.utexas.edu>
    Date:   Wed Jan 27 23:15:46 2021 -0600
@@ -535,14 +535,14 @@ instead:
 
 .. code-block:: console
 
-   [isp02]$ git checkout 344ec9f python_test_1.py
+   [login-coe332]$ git checkout 344ec9f python_test_1.py
    # now you have a copy of python_test_1.py without that comment we added
 
 Again, we can put things back the way they were by using ``git checkout``:
 
 .. code-block:: console
 
-   [isp02]$ git checkout HEAD python_test_1.py
+   [login-coe332]$ git checkout HEAD python_test_1.py
    # back to the most recent version
 
 
