@@ -48,13 +48,13 @@ home page of the repository on GitHub includes the string we need to identify it
    Follow the instructions for pushing an existing repository.
 
 
-Back on ISP in the local Git repo, link it to the repo on GitHub and confirm the
-link was created:
+Back on class server in the local Git repo, link it to the repo on GitHub and confirm
+the link was created:
 
 .. code-block:: console
 
-   [isp02]$ git remote add origin git@github.com:wjallen/python-test.git
-   [isp02]$ git remote -v
+   [login-coe332]$ git remote add origin git@github.com:wjallen/python-test.git
+   [login-coe332]$ git remote -v
    origin  git@github.com:wjallen/python-test.git (fetch)
    origin  git@github.com:wjallen/python-test.git (push)
 
@@ -72,24 +72,29 @@ up SSH keys, click on:
 
 Your account => Settings => SSH and GPG keys => New SSH key
 
-In the "Title" box, add a memorable name for this key like "isp02". In the "Key"
+In the "Title" box, add a memorable name for this key like "login-coe332". In the "Key"
 box, cut and paste the contents of your existing public key on the class server.
 You can find it by executing the command:
 
 .. code-block:: console
 
-   [isp02]$ cat ~/.ssh/id_rsa.pub
+   [login-coe332]$ cat ~/.ssh/id_rsa.pub
    ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDF8crdmqgk2GhRmsLPcREWjzc9zb2B....
    ........................................................................
 
+
+.. note::
+
+   If the ``.ssh/`` directory does not exist, you may need to execute the command:
+   ``$ mkdir ~/.ssh/ && ssh-keygen -f ~/.ssh/id_rsa -t rsa -b 3072 -N ""``
 
 Once the SSH key is set up, this command will push the changes from our local
 repository to the repository on GitHub:
 
 .. code-block:: console
 
-   [isp02]$ git branch -M main
-   [isp02]$ git push -u origin main
+   [login-coe332]$ git branch -M main
+   [login-coe332]$ git push -u origin main
    Warning: Permanently added the ECDSA host key for IP address '140.82.112.4' to the list of known hosts.
    Counting objects: 3, done.
    Delta compression using up to 8 threads.
@@ -107,10 +112,10 @@ you can expect to follow the changes with the commands:
 .. code-block:: console
 
    # Make some edits to "example_file.py"
-   [isp02]$ git status
-   [isp02]$ git add example_file.py
-   [isp02]$ git commit -m "description of changes"
-   [isp02]$ git push
+   [login-coe332]$ git status
+   [login-coe332]$ git add example_file.py
+   [login-coe332]$ git commit -m "description of changes"
+   [login-coe332]$ git push
 
 
 
@@ -118,11 +123,11 @@ Clone the Repository
 --------------------
 
 Spend a few minutes browsing the web interface for GitHub. Now, anyone can make
-a full copy of ``my_first_repo`` including all the commit history by performing:
+a full copy of the ``python-test`` repo including all the commit history by performing:
 
 .. code-block:: console
 
-   [isp02]$ git clone git@github.com:wjallen/python-test.git
+   [login-coe332]$ git clone git@github.com:wjallen/python-test.git
    Cloning into 'python-test'...
    remote: Enumerating objects: 15, done.
    remote: Counting objects: 100% (15/15), done.
@@ -139,8 +144,8 @@ changes back down.
 
 .. code-block:: console
 
-   [isp02]$ git remote update    # checks to see if there are updates in the remote
-   [isp02]$ git pull             # pulls those updates down to local
+   [login-coe332]$ git remote update    # checks to see if there are updates in the remote
+   [login-coe332]$ git pull             # pulls those updates down to local
 
 .. warning::
 
@@ -148,6 +153,8 @@ changes back down.
    (i.e. the repository on GitHub), the ``git pull`` will fail and you have
    found your way into a "merge conflict".
    `Good luck! <https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts>`_
+
+
 
 
 Git / Version Control Concepts
@@ -248,16 +255,16 @@ EXERCISE
 
 Let's next work on a **fork** plus **pull request** in the GitHub web interface.
 
-* Navigate to this repository: https://github.com/jagaither/coe-332-forking-demo
+* Navigate to this repository: https://github.com/wjallen/coe-332-forking-demo
 * Click the "Fork" button near the top right and fork it to your own user space
-* Now you could either ``git clone`` your fork to isp02, put in a new file, then
-  ``git add`` => ``git commit` => ``git push``; OR you could click "Add file" in
-  the GitHub web interface and create a new file that way
+* Now you could either ``git clone`` your fork to the class server, put in a new
+  file, then ``git add`` => ``git commit`` => ``git push``; OR you could click
+  "Add file" in the GitHub web interface and create a new file that way
 * Navigate again to the "Pull requests" tab and click to create a "New pull request"
-* Make sure the original repo (``jagaither``) is set as the base and your fork
+* Make sure the original repo (``wjallen``) is set as the base and your fork
   is set as the head
 * Create the pull request and provide enough detail for the repository owner
-  (``jagaither``) to know whether he should accept your pull request or not
+  (``wjallen``) to know whether he should accept your pull request or not
 
 
 Consult the documentation in the base repository (if documentation exists) and

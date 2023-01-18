@@ -17,4 +17,5 @@ will be necessary for the rest of this course.
    linux_essentials
    python_refresher
    version_control_1
-   
+   version_control_2
+
