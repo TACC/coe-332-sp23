@@ -15,7 +15,7 @@ Here are the requirements for the Git repository:
 * Must contain a top level ``README.md`` with a simple description of what the
   repository is for
 * Must contain a directory called ``homework01``
-* The directory ``honmework01`` must contain three Python scripts called ``script01.py``,
+* The directory ``homework01`` must contain three Python scripts called ``script01.py``,
   ``script02.py``, and ``script03.py``, corresponding to the three numbered Exercise at the end of the
   `Python Refresher guide <https://coe-332-sp23.readthedocs.io/en/latest/unit01/python_refresher.html#exercises>`_
 * The directory ``homework01`` must also contain a ``README.md`` file with a
