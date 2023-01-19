@@ -198,7 +198,7 @@ Pull Request / Merge Request
 
 Pull requests are proposed changes to a repository submitted by a user and
 accepted or rejected by a repository's collaborators. Like issues, pull requests
-ach have their own discussion forum. For more information, see `About pull
+each have their own discussion forum. For more information, see `About pull
 requests <https://help.github.com/articles/about-pull-requests>`_.
 
 
