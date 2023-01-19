@@ -744,7 +744,7 @@ exercises.
 #. Write a Python script that uses the ``names`` module to print out **five** names
    that are exactly **eight** characters each (**nine** characters if you include
    the space). 
-#. Write a Python script that use the ``names`` module to generate a list of **five**
+#. Write a Python script that uses the ``names`` module to generate a list of **five**
    different full names. Define a function to determine the length of a given
    name (in number of characters, excluding spaces). Print to screen each name
    followed by the length of each name as an integer.
