@@ -89,7 +89,7 @@ You can find it by executing the command:
 
    .. code-block:: console
 
-      $ mkdir ~/.ssh/ && ssh-keygen -f ~/.ssh/id_rsa -t rsa -b 3072 -N ""
+      $ mkdir -p ~/.ssh/ && ssh-keygen -f ~/.ssh/id_rsa -t rsa -b 3072 -N ""
 
 Once the SSH key is set up, this command will push the changes from our local
 repository to the repository on GitHub:
