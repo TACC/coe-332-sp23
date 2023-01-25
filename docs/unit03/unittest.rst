@@ -26,7 +26,7 @@ not part of the Python Standard Library, so we must install it.
 
 .. code-block:: console
 
-   [isp02]$ pip3 install --user pytest
+   [login-coe332]$ pip3 install --user pytest
 
 Find the `documentation here <https://docs.pytest.org/en/7.0.x/>`_.
 
@@ -67,10 +67,10 @@ prefix added at the beginning.
 
 .. code-block:: console
 
-   [isp02]$ ls
+   [login-coe332]$ ls
    Meteorite_Landings.json  ml_data_analysis.py
-   [isp02]$ touch test_ml_data_analysis.py
-   [isp02]$ ls
+   [login-coe332]$ touch test_ml_data_analysis.py
+   [login-coe332]$ ls
    Meteorite_Landings.json  ml_data_analysis.py  test_ml_data_analysis.py
 
 
@@ -89,7 +89,7 @@ Next try to execute the test script on the command line:
 
 .. code-block:: console
 
-   [isp02]$ python3 test_ml_data_analysis.py
+   [login-coe332]$ python3 test_ml_data_analysis.py
    1.5
 
 Great! We assume the test is working. But we still have to look at the output
@@ -133,7 +133,7 @@ and there is an executable called ``pytest`` in your PATH:
 
 .. code-block:: console
 
-   [isp02]$ pytest --version
+   [login-coe332]$ pytest --version
    pytest 7.0.0
 
 
