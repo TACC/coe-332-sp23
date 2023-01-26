@@ -167,7 +167,7 @@ happened:
     the request was successful, due to the 200 response code.
 (4) It then drew the HTML message in the browser window.
 
-If enter a URL that GitHub doesn't recognize, we get a page that looks like this:
+If we enter a URL that GitHub doesn't recognize, we get a page that looks like this:
 
 .. figure:: images/github-404.png
     :width: 600px
