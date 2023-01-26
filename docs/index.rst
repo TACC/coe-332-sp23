@@ -21,6 +21,8 @@ provide a web-accessible interface to their system.
    unit01/overview
    unit02/overview
    unit03/overview
+   unit04/overview
+   unit05/overview
 
 
 .. toctree::
