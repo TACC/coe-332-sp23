@@ -211,9 +211,9 @@ To make a request to your Flask app, type the following in the new terminal:
 
 .. code-block:: console
 
-   [isp02]$ curl 127.0.0.1:5000
+   [user-vm]$ curl 127.0.0.1:5000
    - or -
-   [isp02]$ curl localhost:5000
+   [user-vm]$ curl localhost:5000
 
 
 You should see the following response:
@@ -352,7 +352,7 @@ restart the Flask app); you should see:
 
 .. code-block:: console
 
-   [isp02]$ curl localhost:5000/
+   [user-vm]$ curl localhost:5000/
    Hello, world!
 
 Routes with URL Parameters
@@ -395,11 +395,11 @@ Now, the Flask app supports multiple routes with different functionalities:
 
 .. code-block:: console
 
-   [isp02]$ curl localhost:5000/
+   [user-vm]$ curl localhost:5000/
    Hello, world!
-   [isp02]$ curl localhost:5000/joe
+   [ispuser-vm02]$ curl localhost:5000/joe
    Hello, joe!
-   [isp02]$ curl localhost:5000/jane
+   [user-vm]$ curl localhost:5000/jane
    Hello, jane!
 
 
