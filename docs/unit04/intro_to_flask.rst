@@ -62,23 +62,26 @@ the class server, perform the following:
 
    A general utility script for Flask applications.
 
-   Provides commands from Flask, extensions, and the application. Loads the
-   application defined in the FLASK_APP environment variable, or from a
-   wsgi.py file. Setting the FLASK_ENV environment variable to 'development'
-   will enable debug mode.
-
-     > export FLASK_APP=hello.py
-     > export FLASK_ENV=development
-     > flask run
+   An application to load must be given with the '--app' option, 'FLASK_APP'
+   environment variable, or with a 'wsgi.py' or 'app.py' file in the current
+   directory.
 
    Options:
-     --version  Show the flask version
-     --help     Show this message and exit.
+   -e, --env-file FILE   Load environment variables from this file. python-
+                           dotenv must be installed.
+   -A, --app IMPORT      The Flask application or factory function to load, in
+                           the form 'module:name'. Module can be a dotted import
+                           or file path. Name is not required if it is 'app',
+                           'application', 'create_app', or 'make_app', and can be
+                           'name(args)' to pass arguments.
+   --debug / --no-debug  Set debug mode.
+   --version             Show the Flask version.
+   --help                Show this message and exit.
 
    Commands:
-     routes  Show the routes for the app.
-     run     Run a development server.
-     shell   Run a shell in the app context.
+   routes  Show the routes for the app.
+   run     Run a development server.
+   shell   Run a shell in the app context.
 
 
 .. tip::
@@ -120,9 +123,10 @@ inside and outside the host VM.
 Run the Flask App
 -----------------
 
-There are two main ways of starting the Flask service. For now, we recommend you
-start the service using a unique port number. The ``-p 5000`` indicates that
-Flask is running on port 5000. You will need to use your own assigned port.
+There are a few options when starting the Flask app. For now, we recommend you
+start your Flask application using the `flask run` command, specifying the name 
+of the python file (in our case `app.py`) using the `--app` option, and 
+running in debug mode using the `--debug` flag.
 
 .. warning::
 
@@ -131,16 +135,15 @@ Flask is running on port 5000. You will need to use your own assigned port.
 
 .. code-block:: console
 
-    [isp02]$ export FLASK_APP=app.py
-    [isp02]$ export FLASK_ENV=development
-    [isp02]$ flask run -p 5000
-     * Serving Flask app "app.py" (lazy loading)
-     * Environment: development
-     * Debug mode: on
-     * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
-     * Restarting with stat
-     * Debugger is active!
-     * Debugger PIN: 182-299-771
+    [user-vm]$ flask --app app --debug run
+   * Serving Flask app 'app'
+   * Debug mode: on
+   WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+   * Running on http://127.0.0.1:5000
+   Press CTRL+C to quit
+   * Restarting with stat
+   * Debugger is active!
+   * Debugger PIN: 268-620-354
 
 That's it! We now have a server up and running. Some notes on what is happening:
 
@@ -229,11 +232,12 @@ to add some routes.
 
 .. note::
 
-   Only one Flask app can be associated with each port. The default port above
-   (5000) is an example. Please make sure to run your Flask server on the port
-   assigned to you (``flask run -p 50xx``). You can curl your own port number,
-   or you can curl other people's Flask servers by subbing in their port number.
-
+   Only one application can be associated with a given port. If you try to 
+   run a second Flask application on the same default port (5000) on the 
+   same machine, you will hit errors. You can specify the port you want
+   Flask to listen on using the `-p` (or `--port`) option to the `flask run` command; e.g., 
+   ``flask --app app --debug run -p 5001``
+   
 
 Routes in Flask
 ---------------
