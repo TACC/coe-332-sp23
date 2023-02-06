@@ -10,6 +10,8 @@ module, students should be able to:
 * Run a local Flask development server.
 * Use curl to test routes defined in their Flask program when the local Flask development
   server is running.
+* **Design Principles**: Additionally, we will see how using Flask contributes to 
+  the *modularity*, *abstraction*, and *generalization* of software. 
 
 
 Flask is a Python library and framework for building web servers. Some of the

@@ -13,7 +13,8 @@ this module, students should be able to:
 * Install the Python ``requests`` library, and use it to interact with a web API
   in a Python script, including making requests and parsing responses.
 * **Design Principles**: Additionally, we will see how designing software with APIs contributes to 
-  the *modularity* and *portability* of software. 
+  the *modularity*, *portability*, *abstraction* and *generalization* of software (all four major design
+  principles). 
 
 An Application Programming Interface (API) establishes the protocols and methods
 for one piece of a program to communicate with another. APIs are useful for:
@@ -245,6 +246,7 @@ Thus,
 * GET ``<base_url>/users``  would list all users.
 * POST ``<base_url>/users`` would create a new user.
 * PUT ``<base_url>/users/12345`` would update user 12345.
+* DELETE ``<base_url>/users/98765`` would delete user 98765.
 
 The combination of an HTTP verb and URL (path) is called an **endpoint** in an API. A REST
 API is typically comprised of many endpoints.
@@ -255,6 +257,10 @@ the entire list of users.
 
 Response messages often make use of some data serialization format standard such
 as JSON, CSV or XML.
+
+**Design Principles.** Note that the architecture of REST, combining URL paths that represent *resources* with
+HTTP verbs that represnt *actions* to take on resources, constitutes *abstraction* and *generalization* as a large
+number of applications can be described in this way.  
 
 
 REST APIs - Additional Simple Examples
@@ -470,7 +476,7 @@ Let's use ``requests`` to explore the GitHub API. Write functions to return the 
   Return the list f repositories as a Python list of strings, where each string contains the
   repository ``full_name`` attribute.
 
-**Design Principles.** We will use the concept of web APIs in a critical way for developing portable software; as
+**Design Principles.** We will use the concept of web APIs in a critical way for developing portable software. As
 web APIs are accessible to any software running in an environment with a stable internet connection, we can build 
 software components distributed across different computers (and even the entire internet) that work together. The 
 precise locations of the software components won't matter and, when combined with other techniques, we will be able

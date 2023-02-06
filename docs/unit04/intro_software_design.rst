@@ -108,3 +108,21 @@ Portability refers to the ability to access and execute software from different 
 means that the results obtained from executing the software at one time can be obtained later. We will spend a significant
 amount of time this semester working with techniques that improve the portability of the software we develop.
 
+
+Software Design Goals for COE 332
+---------------------------------
+During the course of the semester, you will build a large (by some measure), distributed sofware 
+system for data analysis. You're system will comprise many components and thousands of lines of code. An
+example illustration of a typical final class project is shown below, to give an indication of where we 
+are headed.
+
+.. figure:: images/ex_arch_cls_proj.png
+    :width: 700px
+    :align: center
+
+As we added components and complexity, these software design principles will become increasingly important.
+
+Our goals for COE 332 are to illustrate these design concepts so that you can recognize them and apply them,
+not just towards the design of distributed systems and/or data analysis, but all kinds of different software.
+While in this course we'll illustrate these principles in the context of distributed systems, they are
+broadly applicable to all large software projects. 
