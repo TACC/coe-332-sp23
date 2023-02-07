@@ -120,7 +120,7 @@ are headed.
     :width: 700px
     :align: center
 
-As we added components and complexity, these software design principles will become increasingly important.
+As we add components and complexity, these software design principles will become increasingly important.
 
 Our goals for COE 332 are to illustrate these design concepts so that you can recognize them and apply them,
 not just towards the design of distributed systems and/or data analysis, but all kinds of different software.
