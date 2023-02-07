@@ -1,4 +1,4 @@
-Unit 4: Software Design and Introcution to APIs
+Unit 4: Software Design and Introduction to APIs
 ================================================
 
 In Unit 4, we will introduce the major Software Design concepts and principles that we will be learning throughout the 
