@@ -15,3 +15,4 @@ logging, unit testing, and exception handling.
    organization
    documentation
    unittest
+   errorhandling
