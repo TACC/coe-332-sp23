@@ -17,7 +17,7 @@ boil water notice.
 PART 1
 ~~~~~~
 
-For the first part of this homework, download the water quality data set from
+For the first part of this homework, examine the water quality data set from
 `this link <https://raw.githubusercontent.com/wjallen/turbidity/main/turbidity_data.json>`_.
 The data is a JSON dictionary with one key, ``'turbidity_data'``, whose value is
 a time series list of dictionaries. Each dictionary in the list has the same set
@@ -44,7 +44,7 @@ of keys. A sample of the data looks like:
         ... etc
 
 * **DO NOT** commit this data set to your homework repository
-* **DO** provide instructions in your README on how to download this data set
+* **DO** cite and/or provide a reference/link to this data in your README
 
 .. note::
 
@@ -66,6 +66,7 @@ report "0 hours" or similar). Here are the requirements for this Python3 script:
 
 * The script must have an appropriate ``main()`` function that is only called
   when executing your script directly
+* Use the Python3 ``requests`` library to import the json data into your script
 * The script must have a minimum of two additional functions:
 
   * A function to calculate turbidity using equation 1 below
@@ -78,7 +79,6 @@ report "0 hours" or similar). Here are the requirements for this Python3 script:
   description of the function, arguments, and return values following the format in the
   `Google Style Guide <https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings>`_
 * Each function definition (except ``main()``) must contain type hints
-
 
 
 **Equation 1:** The equation we will use for turbidity is based on readings taken by a
@@ -161,7 +161,7 @@ guidelines to follow for the README are:
 * Descriptive title
 * High-level description of the folder contents / project objective. I.e. why
   does this exist and why is it important? (2-3 sentences)
-* Instructions on how to download the data set from the original source
+* Instructions on how to access and description of the data set from the original source
 * Specific description of the python script (1-2 sentences)
 * Instructions to run the code from start to finish, plus how to interpret the
   results (2-3 sentences) (Example output would help a lot to explain how to
