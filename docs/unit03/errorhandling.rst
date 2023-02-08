@@ -1,35 +1,43 @@
 Error Handling
 ==============
 
+Encountering errors when writing and running code happens all the time. Being able
+to understand error messages, and being able to program defensively, will help 
+avoid some common errors and make your code more robust. After working through this
+module, students should be able to:
+
+* Read traceback statements and identify exceptions
+* Write code blocks to catch and handle exceptions
+* Write code blocks to throw custom exceptions
+* Use assertions to program defensively
+
+
+
 Why Do We Need Error Handling?
 ------------------------------
 
 #. Prevents program from crashing if an error occurs
-    * If an error occurs in a program, we don’t want the program to unexpectedly crash on the user. Instead, error handling can be used to notify the user of why the error occurred and gracefully exit the process that caused the error.
+    * If an error occurs in a program, we don't want the program to unexpectedly
+      crash on the user. Instead, error handling can be used to notify the user of
+      why the error occurred and gracefully exit the process that caused the error.
 
 #. Saves time debugging errors
-    * Following reason #1, having the program display an error instead of immediately crashing will save a lot of time when debugging errors.
-    * The logic inside the error handler can be updated to display useful information for the developer, such as the code trackback, type of error, etc.
+    * Following reason #1, having the program display an error instead of immediately
+      crashing will save a lot of time when debugging errors.
+    * The logic inside the error handler can be updated to display useful information
+      for the developer, such as the code trackback, type of error, etc.
 
 #. Helps define requirements for the program
-    * If the program crashes due to bad input, the error handler could notify the user of why the error occurred and define the requirements and constraints of the program.
+    * If the program crashes due to bad input, the error handler could notify the user
+      of why the error occurred and define the requirements and constraints of the program.
 
 
-Error-Handling Practices
-------------------------
 
-In this section we’ll discuss the following:
-
-* Exception handling using try - except and try - except - finally
-* Assertions
-* When to use exceptions vs. assertions
-
-Future You will thank Past You if you apply these error-handling techniques.
 
 Catching and Handling Exceptions
 --------------------------------
 
-If you have a block of code that might fail, you can manage any exceptions by placing this code in a ``try: … except: … block:``
+If you have a block of code that might fail, you can manage any exceptions by placing this code in a ``try: ... except: ...`` block
 
 
 The error handling is executed as follows:
@@ -44,7 +52,7 @@ If the statement inside the try block fails and the error is not a ValueError, t
 The finally clause will always execute after the last task completes — regardless of whether the last task is in the try block or except block.
 
 Things to look out for when handling exceptions
-Don’t let the code swallow the exception. We don’t want errors to go undetected by simply ignoring them. If you need to swallow an exception to avoid a fundamental issue, the architecture of the program needs to be re-evaluated.
+Don't let the code swallow the exception. We don't want errors to go undetected by simply ignoring them. If you need to swallow an exception to avoid a fundamental issue, the architecture of the program needs to be re-evaluated.
 
 .. code-block:: python3
 
@@ -54,16 +62,17 @@ Don’t let the code swallow the exception. We don’t want errors to go undetec
     >>>    pass 
 
 
-NOTE: Don’t declare new variables inside a ```try``` statement that might not be reached.
+NOTE: Don't declare new variables inside a ```try``` statement that might not be reached.
 
 Raising Exceptions
 ------------------
 
-You might want to re-raise an exception to abort a script. For example, if we can’t determine what kind of error is causing the exception, we might want to re-raise it.
+You might want to re-raise an exception to abort a script. For example, if we can't determine what kind of error is causing the exception, we might want to re-raise it.
 
-Problem – Reraising the exception, that has been caught in the except block:
+Problem - Reraising the exception, that has been caught in the except block:
 
 Using the ```raise```
+
 .. code-block:: python3
 
     >>> def example():
@@ -95,7 +104,7 @@ This problem typically arises when there is no need to take any action in respon
         raise
 
 
-Problem – To have a program issue warning messages (e.g., about deprecated features or usage problems).
+Problem - To have a program issue warning messages (e.g., about deprecated features or usage problems).
 
 .. code-block:: python3
 
@@ -138,7 +147,7 @@ User-Defined Exceptions
 
 There are several types of built-in exception classes that inherit from the same base Exception class. A full list of these built-in classes can be found in the official documentation.
 
-It’s also possible to create a custom exception class that inherits from the base Exception class. A custom class might be needed if the developer wishes to integrate a more sophisticated logging system or further inspect an object.
+It's also possible to create a custom exception class that inherits from the base Exception class. A custom class might be needed if the developer wishes to integrate a more sophisticated logging system or further inspect an object.
 
 The ```__init__()``` and ```__str__()``` methods are required when defining an Exception class:
 
@@ -168,6 +177,7 @@ The ```__init__()``` and ```__str__()``` methods are required when defining an E
 Ouput
 
 .. code-block:: console
+
     ('A New Exception occurred: ', 6)
 
 
@@ -228,7 +238,7 @@ Output
 So When Should We Use Assertions vs. Exceptions?
 ------------------------------------------------
 
-This really comes down to a case-by-case basis, and there’s room for debate here. In my opinion, exceptions should be used when handling external inputs and outputs due to user input, hardware, network, etc. Exceptions should be used when you want to gracefully exit a program, log data, and notify the user of why such an error occurred.
+This really comes down to a case-by-case basis, and there's room for debate here. In my opinion, exceptions should be used when handling external inputs and outputs due to user input, hardware, network, etc. Exceptions should be used when you want to gracefully exit a program, log data, and notify the user of why such an error occurred.
 
 Assertions have a fail-fast approach and should be used to find errors in your code and detect bugs.
 
@@ -246,7 +256,7 @@ Pytest is a python based testing framework, which is used to write and execute t
 Advantages of Pytest
 --------------------
 
-The advantages of Pytest are as follows −
+The advantages of Pytest are as follows -
 
 * Pytest can run multiple tests in parallel, which reduces the execution time of the test suite.
 
@@ -261,6 +271,7 @@ The advantages of Pytest are as follows −
 * Because of its simple syntax, pytest is very easy to start with.
 
 .. code-block:: console
+
     pip install pytest
 
     pytest -h
@@ -315,9 +326,9 @@ output
 
 Additional Resources
 --------------------
-* `Python 3 Error Handling <https://docs.python.org/3/tutorial/errors.html>`
-* `Python 3 Assertions <https://docs.pytest.org/en/7.1.x/how-to/assert.html>`
-* `Python 3 Exception Class <https://docs.python.org/3/library/exceptions.html>`
+* `Python 3 Error Handling <https://docs.python.org/3/tutorial/errors.html>`_
+* `Python 3 Assertions <https://docs.pytest.org/en/7.1.x/how-to/assert.html>`_
+* `Python 3 Exception Class <https://docs.python.org/3/library/exceptions.html>`_
 * `Pytest`
 
 
