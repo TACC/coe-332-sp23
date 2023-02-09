@@ -124,14 +124,9 @@ Run the Flask App
 -----------------
 
 There are a few options when starting the Flask app. For now, we recommend you
-start your Flask application using the `flask run` command, specifying the name 
-of the python file (in our case `app.py`) using the `--app` option, and 
-running in debug mode using the `--debug` flag.
-
-.. warning::
-
-   Check Slack or ask the instructors which port you should use. Trying to run
-   two Flask apps on the same port will not work.
+start your Flask application using the ``flask run`` command, specifying the name 
+of the python file (in our case ``app.py``) using the ``--app`` option, and 
+running in debug mode using the ``--debug`` flag.
 
 .. code-block:: console
 
@@ -158,6 +153,12 @@ That's it! We now have a server up and running. Some notes on what is happening:
 * If we stop our Flask programs, the server will no longer be listening and our
   requests will fail.
 
+.. note::
+
+  The order of the arguments and command is important. Be sure the ``--app``
+  and ``--debug`` parameters appear **before** ``run``.
+
+
 Next we can try to talk to the server using ``curl``. Note this line:
 
 .. code-block:: console
@@ -182,6 +183,16 @@ same computer.
   HTTP, port 443 for HTTPS (encrypted HTTP), but other ports can be used for
   HTTP/HTTPS traffic.
 
+.. note::
+
+   Only one application can be associated with a given port. If you try to 
+   run a second Flask application on the same default port (5000) on the 
+   same machine, you will hit errors. You can specify the port you want
+   Flask to listen on using the ``-p`` (or ``--port``) option to the 
+   ``flask run`` command; e.g., 
+   ``flask --app app --debug run -p 5001``
+   
+
 curl Basics
 ~~~~~~~~~~~
 
@@ -199,6 +210,11 @@ an HTTP client.
   additional information such as the headers passed back and forth (more on this
   later).
 
+Try the following, for example: 
+
+.. code-block:: console
+
+   [user-vm]$ curl https://api.github.com
 
 Make a Request
 --------------
@@ -230,14 +246,6 @@ resource we requested. Although it appears to be an error (and technically it
 is), this is evidence that the Flask server is running successfully. It's time
 to add some routes.
 
-.. note::
-
-   Only one application can be associated with a given port. If you try to 
-   run a second Flask application on the same default port (5000) on the 
-   same machine, you will hit errors. You can specify the port you want
-   Flask to listen on using the `-p` (or `--port`) option to the `flask run` command; e.g., 
-   ``flask --app app --debug run -p 5001``
-   
 
 Routes in Flask
 ---------------
