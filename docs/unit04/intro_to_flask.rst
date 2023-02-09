@@ -53,11 +53,11 @@ the class server, perform the following:
 
 .. code-block:: console
 
-   [isp02]$ pip3 install --user flask
+   [user-vm]$ pip3 install --user flask
    ...
-   Successfully installed flask-1.1.2
+   Successfully installed flask-2.2.2
 
-   [isp02]$ flask --help
+   [user-vm]$ flask --help
    Usage: flask [OPTIONS] COMMAND [ARGS]...
 
    A general utility script for Flask applications.
