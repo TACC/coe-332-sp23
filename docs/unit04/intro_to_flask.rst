@@ -368,12 +368,17 @@ Routes with URL Parameters
 
 Flask makes it easy to create routes (or URLs) with variables in the URL. The
 variable name simply must appear in angled brackets (``<>``) within the
-``@app.route()`` decorator statement; for example the following would grant the
+``@app.route()`` decorator statement. Then, specify the variable as a parameter 
+to the actual function.
+
+For example, the following would grant the
 function below it access to a variable called ``year``:
 
 .. code-block:: python3
 
-   @app.route('/<year>')
+   @app.route('/<year>', methods=[...])
+   def f(year):
+       # function implementation...
 
 
 In the next example, we extend our ``app.py`` Flask app by adding a route
@@ -414,7 +419,7 @@ Now, the Flask app supports multiple routes with different functionalities:
 EXERCISE
 ~~~~~~~~
 
-Let's utilize the meteorite landing data from the Advances Containers section of Unit 4
+Let's utilize the turbidity data from Homework 3 (`see here <https://raw.githubusercontent.com/wjallen/turbidity/main/turbidity_data.json>`_)
 to define a somewhat more interesting route. We'll create a route that allows a user
 to download the entire dataset over HTTP.
 
