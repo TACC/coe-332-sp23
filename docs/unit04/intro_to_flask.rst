@@ -433,7 +433,7 @@ Once those questions are answered, we'll need to actually implement the new rout
 What will we need to do to implement the function? The implementation will require two
 steps:
 
-1) Read the data into Python from the JSON file.
+1) Read the data into Python from the JSON file. (What Python library will you use for this step?)
 2) Return the result of step 1).
 
 Finally, once we have implemented the function, let's test it using ``curl``.
