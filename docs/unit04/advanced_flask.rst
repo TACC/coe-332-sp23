@@ -12,8 +12,8 @@ functions for our REST API. After going through this module, students should be 
 
 .. note::
 
-   We will continue to do our work on the isp02 VM. Like last time, it will be helpful for you to
-   have two SSH terminals open to isp02 at the same time so you can run your Flask application in
+   We will continue to work on the the individual student VMs. Like last time, it will be helpful for you to
+   have two SSH terminals open to your VM at the same time so you can run your Flask application in
    one terminal and test it in the other.
 
 
@@ -53,9 +53,7 @@ following:
 3) Copy the ``get_data()`` method above into the application
    script.
 4) Add a route (``/degrees``) which responds to the HTTP ``GET`` request and
-   returns the complete list of data returned by ``get_data()`` as a Python string. **Hint:**
-   You won't be able to return a Python list directly from your route function -- consider
-   casting the list to a string using the ``str()`` function.
+   returns the complete list of data returned by ``get_data()``. 
 
 In a separate Terminal use ``curl`` to test out your new route. Does it work as
 expected?
@@ -66,37 +64,132 @@ expected?
    you need help remembering the boiler-plate code.
 
 
+EXERCISE 2
+~~~~~~~~~~
+Back inside the ``degrees_api.py`` file, let's add a second route, ``/degrees/<id>`` that returns the 
+data associated with a single dictionary. There are often design questions one should consider when writing 
+new code. In this case, we have:
+
+  * What method(s) should it accept? 
+  * What type will the incoming ``id`` field by from the user? 
+  * How will you find the corresponding dictionary? 
+  * What should happen if the user enters an ``id`` that doesn't exist?
+
+
+Discussion
+^^^^^^^^^^
+By default, Flask uses String for the types of path variables. If we use a route declaration like this,
+
+.. code-block:: python
+   
+   @app.route('/degrees/<id>', methods=['GET'])
+   def degrees_for_id(id):
+       # implementation...
+
+
+Then GET any request with a URL path that starts with ``/degrees/`` and ends with any string will match. That is,
+
+  * ``/degress/0`` --> ``id`` holds the value ``"0"`` as a Python String.
+  * ``/degrees/A`` --> ``id`` holds the value ``"A"`` as a Python String.
+  * ``/degrees/one`` --> ``id`` holds the value ``"one"`` as a Python String.
+
+will all match the ``degrees_for_id`` route and the variable, ``id`` will hold a String value. In this case,
+we'll have to deal with the String type in our function, converting it to ``int``, etc.  
+
+
+Typed URL Parameters
+---------------------
+
+We can specif the types of the URL parameters we are expecting using the syntax ``<type:variable_name>``. 
+For example, we could change our ``degrees_for_id`` route declaration as follows, to indicate we required the ``id``
+variable to be an integer:
+
+.. code-block:: python
+   
+   @app.route('/degrees/<int:id>', methods=['GET'])
+   def degrees_for_id(id):
+       # implementation...
+
+With the above definition, a request like ``GET /degrees/A`` will no longer match our ``degrees_for_id`` route
+while a request like ``GET /degrees/2`` will ``call degrees_for_id`` with an integer type for the ``id``
+variable. 
+
+Here is a summary of the types supported in Flask; see the `docs <https://flask.palletsprojects.com/en/2.2.x/quickstart/#routing>`_
+for more details. 
+
+.. list-table:: Type Support in Flask URL Path Parameters
+   :widths: 10 25
+   :header-rows: 1
+
+   * - Type 
+     - Support
+   * - string
+     - (default) accepts any text without a slash
+   * - int
+     - accepts positive integers
+   * - float 
+     - accepts positive floating point values
+   * - path
+     - like string but also accepts slashes
+   * - uuid 
+     - accepts UUID strings
+
+.. warning::
+
+   The numeric types, ``int`` and ``float`` do **not** accept negative values!
+
+
+EXERCISE 3
+~~~~~~~~~~
+Modify your ``degrees_for_id`` route to specify an integer path parameter. 
+
+
 Responses in Flask
 ------------------
 
-If you tried to return the list object directly in your route function
-definition, you got an error when you tried to request it with curl. Something
-like:
+Suppose we wanted to add a third route that just returns a single value, the number of degrees associated with a 
+a particular dictionary. We might proceed as follows:
+
+  * For URL path, use ``/degrees/<int:id>/degrees``
+  * Iterate through the list looking for the dictionary with the same id as the input. 
+  * If we find a dictionary, ``d``, with the same id, return ``d['degrees']``.
+
+Let's try that and see what happens.
+
+
+EXERCISE 4
+~~~~~~~~~~
+Implement a new route for the ``/degrees/<int:id>/degrees`` endpoint. Does it work as you expect? 
+
+
+If you tried to return the integer object, ``d['degrees']`` directly in your route function
+definition, you got an error when you tried to request it with curl. A long stack trace is returned, 
+but at the end you will see:
 
 .. code-block:: console
 
-   TypeError: The function did not return a valid response
+   TypeError: The view function did not return a valid response. The return type must be a string, dict, list, 
+   tuple with headers or status, Response instance, or WSGI callable, but it was a int.
+
 
 Flask allows you three options for creating responses:
 
 1) Return a string (``str``) object
-2) Return a dictionary (``dict``) object
-3) Return a tuple (``tuple``) object
+2) Return a dictionary (``dict``) or list ``list`` object
+3) Return a tuple (``tuple``) object in particular form -- we'll return to this later. 
 4) Return a ``flask.Response`` object
 
 Some notes:
 
 * Option 1 is good for text or html such as when returning a web page or text
   file.
-* Option 2 is good for returning rich information in JSON-esque format.
-* Option 3 is good for returning a list of data using a special type of Python
-  list - a ``tuple`` - which is ordered and unchangeable.
+* Option 2 is good for returning rich information in JSON format.
+* Option 3 is good for returning additional information including headers and status code. 
 * Option 4 gives you the most flexibility, as it allows you to customize the
   headers and other aspects of the response.
 
-For our REST API, we will want to return JSON-formatted data. We will use a
-special Flask method to convert our list to JSON - ``flask.jsonify``. (More on
-this later.)
+For our REST API, we will want to return JSON-formatted data. Flask will handle all of this for us,
+so long as we return a list or dictionary. 
 
 .. tip::
 
@@ -104,31 +197,19 @@ this later.)
    primer on the JSON format and relevant JSON-handling methods.
 
 
-EXERCISE 2
-~~~~~~~~~~
-
-Try doing this exercise in a Python (or ``ipython``) shell.
-
-1) Serialize the list returned by the ``get_data()`` method above into a
-   JSON-formatted string using the Python ``json`` library. Verify that the type
-   returned is a string.
-2) Next, deserialize the string returned in part 1 by using the ``json`` library
-   to decode it. Verify that the result equals the original list.
-
 
 Returning JSON (and Other Kinds of Data)
 ----------------------------------------
 
-You probably are thinking at this point we can fix our solution to the first **Exercise**
-by using the ``json`` library (which function?). Let's try that and see what
-happens:
+You probably are thinking at this point we can fix our solution to Exercise 3
+by changing the return type. Instead of returning a raw integer, we can return a type that Flask recognized. 
+What type should we return?
 
-EXERCISE 3
+
+EXERCISE 5
 ~~~~~~~~~~
 
-Update your code from the first Exercise to use the ``json`` library to return a properly
-formatted JSON string.
-
+Update your code from Exercise 4 to return a Python type that Flask accepts.
 Then, with your API server running in one window, open a Python3 interactive
 session in another window and:
 
@@ -137,6 +218,8 @@ session in another window and:
 * Verify that ``r.status_code`` is what you expect (what do you expect it to be?)
 * Verify that ``r.content`` is what you expect.
 * Use ``r.json()`` to decode the response and compare the type to that of ``r.content``.
+
+Then, repreat the above with the ``/degrees/{id}/degrees`` endpoint. 
 
 
 HTTP Content Type Headers
@@ -154,7 +237,7 @@ size of the message (``Content-Length``), the domain the server is listening on
 We can use ``curl`` or the python ``requests`` library to see all of the headers
 returned on a response from our flask server. Let's try it.
 
-EXERCISE 4
+EXERCISE 6
 ~~~~~~~~~~
 
 1) Use ``curl`` to make a GET request to your ``/degrees`` endpoint
@@ -174,23 +257,22 @@ EXERCISE 4
 
    curl localhost:5000/degrees -v
 
-   * About to connect() to localhost port 5000 (#0)
-   *   Trying ::1...
-   * Connection refused
-   *   Trying 127.0.0.1...
+   *   Trying 127.0.0.1:5000...
+   * TCP_NODELAY set
    * Connected to localhost (127.0.0.1) port 5000 (#0)
    > GET /degrees HTTP/1.1
-   > User-Agent: curl/7.29.0
    > Host: localhost:5000
+   > User-Agent: curl/7.68.0
    > Accept: */*
-   >
-   * HTTP 1.0, assume close after body
-   < HTTP/1.0 200 OK
-   < Content-Type: text/html; charset=utf-8
-   < Content-Length: 210
-   < Server: Werkzeug/2.0.3 Python/3.6.8
-   < Date: Fri, 04 Mar 2022 01:12:34 GMT
-
+   > 
+   * Mark bundle as not supporting multiuse
+   < HTTP/1.1 200 OK
+   < Server: Werkzeug/2.2.2 Python/3.8.10
+   < Date: Sun, 12 Feb 2023 16:42:55 GMT
+   < Content-Type: application/json
+   < Content-Length: 303
+   < Connection: close
+   < 
 
 .. code-block:: python3
 
@@ -199,10 +281,11 @@ EXERCISE 4
    In [2]: r = requests.get('http://127.0.0.1:5000/degrees')
 
    In [3]: r.headers
-   Out[3]: {'Content-Type': 'text/html; charset=utf-8', 'Content-Length': '210', 'Server': 'Werkzeug/2.0.3 Python/3.6.8', 'Date': 'Fri, 04 Mar 2022 01:21:41 GMT'}
+   Out[3]: {'Server': 'Werkzeug/2.2.2 Python/3.8.10', 'Date': 'Sun, 12 Feb 2023 16:41:23 GMT', 'Content-Type': 'application/json', 'Content-Length': '49', 'Connection': 'close'}
 
-We see that we are sending a ``Content-type`` of ``'text/html``. In some ways, that is true, but
-we can do better; we can tell the client we are sending ``json`` data.
+We see that we are sending a ``Content-type`` of ``'application/json``, which is what we want. That is how the
+Python requests library is able to provide the ``r.json()`` function to automatically convert to a Python list or 
+dictionary. 
 
 
 Media Type (or Mime Type)
@@ -216,37 +299,6 @@ about media types are that they:
 * The most common types are application, text, audio, image, and multipart
 * The most common values (type and subtype) are application/json,
   application/xml, text/html, audio/mpeg, image/png, and multipart/form-data
-
-
-Content Types in Flask
-~~~~~~~~~~~~~~~~~~~~~~
-
-The Flask library has the following built-in conventions you want to keep in
-mind:
-
-* When returning a string as part of a route function in Flask, a
-  ``Content-Type`` of ``text/html`` is returned.
-* To convert a Python object to a JSON-formatted string **and** set the content
-  type properly, use the ``flask.jsonify()`` function.
-
-For example, the following code will convert the list to a JSON string and
-return a content type of aplication/json:
-
-.. code-block:: python3
-
-   return flask.jsonify(['a', 'b', 'c'])
-
-
-EXERCISE 5
-~~~~~~~~~~
-
-Use the ``flask.jsonify()`` method to update your code from Exercise 1. Then:
-
-* Validate that your ``/degrees`` endpoint works as expected by using the
-  ``requests`` library to make an API request and check that the ``.json()``
-  method works as expected on the response.
-* Use the ``.headers()`` method on the response to verify the ``Content-Type``
-  is what you expect.
 
 
 Query Parameters
@@ -290,25 +342,14 @@ extract the passed query parameter into a variable.
   make http requests. the ``flask.request`` object represents the incoming request that our
   flask application server has received from the client.
 
+For example, 
 
-.. code-block:: python3
-   :linenos:
+.. code-block:: python
 
-   from flask import Flask, request
+   start = requests.args.get('start')
 
-   @app.route('/degrees', methods=['GET'])
-   def degrees():
-       start = request.args.get('start')
-       # additional code...
-
-
-The ``start`` variable will be the value of the ``start`` parameter, if one is
-passed, or it will be ``None`` otherwise:
-
-.. code-block:: console
-
-   GET https://api.example.com/degrees?start=2
-
+In this case, the start variable will be the value of the start parameter, if one is passed, or it 
+will be None otherwise.
 
 .. note::
 
@@ -316,50 +357,81 @@ passed, or it will be ``None`` otherwise:
    type of data being passed in.
 
 
+
+EXERCISE 7
+~~~~~~~~~~
+Implement the ``start`` query parameter on your ``GET /degrees`` endpoint and check the behavior by
+issuing some ``curl`` requests in another window, e.g.,  
+
+.. code-block:: console
+
+   curl http://api.example.com/degrees?start=1993
+
+
 Let's use this idea to update our ``degrees_api`` to only return the years starting from the
 ``start`` query parameter year, if that parameter is provided.
 
 
-.. code-block:: python3
+
+
+Solution
+~~~~~~~~~
+
+To implement a ``start`` query parameter on the ``GET /degrees`` endpoint that only returns data
+for years on or after the ``start`` year, we first might write something like the following:
+
+.. code-block:: python
 
    @app.route('/degrees', methods=['GET'])
    def degrees():
-      d = get_data()
+       start = request.args.get('start')
+       data = get_data()
+       # iterate through data and check if years are >= start...
+
+However, there are a couple of issues here:
+
+  1. The user may not provide a ``start`` query parameter, in which case our ``start`` variable will be ``None``.
+  2. If the user does provide a ``start`` query parameter, it will be a string type, which cannot be compared to 
+     an integer year. 
+
+Here is a first approach to fixing it: 
+
+.. code-block:: python
+
+   from flask import Flask, request
+
+   @app.route('/degrees', methods=['GET'])
+   def degrees():
+      # provide a default value that is less than all the years and 
       start = int(request.args.get('start', 0))
-      return flask.jsonify(d)
+      data = get_data()
+      result = []
+      for d in data:
+         if d['year'] >= start:
+               result.append(d)
+      return result
+
 
 
 Error Handling
 --------------
 
-This brings up the topic of error handling. What happens if the user sends a value for the ``start``
-query parameter that isn't an integer? We can test it ourselves.
+However, there is one more problem with our solution above... what happens if the user enters a non-numeric
+value for the ``start`` parameter? Let's try it and see what happens... 
 
 .. code-block:: console
 
-   [isp02]$ curl 127.0.0.1:5000/degrees?start=abc
+   [user-vm]$ curl 127.0.0.1:5000/degrees?start=abc
 
 
-If we try this we get some nasty stuff that ends with a traceback, like this:
+Yikes! If we try this we get a long traceback that ends like this:
 
 .. code-block:: console
 
-   Traceback (most recent call last):
-   File "/home/jstubbs/.local/lib/python3.6/site-packages/flask/app.py", line 2091, in __call__
-      return self.wsgi_app(environ, start_response)
-   File "/home/jstubbs/.local/lib/python3.6/site-packages/flask/app.py", line 2076, in wsgi_app
-      response = self.handle_exception(e)
-   File "/home/jstubbs/.local/lib/python3.6/site-packages/flask/app.py", line 2073, in wsgi_app
-      response = self.full_dispatch_request()
-   File "/home/jstubbs/.local/lib/python3.6/site-packages/flask/app.py", line 1518, in full_dispatch_request
-      rv = self.handle_user_exception(e)
-   File "/home/jstubbs/.local/lib/python3.6/site-packages/flask/app.py", line 1516, in full_dispatch_request
-      rv = self.dispatch_request()
-   File "/home/jstubbs/.local/lib/python3.6/site-packages/flask/app.py", line 1502, in dispatch_request
-      return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
-   File "/home/jstubbs/coe332-sp22/flask_2/degrees_api_2.py", line 31, in degrees3
+    . . . 
+    File "/home/ubuntu/test/degrees_api.py", line 26, in degrees2
       start = int(request.args.get('start', 0))
-   ValueError: invalid literal for int() with base 10: 'abc'
+    ValueError: invalid literal for int() with base 10: 'abc'
 
 
 Checking User Input
