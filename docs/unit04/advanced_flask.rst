@@ -612,7 +612,7 @@ Here is the full code for our route function with exception handling.
 
 
 
-EXERCISE 6
+EXERCISE 8
 ~~~~~~~~~~
 
 
