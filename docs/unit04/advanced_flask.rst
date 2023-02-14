@@ -471,12 +471,16 @@ If it is not numeric, we can return an error message to the user.
 
     @app.route('/degrees', methods=['GET'])
     def degrees():
-        d = get_data()
         start = request.args.get('start', 0)
         if not start.isnumeric():
-            return 'Invalid start value; start must be numeric.'
+            return "Error: start must be an integer"
         start = int(start)
-        return flask.jsonify(d[start:])
+        data = get_data()
+        result = []
+        for d in data:
+            if d['year'] >= start:
+                result.append(d)
+        return result
 
 
 Exceptions
@@ -601,14 +605,19 @@ Here is the full code for our route function with exception handling.
 
    @app.route('/degrees', methods=['GET'])
    def degrees():
-      d = get_data()
-      start = request.args.get('start')
-      if start:
-         try:
-             start = int(start)
-         except ValueError:
-             return "Invalid start parameter; start must be an integer."
-      return flask.jsonify(d[start:])
+       d = get_data()
+       start = request.args.get('start', 0)
+       if start:
+           try:
+               start = int(start)
+           except ValueError:
+               return "Invalid start parameter; start must be an integer."
+       data = get_data()
+       result = []
+       for d in data:
+           if d['year'] >= start:
+               result.append(d)
+       return result
 
 
 
