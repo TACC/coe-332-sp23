@@ -60,7 +60,7 @@ expected?
 
 .. tip::
 
-   Refer back to the `Intro to Flask material <flask_1.html>`_ if
+   Refer back to the `Intro to Flask material <intro_to_flask.html>`_ if
    you need help remembering the boiler-plate code.
 
 
@@ -100,7 +100,7 @@ we'll have to deal with the String type in our function, converting it to ``int`
 Typed URL Parameters
 ---------------------
 
-We can specif the types of the URL parameters we are expecting using the syntax ``<type:variable_name>``. 
+We can specify the types of the URL parameters we are expecting using the syntax ``<type:variable_name>``. 
 For example, we could change our ``degrees_for_id`` route declaration as follows, to indicate we required the ``id``
 variable to be an integer:
 
@@ -172,7 +172,7 @@ but at the end you will see:
    tuple with headers or status, Response instance, or WSGI callable, but it was a int.
 
 
-Flask allows you three options for creating responses:
+Flask allows you four options for creating responses:
 
 1) Return a string (``str``) object
 2) Return a dictionary (``dict``) or list ``list`` object
@@ -201,7 +201,7 @@ so long as we return a list or dictionary.
 Returning JSON (and Other Kinds of Data)
 ----------------------------------------
 
-You probably are thinking at this point we can fix our solution to Exercise 3
+You probably are thinking at this point we can fix our solution to Exercise 4
 by changing the return type. Instead of returning a raw integer, we can return a type that Flask recognized. 
 What type should we return?
 
@@ -219,14 +219,14 @@ session in another window and:
 * Verify that ``r.content`` is what you expect.
 * Use ``r.json()`` to decode the response and compare the type to that of ``r.content``.
 
-Then, repreat the above with the ``/degrees/{id}/degrees`` endpoint. 
+Then, repeat the above with the ``/degrees/<id>/degrees`` endpoint. 
 
 
 HTTP Content Type Headers
 -------------------------
 
 Requests and responses have ``headers`` which describe additional metadata about
-them. Headers are ``key: value`` pairs (much like dictionary entries). The ``key``
+them. Headers are ``key:value`` pairs (much like dictionary entries). The ``key``
 is called the header name and the ``value`` is the header value.
 
 There are many pre-defined headers for common metadata such as specifying the
@@ -235,7 +235,7 @@ size of the message (``Content-Length``), the domain the server is listening on
 
 
 We can use ``curl`` or the python ``requests`` library to see all of the headers
-returned on a response from our flask server. Let's try it.
+returned on a response from our Flask server. Let's try it.
 
 EXERCISE 6
 ~~~~~~~~~~
@@ -249,7 +249,7 @@ EXERCISE 6
    option instead of the ``-v``; this will show you **only** the headers being
    returned in the response.
 3) Inside a Python shell, use ``requests`` to make the same GET request to your ``/degrees``
-   endpoint, and capture the result in a variable, ``r``. Inspect the ``r.header`` attribute.
+   endpoint, and capture the result in a variable, ``r``. Inspect the ``r.headers`` attribute.
    What is the type of ``r.headers``?
 
 
@@ -283,7 +283,7 @@ EXERCISE 6
    In [3]: r.headers
    Out[3]: {'Server': 'Werkzeug/2.2.2 Python/3.8.10', 'Date': 'Sun, 12 Feb 2023 16:41:23 GMT', 'Content-Type': 'application/json', 'Content-Length': '49', 'Connection': 'close'}
 
-We see that we are sending a ``Content-type`` of ``'application/json``, which is what we want. That is how the
+We see that we are sending a ``Content-type`` of ``'application/json'``, which is what we want. That is how the
 Python requests library is able to provide the ``r.json()`` function to automatically convert to a Python list or 
 dictionary. 
 
@@ -346,7 +346,7 @@ For example,
 
 .. code-block:: python
 
-   start = requests.args.get('start')
+   start = request.args.get('start')
 
 In this case, the start variable will be the value of the start parameter, if one is passed, or it 
 will be None otherwise.
@@ -498,7 +498,7 @@ Some common situations that generate exceptions are:
 
 * Trying to open a file that does not exist raises a ``FileNotFoundError``.
 
-* Trying o divide by zero raises a ``ZeroDivisionError``.
+* Trying to divide by zero raises a ``ZeroDivisionError``.
 
 * Trying to access a list at an index beyond its length raises an ``IndexError``.
 
@@ -616,7 +616,7 @@ EXERCISE 8
 ~~~~~~~~~~
 
 
-Add support for a ``limit`` parameter to the code you wrote for Exercise 5. The
+Add support for a ``limit`` parameter to the code you wrote for Exercise 7. The
 ``limit`` parameter should be optional. When passed with an integer value, the
 API should return no more than ``limit`` data points.
 
