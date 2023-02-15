@@ -27,7 +27,7 @@ read the ~3 paragraphs of accompanying text on the website as well.
 
 The most important thing to understand is that the data contains ISS state
 vectors over an ~15 day period. The range of days may change depending on
-when you download the data set. 'State vectors' are the Cartesion vectors
+when you download the data set. 'State vectors' are the Cartesian vectors
 for both position ``{X, Y, Z}`` and velocity ``{X_DOT, Y_DOT, Z_DOT}`` that,
 along with a time stamp ``(EPOCH)``, describe the complete state of the system
 (the ISS).  The frame of reference for these vectors is Earth, based on something
