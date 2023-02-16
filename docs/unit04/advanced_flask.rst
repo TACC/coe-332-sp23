@@ -5,7 +5,7 @@ We continue using Flask in this module with a look at more complex endpoints and
 functions for our REST API. After going through this module, students should be able to:
 
 * Identify valid and invalid Flask route return types
-* Convert unsupported types (e.g. ``list``) to valid Flask route return types
+* Convert unsupported types (e.g. ``int``) to valid Flask route return types
 * Extract Content-Type and other headers from Flask route responses
 * Add query parameters to GET requests, and extract their values inside Flask routes
 * Deal with errors from user-supplied input to an API and handle Python exceptions

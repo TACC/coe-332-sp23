@@ -138,41 +138,40 @@ Getting Started With Docker
 Much like the ``git`` command line tools, the ``docker`` command line tools
 follow the syntax: ``docker <verb> <parameters>``. Discover all the verbs
 available by typing ``docker --help``, and discover help for each verb by typing
-``docker <verb> --help``. Open up your favorite terminal, log in to the class
+``docker <verb> --help``. Open up your favorite terminal, log in to your student
 server, and try running the following:
 
 .. code-block:: console
 
-   [isp02]$ docker version
-   Client: Docker Engine - Community
-    Version:           20.10.12
-    API version:       1.41
-    Go version:        go1.16.12
-    Git commit:        e91ed57
-    Built:             Mon Dec 13 11:45:41 2021
-    OS/Arch:           linux/amd64
-    Context:           default
-    Experimental:      true
+   [user-vm]$ docker version
+   Client:
+      Version:           20.10.12
+      API version:       1.41
+      Go version:        go1.16.2
+      Git commit:        20.10.12-0ubuntu2~20.04.1
+      Built:             Wed Apr  6 02:14:38 2022
+      OS/Arch:           linux/amd64
+      Context:           default
+      Experimental:      true
 
-   Server: Docker Engine - Community
-    Engine:
-     Version:          20.10.12
-     API version:      1.41 (minimum version 1.12)
-     Go version:       go1.16.12
-     Git commit:       459d0df
-     Built:            Mon Dec 13 11:44:05 2021
-     OS/Arch:          linux/amd64
-     Experimental:     false
-    containerd:
-     Version:          1.4.12
-     GitCommit:        7b11cfaabd73bb80907dd23182b9347b4245eb5d
-    runc:
-     Version:          1.0.2
-     GitCommit:        v1.0.2-0-g52b36a2
-    docker-init:
-     Version:          0.19.0
-     GitCommit:        de40ad0
-
+   Server:
+     Engine:
+      Version:          20.10.12
+      API version:      1.41 (minimum version 1.12)
+      Go version:       go1.16.2
+      Git commit:       20.10.12-0ubuntu2~20.04.1
+      Built:            Thu Feb 10 15:03:35 2022
+      OS/Arch:          linux/amd64
+      Experimental:     false
+      containerd:
+   Version:          1.5.9-0ubuntu1~20.04.6
+      GitCommit:        
+      runc:
+      Version:          1.1.0-0ubuntu1~20.04.2
+   GitCommit:        
+      docker-init:
+      Version:          0.19.0
+      GitCommit:        
 
 
 .. warning::
@@ -191,35 +190,20 @@ Working with Images from Docker Hub
 -----------------------------------
 
 To introduce ourselves to some of the most essential Docker commands, we will go
-through the process of listing images that are currently available on the ISP
+through the process of listing images that are currently available on your student
 server, we will pull a 'hello-world' image from Docker Hub, then we will run the
 'hello-world' image to see what it says.
 
-List images on the ISP server with the ``docker images`` command. This peaks
-into the Docker daemon, which is shared by all users on this system, to see
-which images are available, when they were created, and how large they are:
+List images on your server with the ``docker images`` command. This peaks
+into the Docker daemon, to see which images are available, when they were created, 
+and how large they are:
 
 .. code-block:: console
 
-   [isp02]$ docker images
-   REPOSITORY               TAG                              IMAGE ID       CREATED        SIZE
-   eriksf/pi-estimator      0.1-mpi                          7c0c51eadb4a   5 days ago     2.4GB
-   ubuntu                   18.04                            886eca19e611   5 weeks ago    63.1MB
-   eriksf/ucvm_1210_cvms5   11162039                         2e60f37e22b0   2 months ago   6.35GB
-   eriksf/bert-classifier   0.0.1                            f0f041a7aa2f   4 months ago   6.67GB
-   eriksf/bert-classifier   0.0.2                            f0f041a7aa2f   4 months ago   6.67GB
-   tacc/tacc-ml             ubuntu16.04-cuda10-tf2.4-pt1.7   2dfb4d60a1ee   4 months ago   6.06GB
-   tacc/tacc-ml             centos7-cuda10-tf2.4-pt1.7       e150e2a64b12   4 months ago   6.34GB
-   tacc/tacc-ml             centos7-cuda10-tf2.1-pt1.3       152aac5c5d4a   4 months ago   6.51GB
-   tacc/tacc-ml             centos7-cuda10-tf1.15-pt1.3      59d9b476cda9   4 months ago   6.74GB
-   tacc/tacc-ml             centos7-cuda9-tf1.14-pt1.3       4c5b5c69912b   4 months ago   6.38GB
-   tacc/tacc-ml             ubuntu16.04-cuda10-tf2.1-pt1.3   11749adce91f   4 months ago   6.23GB
-   tacc/tacc-ml             ubuntu16.04-cuda10-tf1.15-pt1.3  53408ed25cc8   4 months ago   6.46GB
-   tacc/tacc-ml             ubuntu16.04-cuda9-tf1.14-pt1.3   1752a789aa75   4 months ago   6.1GB
-   tacc/tacc-ml             ubuntu16.04                      952f3930bbfc   4 months ago   543MB
-   tacc/tacc-ml             centos7                          068a63ee19c8   4 months ago   814MB
-   centos                   7                                eeb6ee3f44bd   5 months ago   204MB
-   centos                   8                                5d0da3dc9764   5 months ago   231MB
+   [user-vm]$ docker images
+   REPOSITORY            TAG       IMAGE ID       CREATED        SIZE
+   guacamole/guacamole   <none>    a385e28f9fd6   8 months ago   642MB
+   guacamole/guacd-dev   <none>    315a12ba560b   9 months ago   228MB
 
 
 Pull an image from Docker hub with the ``docker pull`` command. This looks
@@ -228,7 +212,7 @@ image:
 
 .. code-block:: console
 
-   [isp02]$ docker pull hello-world
+   [user-vm]$ docker pull hello-world
    Using default tag: latest
    latest: Pulling from library/hello-world
    0e03bdcc26d7: Pull complete
@@ -243,7 +227,7 @@ that has been configured as the 'default command' when the image was built:
 
 .. code-block:: console
 
-   [isp02]$ docker run hello-world
+   [user-vm]$ docker run hello-world
 
    Hello from Docker!
    This message shows that your installation appears to be working correctly.
@@ -271,7 +255,7 @@ Check to see if any containers are still running using ``docker ps``:
 
 .. code-block:: console
 
-   [isp02]$ docker ps
+   [user-vm]$ docker ps
    CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 
 
@@ -282,24 +266,42 @@ help text for that command and figure out how to show all containers, not just
 currently running containers.
 
 
-Pull Another Image
-------------------
+Pull An Official Image
+----------------------
 
-Navigate to the repositories of user ``wjallen`` on Docker Hub
-`here <https://hub.docker.com/u/wjallen>`_.
+One powerful aspect of developing with containers and the Docker ecosystem is the 
+large collection of container images freely available. There are 10s of millions of
+images on Docker Hub alone, but beware: using an image that you don't know anything 
+about comes with the same risks involved with running any software.
 
-Scroll down to find an image called ``wjallen/bsd``, then click on that image.
+.. warning::
+   Be careful running container images that you are not familiar with. Some could contain 
+   security vulnerabilities or, even worse, malicious code like viruses or ransomware. 
 
-Pull the image using the suggested command, then check to make sure it is
+To combat this, Docker Hub provides `"Official Images" <https://docs.docker.com/docker-hub/official_images/>`_,
+a well-maintained set of container images providing high-quality installations of operating
+systems, programming language environments and more.
+
+We can seearch through the official images on Docker Hub `here <https://hub.docker.com/search?image_filter=official&q=&type=image>`_.
+
+Scroll down to find the Python official image called ``python``, then 
+click on that `image <https://hub.docker.com/_/python>`_.
+
+We see a lot of information about how to use the image, including information about the different 
+"tags" available. We see tags such as ``3.12-rc``, ``3.11.2``, ``3.11``, ``3``, etc.
+We'll discuss tags in detail later, but for now, does anyone have a guess as to what
+the Python tags refer to? 
+
+We can pull the official Python image using command, then check to make sure it is
 available locally:
 
 .. code-block:: console
 
-   [isp02]$ docker pull wjallen/bsd:1.0
+   [isp02]$ docker pull python
    ...
    [isp02]$ docker images
    ...
-   [isp02]$ docker inspect wjallen/bsd:1.0
+   [isp02]$ docker inspect python
    ...
 
 .. tip::
@@ -320,35 +322,29 @@ commands on the ISP server (we will see why in a minute):
 
 .. code-block:: console
 
-   [isp02]$ whoami
-   wallen
-   [isp02]$ pwd
-   /home/wallen
-   [isp02]$ cat /etc/os-release
-   NAME="CentOS Linux"
-   VERSION="7 (Core)"
-   ID="centos"
-   ID_LIKE="rhel fedora"
-   VERSION_ID="7"
-   PRETTY_NAME="CentOS Linux 7 (Core)"
-   ANSI_COLOR="0;31"
-   CPE_NAME="cpe:/o:centos:centos:7"
-   HOME_URL="https://www.centos.org/"
-   BUG_REPORT_URL="https://bugs.centos.org/"
+   [user-vm]$ whoami
+   ubuntu
+   [user-vm]$ pwd
+   /home/ubuntu
+   [user-vm]$ cat /etc/os-release
+   NAME="Ubuntu"
+   VERSION="20.04.5 LTS (Focal Fossa)"
+   ID=ubuntu
+   ID_LIKE=debian
+   PRETTY_NAME="Ubuntu 20.04.5 LTS"
+   VERSION_ID="20.04"
+   HOME_URL="https://www.ubuntu.com/"
+   SUPPORT_URL="https://help.ubuntu.com/"
+   BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+   PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+   VERSION_CODENAME=focal
+   UBUNTU_CODENAME=focal
 
-   CENTOS_MANTISBT_PROJECT="CentOS-7"
-   CENTOS_MANTISBT_PROJECT_VERSION="7"
-   REDHAT_SUPPORT_PRODUCT="centos"
-   REDHAT_SUPPORT_PRODUCT_VERSION="7"
-
-   [isp02]$ ls -l /usr/games/
-   total 0
-
-Now start the interactive shell:
+Now start the interactive shell inside a Python container:
 
 .. code-block:: console
 
-   [isp02]$ docker run --rm -it wjallen/bsd:1.0 /bin/bash
+   [user-vm]$ docker run --rm -it python /bin/bash
    root@fc5b620c5a88:/#
 
 Here is an explanation of the command options:
@@ -358,8 +354,8 @@ Here is an explanation of the command options:
   docker run       # run a container
   --rm             # remove the container when we exit
   -it              # interactively attach terminal to inside of container
-  wjallen/bsd:1.0  # image and tag on local machine
-  /bin/bash        # shell to start inside container
+  python           # use the official python image 
+  /bin/bash        # execute the bash shell program inside container
 
 Try the following commands - the same commands you did above before staring the
 interactive shell in the container - and note what has changed:
@@ -371,23 +367,15 @@ interactive shell in the container - and note what has changed:
    root@fc5b620c5a88:/# pwd
    /
    root@fc5b620c5a88:/# cat /etc/os-release
-   NAME="Ubuntu"
-   VERSION="16.04.6 LTS (Xenial Xerus)"
-   ID=ubuntu
-   ID_LIKE=debian
-   PRETTY_NAME="Ubuntu 16.04.6 LTS"
-   VERSION_ID="16.04"
-   HOME_URL="http://www.ubuntu.com/"
-   SUPPORT_URL="http://help.ubuntu.com/"
-   BUG_REPORT_URL="http://bugs.launchpad.net/ubuntu/"
-   VERSION_CODENAME=xenial
-   UBUNTU_CODENAME=xenial
-   root@fc5b620c5a88:/# ls /usr/games/
-   adventure   bcd       countmail  hack     morse      ppt     robots   teachgammon  worms
-   arithmetic  boggle    cribbage   hangman  number     primes  rot13    tetris-bsd   wtf
-   atc         caesar    dab        hunt     phantasia  quiz    sail     trek         wump
-   backgammon  canfield  go-fish    mille    pig        rain    snake    wargames
-   battlestar  cfscores  gomoku     monop    pom        random  snscore  worm
+   PRETTY_NAME="Debian GNU/Linux 11 (bullseye)"
+   NAME="Debian GNU/Linux"
+   VERSION_ID="11"
+   VERSION="11 (bullseye)"
+   VERSION_CODENAME=bullseye
+   ID=debian
+   HOME_URL="https://www.debian.org/"
+   SUPPORT_URL="https://www.debian.org/support"
+   BUG_REPORT_URL="https://bugs.debian.org/"
 
 Now you are the ``root`` user on a different operating system inside a running
 Linux container! You can type ``exit`` to escape the container.
@@ -395,17 +383,19 @@ Linux container! You can type ``exit`` to escape the container.
 EXERCISE
 ~~~~~~~~
 
-Before you exit the container, try running a few of the games (e.g. ``hangman``).
-
+Before you exit the container, try running the command ``python``. What happens?
+Compare that with running the command ``python`` directly on your student VM. 
 
 
 Run a Command Inside a Container
 --------------------------------
 
-Back out on the ISP server, we now know we have an image called
-``wjallen/bsd:1.0`` that has some terminal games inside it which would not
-otherwise be available to us on the ISP server. They (and their dependencies)
-are *isolated* from everything else. This image (``wjallen/bsd:1.0``) is portable
+Back out on you student VM, we now know we have a container image called
+``python`` that has a particular version of Python (3.11.2) that is 
+otherwise not available on your student server. The 3.11.2 Python interpreter,  
+it's standard library, and all of the dependencies of those are included in the 
+container image and 
+are *isolated* from everything else. This image (``python``) is portable
 and will run the exact same way on any OS that Docker supports.
 
 In practice, though, we don't want to start interactive shells each time we need
@@ -415,38 +405,38 @@ to use a software application inside an image. Docker allows you to spin up an
 
 .. code-block:: console
 
-   [isp02]$ docker run --rm wjallen/bsd:1.0 whoami
+   [user-vm]$ docker run --rm python whoami
    root
-   [isp02]$ docker run --rm wjallen/bsd:1.0 pwd
+   [user-vm]$ docker run --rm python pwd
    /
-   [isp02]$ docker run --rm wjallen/bsd:1.0 cat /etc/os-release
-   NAME="Ubuntu"
-   VERSION="16.04.6 LTS (Xenial Xerus)"
-   ID=ubuntu
-   ID_LIKE=debian
-   PRETTY_NAME="Ubuntu 16.04.6 LTS"
-   VERSION_ID="16.04"
-   HOME_URL="http://www.ubuntu.com/"
-   SUPPORT_URL="http://help.ubuntu.com/"
-   BUG_REPORT_URL="http://bugs.launchpad.net/ubuntu/"
-   VERSION_CODENAME=xenial
-   UBUNTU_CODENAME=xenial
-   [isp02]$ docker run --rm wjallen/bsd:1.0 ls /usr/games
-   adventure   bcd       countmail  hack     morse      ppt     robots   teachgammon  worms
-   arithmetic  boggle    cribbage   hangman  number     primes  rot13    tetris-bsd   wtf
-   atc         caesar    dab        hunt     phantasia  quiz    sail     trek         wump
-   backgammon  canfield  go-fish    mille    pig        rain    snake    wargames
-   battlestar  cfscores  gomoku     monop    pom        random  snscore  worm
-   [isp02]$ docker run --rm -it wjallen/bsd:1.0 hangman
+   [user-vm]$ docker run --rm python cat /etc/os-release
+   PRETTY_NAME="Debian GNU/Linux 11 (bullseye)"
+   NAME="Debian GNU/Linux"
+   VERSION_ID="11"
+   VERSION="11 (bullseye)"
+   VERSION_CODENAME=bullseye
+   ID=debian
+   HOME_URL="https://www.debian.org/"
+   SUPPORT_URL="https://www.debian.org/support"
+   BUG_REPORT_URL="https://bugs.debian.org/"
+   [user-vm] docker run -it --rm python
+   Python 3.11.2 (main, Feb 11 2023, 02:24:27) [GCC 10.2.1 20210110] on linux
+   Type "help", "copyright", "credits" or "license" for more information.
+   >>> # type exit() to escape
 
-The first four commands above omitted the ``-it`` flags because they did not
+
+In the first three commands above omitted the ``-it`` flags because they did not
 require an interactive terminal to run. On each of these commands, Docker finds
 the image the command refers to, spins up a new container based on that image,
 executes the given command inside, prints the result, and exits and removes the
 container.
 
-The last command, which executes the ``hangman`` game, requires an interactive
-terminal so the ``-it`` flags were provided.
+The last command, which did not specify a command to run inside the container, uses the container's 
+default command. We don't know ahead of time what (if any) default command is provided for 
+any given image, but what default command was provided for the ``python`` image? 
+
+Yes, it was the ``python`` command itself, and that requires an interactivity to use, 
+so we provide the ``-it`` flags.
 
 
 Essential Docker Command Summary
