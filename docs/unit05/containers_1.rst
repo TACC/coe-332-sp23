@@ -14,6 +14,8 @@ After going through this module, students should be able to:
 * Use essential docker commands
 * Find and pull existing containers from Docker Hub
 * Run containers interactively and non-interactively
+* **Design Principles:** Additionally, we will see how containers contribute to
+  the portability of software projects
 
 
 
@@ -259,7 +261,8 @@ Check to see if any containers are still running using ``docker ps``:
    CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 
 
-**EXERCISE**
+EXERCISE
+~~~~~~~~
 
 The command ``docker ps`` shows only currently running containers. Pull up the
 help text for that command and figure out how to show all containers, not just
@@ -275,6 +278,7 @@ images on Docker Hub alone, but beware: using an image that you don't know anyth
 about comes with the same risks involved with running any software.
 
 .. warning::
+
    Be careful running container images that you are not familiar with. Some could contain 
    security vulnerabilities or, even worse, malicious code like viruses or ransomware. 
 
@@ -282,7 +286,7 @@ To combat this, Docker Hub provides `"Official Images" <https://docs.docker.com/
 a well-maintained set of container images providing high-quality installations of operating
 systems, programming language environments and more.
 
-We can seearch through the official images on Docker Hub `here <https://hub.docker.com/search?image_filter=official&q=&type=image>`_.
+We can search through the official images on Docker Hub `here <https://hub.docker.com/search?image_filter=official&q=&type=image>`_.
 
 Scroll down to find the Python official image called ``python``, then 
 click on that `image <https://hub.docker.com/_/python>`_.
@@ -297,11 +301,11 @@ available locally:
 
 .. code-block:: console
 
-   [isp02]$ docker pull python
+   [user-vm]$ docker pull python
    ...
-   [isp02]$ docker images
+   [user-vm]$ docker images
    ...
-   [isp02]$ docker inspect python
+   [user-vm]$ docker inspect python
    ...
 
 .. tip::
@@ -318,7 +322,7 @@ see what is in there. Imagine you are ssh-ing to a different Linux server, have
 root access, and can see what files, commands, environment, etc., is available.
 
 Before starting an interactive shell inside the container, execute the following
-commands on the ISP server (we will see why in a minute):
+commands on your private VM (we will see why in a minute):
 
 .. code-block:: console
 
@@ -476,13 +480,13 @@ If all else fails, display the help text:
 
 .. code-block:: console
 
-   [isp02]$ docker --help
+   [user-vm]$ docker --help
    shows all docker options and summaries
 
 
 .. code-block:: console
 
-   [isp02]$ docker COMMAND --help
+   [user-vm]$ docker COMMAND --help
    shows options and summaries for a particular command
 
 Additional Resources
