@@ -10,13 +10,15 @@ find and use it. After going through this module, students should be able to:
 * Write a Dockerfile from scratch
 * Build a Docker image from a Dockerfile
 * Push a Docker image to Docker Hub
+* **Design Principles:** As with the previous lecture, we will see how containers contribute 
+to the portability of software projects
 
 
 Getting Set Up
 --------------
 
-*Scenario:* You are a developer who has written some code for reading and
-parsing meteorite landing data in JSON format. You now want to distribute that
+*Scenario:* You are a developer who has written some code the provides a JSON API to some
+data. You now want to distribute that
 code for others to use in what you know to be a stable production environment
 (including OS and dependency versions). End users may want to use this application
 on their local workstations, in the cloud, or on an HPC cluster.
@@ -27,7 +29,7 @@ and testing an application interactively within a running Docker container.
 
 .. note::
 
-   We recommend doing this on the class ISP server. But, one of the most
+   We recommend doing this on your own student VM. But, one of the most
    important features of Docker is that it is platform agnostic. These steps
    could be done anywhere Docker is installed.
 
@@ -38,26 +40,23 @@ files.
 
 .. code-block:: console
 
-   [isp02]$ cd ~/coe-332/
-   [isp02]$ mkdir docker-exercise/
-   [isp02]$ cd docker-exercise/
-   [isp02]$ pwd
-   /home/wallen/coe-332/docker-exercise
+   [user-vm]$ cd ~/coe-332/
+   [user-vm]$ mkdir docker/
+   [user-vm]$ cd docker/
+   [user-vm]$ pwd
+   /home/ubuntu/coe332/docker
 
-Specifically, you need your ``ml_data_analysis.py`` script and the input data
-file called ``Meteorite_Landings.json``. You can make copies of your own, our
-download sample copies from the links below. You also need a ``Dockerfile``, and
-we can just make an empty one with no contents for now.
+We're going to containerize the ``degrees_api`` Flask application from the end of Unit 4. 
+Specifically, you need your ``degrees_api.py`` script that we wrote together in class. To simplify
+our work today, we will just copy the file into our docker directory:
 
 .. code-block:: console
 
-   [isp02]$ pwd
-   /home/wallen/coe-332/docker-exercise
-   [isp02]$ touch Dockerfile
-   [isp02]$ wget https://raw.githubusercontent.com/tacc/coe-332-sp22/main/docs/unit04/scripts/Meteorite_Landings.json
-   [isp02]$ wget https://raw.githubusercontent.com/tacc/coe-332-sp22/main/docs/unit04/scripts/ml_data_analysis.py
-   [isp02]$ ls
-   Dockerfile  Meteorite_Landings.json  ml_data_analysis.py
+   [user-vm]$ cp ~/coe-332/degrees_api.py .
+
+.. note::
+   You may need to update the path above to point to your ``degrees_api.py`` file.
+
 
 .. warning::
 
@@ -80,19 +79,20 @@ code for the first time:
 4. What environment variables may be important?
 
 We can work through these questions by performing an **interactive installation**
-of our Python script. Our development environment (the class ISP server) is a
-Linux server running CentOS 7.7. We know our code works here, so that is how we
-will containerize it. Use ``docker run`` to interactively attach to a fresh
-`CentOS 7.7 container <https://hub.docker.com/_/centos?tab=tags&page=1&ordering=last_updated&name=7.7>`_.
+of our Python script. The official Python container image that worked with last lecture
+is a an excellent choice for Python projects, as it already contains a well-maintained
+installation of Python, and we can easily pick the version of Python that we want by selecting
+different tags. The Python we have been using on the VM is Python 3.8.10, so we'll stick 
+with that one to avoid any Python-specific issues that could arise from chaging the version. 
 
-.. warning::
+To get that exact version of the Python offisial image, use ``docker pull python:3.8.10``.
+We can also run a container from the image to 
 
-   Due to Log4Shell vulnerability (CVE-2021-44228 or CVE-2021-45046), let's
-   instead pull CentOS 7.9.
 
 .. code-block:: console
 
-   [isp02]$ docker run --rm -it -v $PWD:/code centos:7.9.2009 /bin/bash
+   [user-vm]$ docker pull python:3.8.10
+   [user-vm]$ docker run --rm -it python:3.8.10 /bin/bash
    [root@7ad568453e0b /]#
 
 Here is an explanation of the options:
@@ -102,56 +102,108 @@ Here is an explanation of the options:
    docker run       # run a container
    --rm             # remove the container on exit
    -it              # interactively attach terminal to inside of container
-   -v $PWD:/code    # mount the current directory to /code
-   centos:7.9.2009  # image and tag from Docker Hub
+   python:3.8.10    # image and tag from Docker Hub
    /bin/bash        # shell to start inside container
 
 
-The command prompt will change, signaling you are now 'inside' the container.
-And, new to this example, we are using the ``-v`` flag which mounts the contents
-of our current directory (``$PWD``) inside the container in a folder in the root
-directory called (``/code``).
-
-
-Update and Upgrade
-~~~~~~~~~~~~~~~~~~
-
-The first thing we will typically do is use the CentOS package manager ``yum``
-to update the list of available packages and install newer versions of the
-packages we have. We can do this with:
+The command prompt will change, signaling you are now 'inside' the container. Let's check that 
+we can run ``python`` from the shell:
 
 .. code-block:: console
 
-  [root@7ad568453e0b /]# yum update
-  ...
+  [root@7ad568453e0b /] python
+  Python 3.8.10 (default, Jun 23 2021, 15:19:53) 
+  [GCC 8.3.0] on linux
+  Type "help", "copyright", "credits" or "license" for more information.
 
-.. note::
 
-  You will need to press 'y' followed by 'Enter' twice to download and install
-  the updates
+What about Flask? What happens if try to import it from the Python repl?
 
+.. code-block:: console
+
+  [root@7ad568453e0b /] python
+  Python 3.8.10 (default, Jun 23 2021, 15:19:53) 
+  [GCC 8.3.0] on linux
+  Type "help", "copyright", "credits" or "license" for more information.
+  >>> import flask
+
+
+The base Python images have the Python interpreter and standard library, but they do not include 
+any third-party packages. If we try to ``import flask``, we'll get a ``ModuleNotFoundError`` exception.
+
+.. code-block:: python
+
+   >>> import flask
+   Traceback (most recent call last):
+   File "<stdin>", line 1, in <module>
+   ModuleNotFoundError: No module named 'flask'
+
+To use Flask, we'll need to install it in the container image ourselves.
 
 Install Required Packages
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For our Python scripts to work, we need to install two dependencies: Python3 and
-the 'pytest' package (more on the 'pytest' package later, let's just assume for
-now we need it).
+For our Python Flask program to work, we need to install the ``Flask`` package. 
+How do we typically install Python packages? We use the ``pip`` package manager. Does
+our Python container image have ``pip`` installed? Let's check:
 
 .. code-block:: console
 
-   [root@7ad568453e0b /]# yum install python3
+   [root@7ad568453e0b /]# pip -h
+   Usage:   
+   pip <command> [options]
+
+   Commands:
+   install                     Install packages.
    ...
-   [root@7ad568453e0b /]# python3 --version
-   Python 3.6.8
-   [root@7ad568453e0b /]# pip3 install pytest==7.0.0
-   Collecting pytest==7.0.0
-     ...
-   Installing collected packages: py, pyparsing, packaging, typing-extensions, zipp,
-     importlib-metadata, pluggy, attrs, iniconfig, tomli, pytest
-   Successfully installed attrs-21.4.0 importlib-metadata-4.8.3 iniconfig-1.1.1 packaging-21.3
-     pluggy-1.0.0 py-1.11.0 pyparsing-3.0.7 pytest-7.0.0 tomli-1.2.3 typing-extensions-4.1.1
-     zipp-3.6.0
+
+It does! That's great. So we should be able to use pip to install a particular version of Flask. 
+Which version do we want to install? We can check which version we were using on our VM and use the
+same one in the container. That way, we won't hit any issues due to version changes with the 
+package. 
+
+Back out in the VM, we can get a list of packages pip knows about using ``pip freeze``:
+
+.. code-block:: console
+
+  [user-vm] pip freeze
+   appdirs==1.4.3
+   apturl==0.5.2
+   asttokens==2.2.1
+   attrs==19.3.0
+   Automat==0.8.0
+   backcall==0.2.0
+   blinker==1.4
+   Brlapi==0.7.0
+   cached-property==1.5.1
+   ceph==1.0.0
+   cephfs==2.0.0
+   certifi==2019.11.28
+   . . . 
+
+Wow, that's a long list! We really just want to know the version of the Flask package, so we can 
+pipe the output of ``pip freeze`` to ``grep`` to just select lines with ``Flask`` in them (note the capital
+``F``):
+
+.. code-block:: console
+
+  [user-vm] pip freeze | grep Flask
+  Flask==2.2.2
+
+Great, so we need Flask version 2.2.2. Back in the container, we can try to install Flask using ``pip`` 
+
+.. code-block:: console
+
+   [root@7ad568453e0b /] pip install Flask==2.2.2
+
+   Collecting Flask==2.2.2
+   Downloading Flask-2.2.2-py3-none-any.whl (101 kB)
+      |████████████████████████████████| 101 kB 3.3 MB/s 
+   Collecting itsdangerous>=2.0
+   . . .
+   Successfully installed Flask-2.2.2 Jinja2-3.1.2 MarkupSafe-2.1.2 Werkzeug-2.2.3 click-8.1.3 importlib-metadata-6.0.0 itsdangerous-2.1.2 zipp-3.14.0
+
+That worked! Note that when pip installed Flask 2.2.2 it also installed its dependencies for us.
 
 .. warning::
 
@@ -161,60 +213,16 @@ now we need it).
 
 
 
-Install and Test Your Code
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-At this time, we should make a small edit to the code that will make it a little
-more flexible and more amenable to running in a container. Instead of hard coding
-the filename 'Meteorite_Landings.json' in the script, let's make a slight
-modification so we can pass the filename on the command line. In the script, add
-this line near the top:
-
-.. code-block:: python3
-
-   import sys
-
-And change the ``with open...`` statements to these, as appropriate:
-
-.. code-block:: python3
-
-   with open(sys.argv[1], 'r') as f:
-       ml_data = json.load(f)
-
-
-Since we are using a simple Python script, there is not a difficult install
-process. However, we can make it executable and add it to them user's `PATH`.
-
-.. code-block:: console
-
-   [root@7ad568453e0b /]# cd /code
-   [root@7ad568453e0b /]# chmod +rx ml_data_analysis.py
-   [root@7ad568453e0b /]# export PATH=/code:$PATH
-
-Now test with the following:
-
-.. code-block:: console
-
-   [root@7ad568453e0b /]# cd /home
-   [root@7ad568453e0b /]# cp /code/Meteorite_Landings.json .
-   [root@7ad568453e0b /]# ml_data_analysis.py Meteorite_Landings.json
-   83857.3
-   Northern & Eastern
-   ...etc
-
-
-We now have functional versions of our script 'installed' in this container.
-Now would be a good time to execute the `history` command to see a record of the
-build process. When you are ready, type `exit` to exit the container and we can
-start writing these build steps into a Dockerfile.
-
 
 Assemble a Dockerfile
 ---------------------
 
 After going through the build process interactively, we can translate our build
-steps into a Dockerfile using the directives described below. Open up your copy
-of ``Dockerfile`` with a text editor and enter the following:
+steps into a Dockerfile using the directives described below. A Dockerfile is 
+just a text file that contains commands for building a new image. We'll 
+cover a few of the different Dockerfile instructions below. 
+
+Create a new file called ``Dockerfile`` and open it with a text editor.
 
 
 The FROM Instruction
@@ -222,58 +230,38 @@ The FROM Instruction
 
 We can use the FROM instruction to start our new image from a known base image.
 This should be the first line of our Dockerfile. In our scenario, we want to
-match our development environment with CentOS 7.9. We know our code works in
-that environment, so that is how we will containerize it for others to use:
+use an official Python image that contains the same version of Python that we 
+have been using on the VM:
 
 .. code-block:: dockerfile
 
-   FROM centos:7.9.2009
+   FROM python:3.8.10
 
-Base images typically take the form `os:version`. Avoid using the '`latest`'
-version; it is hard to track where it came from and the identity of '`latest`'
-can change.
-
-.. tip::
-
-   Browse `Docker Hub <https://hub.docker.com/>`_ to discover other potentially
-   useful base images. Keep an eye out for the 'Official Image' badge.
+At this point, our new image just has the Python 3.8.10 official image in it.
 
 
 The RUN Instruction
 ~~~~~~~~~~~~~~~~~~~
 
 We can install updates, install new software, or download code to our image by
-running commands with the RUN instruction. In our case, our only dependencies
-were Python3 and the "pytest" library. So, we will use a few RUN instructions to
-install them. Keep in mind that the the ``docker build`` process cannot handle
-interactive prompts, so we use the ``-y`` flag with ``yum`` and ``pip3``.
+running commands with the RUN instruction. The RUN instruction works by literally
+running the command line provided after ``RUN`` in the existing container image.
+Any files created, modified or deleted by the command line will be correspondingly 
+changes in the image.
+
+In our case, our only dependency was the Flask library which we can install with ``pip``. 
+We will use a RUN instruction to execute the ``pip`` command to install it. 
 
 .. code-block:: dockerfile
 
-   RUN yum update -y
-   RUN yum install -y python3
-   RUN pip3 install pytest==7.0.0
+   RUN pip install Flask==2.2.2
 
 Each RUN instruction creates an intermediate image (called a 'layer'). Too many
 layers makes the Docker image less performant, and makes building less
 efficient. We can minimize the number of layers by combining RUN instructions.
 Dependencies that are more likely to change over time (e.g. Python3 libraries)
 still might be better off in in their own RUN instruction in order to save time
-building later on:
-
-
-.. code-block:: dockerfile
-
-   RUN yum update -y && \
-       yum install -y python3
-
-   RUN pip3 install pytest==7.0.0
-
-.. tip::
-
-   In the above code block, the \ character at the end of the lines causes the
-   newline character to be ignored. This can make very long run-on lines with
-   many commands separated by && easier to read.
+building later on.
 
 
 
@@ -281,39 +269,36 @@ building later on:
 The COPY Instruction
 ~~~~~~~~~~~~~~~~~~~~
 
-There are a couple different ways to get your source code inside the image. One
-way is to use a RUN instruction with ``wget`` to pull your code from the web.
-When you are developing, however, it is usually more practical to copy code in
+Now we need to add our flask application. 
+There are a couple different ways to get your source code inside the image.
+When you are developing, the most practical methods is usually to copy code in
 from the Docker build context using the COPY instruction. For example, we can
-copy our script to the root-level `/code` directory with the following
+copy our script to the root-level `/` directory with the following
 instructions:
 
 .. code-block:: dockerfile
 
-   COPY ml_data_analysis.py /code/ml_data_analysis.py
+   COPY degrees_api.py /degrees_api.py
 
 
-And, don't forget to perform another RUN instruction to make the script
-executable:
-
-.. code-block:: dockerfile
-
-   RUN chmod +rx /code/ml_data_analysis.py
-
-
-
-
-The ENV Instruction
+The CMD Instruction
 ~~~~~~~~~~~~~~~~~~~
 
-Another useful instruction is the ENV instruction. This allows the image
-developer to set environment variables inside the container runtime. In our
-interactive build, we added the ``/code`` folder to the ``PATH``. We can do this
-with ENV instructions as follows:
+Another useful instruction is the ``CMD`` instruction. This sets a default command line
+to run in the container when none is provided to a ``docker run`` command that makes use 
+of the image. To run our flask application, we can simply execute the file with python:
+
+.. code-block:: console
+
+  [user-vm] python degrees_api.py
+
+
+To provide the command line to ``CMD`` instruction, separate each part of the command line 
+into a list of strings. 
 
 .. code-block:: dockerfile
 
-   ENV PATH "/code:$PATH"
+   CMD ["python", "degrees_api.py"]
 
 
 
@@ -325,18 +310,13 @@ The contents of the final Dockerfile should look like:
 .. code-block:: dockerfile
    :linenos:
 
-   FROM centos:7.9.2009
+   FROM python:3.10
 
-   RUN yum update -y && \
-       yum install -y python3
+   RUN pip install Flask==2.2.2
 
-   RUN pip3 install pytest==7.0.0
+   ADD degrees_api.py /degrees_api.py
 
-   COPY ml_data_analysis.py /code/ml_data_analysis.py
-
-   RUN chmod +rx /code/ml_data_analysis.py
-
-   ENV PATH "/code:$PATH"
+   CMD ["python", "degrees_api.py"]
 
 
 Build the Image
@@ -348,7 +328,7 @@ generally takes the form:
 
 .. code-block:: console
 
-   [isp02]$ docker build -t <dockerhubusername>/<code>:<version> .
+   [user-vm]$ docker build -t <dockerhubusername>/<code>:<version> .
 
 The ``-t`` flag is used to name or 'tag' the image with a descriptive name and
 version. Optionally, you can preface the tag with your **Docker Hub username**.
@@ -361,7 +341,7 @@ To build the image, use:
 
 .. code-block:: console
 
-   [isp02]$ docker build -t username/ml_data_analysis:1.0 .
+   [user-vm]$ docker build -t username/degrees_api:1.0 .
 
 .. note::
 
@@ -373,14 +353,14 @@ also use `docker inspect` to find out more information about the image.
 
 .. code-block:: console
 
-   [isp02]$ docker images
+   [user-vm]$ docker images
    REPOSITORY                 TAG        IMAGE ID       CREATED              SIZE
-   wjallen/ml_data_analysis   1.0        2883079fad18   About a minute ago   547MB
+   jstubbs/degrees_api        1.0        2883079fad18   About a minute ago   928MB
    ...
 
 .. code-block:: console
 
-   [isp02]$ docker inspect username/ml_data_analysis:1.0
+   [user-vm]$ docker inspect username/degrees_api:1.0
 
 
 If you need to rename your image, you can either re-tag it with ``docker tag``, or
@@ -392,91 +372,67 @@ commands on an empty command line to find out usage information.
 Test the Image
 --------------
 
-We can test a newly-built image two ways: interactively and non-interactively.
-In interactive testing, we will use ``docker run`` to start a shell inside the
-image, just like we did when we were building it interactively. The difference
-this time is that we are NOT mounting the code inside with the ``-v`` flag,
-because the code is already in the container:
+We can now test our newly-built image! Let's start a container from the image
+using the ``docker run`` command. Execute the following in your VM:
 
 .. code-block:: console
 
-   [isp02]$ docker run --rm -it username/ml_data_analysis:1.0 /bin/bash
-   ...
-   [root@c5cf05edddcd /]# ls /code
-   ml_data_analysis.py
-   [root@c5cf05edddcd /]# cd /home
-   [root@c5cf05edddcd home]# pwd
-   /home
-   [root@c5cf05edddcd home]# ml_data_analysis.py Meteorite_Landings.json
-   Traceback (most recent call last):
-     File "/code/ml_data_analysis.py", line 96, in <module>
-       main()
-     File "/code/ml_data_analysis.py", line 82, in main
-       with open(sys.argv[1], 'r') as f:
-   FileNotFoundError: [Errno 2] No such file or directory: 'Meteorite_Landings.json'
+   [user-vm] docker run -it --rm -p 5000:5000 username/degrees_api:1.0
 
-Here is an explanation of the options:
+   * Serving Flask app 'degrees_api'
+   * Debug mode: on
+   WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+   * Running on all addresses (0.0.0.0)
+   * Running on http://127.0.0.1:5000
+   * Running on http://172.17.0.2:5000
+   Press CTRL+C to quit
+   * Restarting with stat
+   * Debugger is active!
+   * Debugger PIN: 127-571-634
 
-.. code-block:: text
+Note the use of the ``-p`` flag to bind a port on the container to a port on the VM. We'll talk more about
+container networking later, but for now, understand that every container gets a complete set of "private" 
+ports that, by default, are not connected to the host ports. Since our Flask application listens on port 
+5000, if we do not connect the container's port 5000 to the host's port 5000, then we won't be able to communicate
+with our Flask program on the VM. 
 
-   docker run      # run a container
-   --rm            # remove the container when we exit
-   -it             # interactively attach terminal to inside of container
-   username/...    # image and tag on local machine
-   /bin/bash       # shell to start inside container
+The ``-p`` flag takes the form ``<host port>:<container port>`` and connects the two. 
 
-
-Uh oh! We forgot about ``Meteorite_Landings.json``! We get a FileNotFoundError
-in Python3. This is because we (1) did not copy the JSON file into the container
-at build time, and (2) we did not copy the JSON file into the container at run
-time.
-
-We should pause at this moment to think about how we want to distribute this
-application. Should the data be encapsulated within? Or should we expect potential
-users to be brining their own data for analysis?
-
-Let's try again, but this time mount the data inside the container so we can
-access it. If we mount the current folder as, e.g., ``/data``, then everything
-in the current folder will be available. In addition, if we write any new files
-inside the container to ``/data``, those will be preserved and persist outside
-the container once it stops.
+With our ``degrees_api`` container running, let's use curl in another window to interact with our 
+program:
 
 .. code-block:: console
 
-   [isp02]$ docker run --rm -it -v $PWD:/data username/ml_data_analysis:1.0 /bin/bash
-   [root@dc0d6bf1875c /]# pwd
-   /
-   [root@dc0d6bf1875c /]# ls /data
-   Dockerfile  Meteorite_Landings.json  ml_data_analysis.py
-   [root@dc0d6bf1875c /]# ls /code
-   ml_data_analysis.py
-   [root@dc0d6bf1875c /]# ml_data_analysis.py /data/Meteorite_Landings.json
-   83857.3
-   Northern & Eastern
-   ... etc
+   curl 127.0.0.1:5000/degrees
+   [
+      {
+         "degrees": 5818,
+         "id": 0,
+         "year": 1990
+      },
+      {
+         "degrees": 5725,
+         "id": 1,
+         "year": 1991
+      },
+      {
+         "degrees": 6005,
+         "id": 2,
+         "year": 1992
+      },
+      {
+         "degrees": 6123,
+         "id": 3,
+         "year": 1993
+      },
+      {
+         "degrees": 6096,
+         "id": 4,
+         "year": 1994
+      }
+   ]
 
-
-
-Everything looks like it works now! Next, exit the container and test the code
-non-interactively. Notice we are calling the container again with ``docker run``,
-but instead of specifying an interactive (``-it``) run, we just issue the command
-as we want to call it on the command line. Also, notice the return of the ``-v``
-flag, because we need to create a volume mount so that our data
-(``Meteorite_Landings.json``) is available inside the container.
-
-.. code-block:: console
-
-   [isp02]$ docker run --rm -v $PWD:/data username/ml_data_analysis:1.0 ml_data_analysis.py /data/Meteorite_Landings.json
-   83857.3
-   Northern & Eastern
-   ... etc
-
-Much simpler and cleaner! Our only local dependencies are the Docker runtime and
-some input data that we provide. Then we pull and run the image, mounting our
-data inside the container and executing the embedded Python3 script. Anyone with
-their own data could follow our same steps to replicate our work in their own
-environments.
-
+It worked!
 
 
 Share Your Docker Image
@@ -491,16 +447,16 @@ organization where you have write privileges in order to push it:
 
 .. code-block:: console
 
-   [isp02]$ docker login
+   [user-vm]$ docker login
    ...
-   [isp02]$ docker push username/ml_data_analysis:1.0
+   [user-vm]$ docker push username/degrees_api:1.0
 
 
 You and others will now be able to pull a copy of your container with:
 
 .. code-block:: console
 
-   [isp02]$ docker pull username/ml_data_analysis:1.0
+   [user-vm]$ docker pull username/degrees_api:1.0
 
 
 As a matter of best practice, it is highly recommended that you store your
