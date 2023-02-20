@@ -11,7 +11,7 @@ find and use it. After going through this module, students should be able to:
 * Build a Docker image from a Dockerfile
 * Push a Docker image to Docker Hub
 * **Design Principles:** As with the previous lecture, we will see how containers contribute 
-to the portability of software projects
+  to the portability of software projects
 
 
 Getting Set Up
@@ -111,7 +111,7 @@ we can run ``python`` from the shell:
 
 .. code-block:: console
 
-  [root@7ad568453e0b /] python
+  [root@7ad568453e0b /]$ python
   Python 3.8.10 (default, Jun 23 2021, 15:19:53) 
   [GCC 8.3.0] on linux
   Type "help", "copyright", "credits" or "license" for more information.
@@ -121,7 +121,7 @@ What about Flask? What happens if try to import it from the Python repl?
 
 .. code-block:: console
 
-  [root@7ad568453e0b /] python
+  [root@7ad568453e0b /]$ python
   Python 3.8.10 (default, Jun 23 2021, 15:19:53) 
   [GCC 8.3.0] on linux
   Type "help", "copyright", "credits" or "license" for more information.
@@ -131,7 +131,7 @@ What about Flask? What happens if try to import it from the Python repl?
 The base Python images have the Python interpreter and standard library, but they do not include 
 any third-party packages. If we try to ``import flask``, we'll get a ``ModuleNotFoundError`` exception.
 
-.. code-block:: python
+.. code-block:: console
 
    >>> import flask
    Traceback (most recent call last):
@@ -166,7 +166,7 @@ Back out in the VM, we can get a list of packages pip knows about using ``pip fr
 
 .. code-block:: console
 
-  [user-vm] pip freeze
+  [user-vm]$ pip freeze
    appdirs==1.4.3
    apturl==0.5.2
    asttokens==2.2.1
@@ -187,14 +187,14 @@ pipe the output of ``pip freeze`` to ``grep`` to just select lines with ``Flask`
 
 .. code-block:: console
 
-  [user-vm] pip freeze | grep Flask
+  [user-vm]$ pip freeze | grep Flask
   Flask==2.2.2
 
 Great, so we need Flask version 2.2.2. Back in the container, we can try to install Flask using ``pip`` 
 
 .. code-block:: console
 
-   [root@7ad568453e0b /] pip install Flask==2.2.2
+   [root@7ad568453e0b /]$ pip install Flask==2.2.2
 
    Collecting Flask==2.2.2
    Downloading Flask-2.2.2-py3-none-any.whl (101 kB)
@@ -290,7 +290,7 @@ of the image. To run our flask application, we can simply execute the file with 
 
 .. code-block:: console
 
-  [user-vm] python degrees_api.py
+  [user-vm]$ python degrees_api.py
 
 
 To provide the command line to ``CMD`` instruction, separate each part of the command line 
@@ -310,11 +310,11 @@ The contents of the final Dockerfile should look like:
 .. code-block:: dockerfile
    :linenos:
 
-   FROM python:3.10
+   FROM python:3.8.10
 
    RUN pip install Flask==2.2.2
 
-   ADD degrees_api.py /degrees_api.py
+   COPY degrees_api.py /degrees_api.py
 
    CMD ["python", "degrees_api.py"]
 
@@ -377,7 +377,7 @@ using the ``docker run`` command. Execute the following in your VM:
 
 .. code-block:: console
 
-   [user-vm] docker run -it --rm -p 5000:5000 username/degrees_api:1.0
+   [user-vm]$ docker run -it --rm -p 5000:5000 username/degrees_api:1.0
 
    * Serving Flask app 'degrees_api'
    * Debug mode: on
@@ -403,7 +403,7 @@ program:
 
 .. code-block:: console
 
-   curl 127.0.0.1:5000/degrees
+   [user-vm]$ curl 127.0.0.1:5000/degrees
    [
       {
          "degrees": 5818,
