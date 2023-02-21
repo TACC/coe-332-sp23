@@ -33,6 +33,7 @@ provide a web-accessible interface to their system.
    homework/homework02.rst
    homework/homework03.rst
    homework/homework04.rst
+   homework/homework05.rst
 
 
 Additional Resources
