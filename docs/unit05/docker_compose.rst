@@ -1,14 +1,19 @@
 Docker Compose
 ==============
 
-Up to this point, we have been looking at single-container applications - small
-units of code that are containerized, executed *ad hoc* to generate or read a
-JSON file, then exit on completion. But what if we want to do something more
-complex? For example, what if our goal is to orchestrate a multi-container
+Using the ``docker run`` command to start containers is OK for simple commands, but as 
+we started to see in the previous material, the commands can long pretty quickly. It can be
+hard to remember all of the flags and options that we want to use when starting our
+containers. 
+
+Moreover, so far we have been looking at single-container applications. 
+But what if we want to do something more complex involving multiple containers? For example, 
+what if our goal is to orchestrate a multi-container
 application consisting of, e.g., a Flask app, a database, a message queue, an
 authentication service, and more.
 
-**Docker compose** is tool for managing multi-container applications. A YAML
+**Docker compose** is tool for managing multi-container applications that allows you to document 
+all of the options you want to use for starting the containers in a single file. A YAML
 file is used to define all of the application service, and a few simple commands
 can be used to spin up or tear down all of the services.
 
@@ -21,187 +26,8 @@ through this module, students should be able to:
 * Manage small software systems composed of more than one script, and more than
   one container
 * Copy data into and out of containers as needed
-
-
-Another Script, Another Container
----------------------------------
-
-We have been working a lot with a script for reading in and analyzing a
-JSON file of meteorite landing data. Let's quickly write a new script to
-generate that data, then we will package it into its own container. Consider the
-following script for **generating** the Meteorite Landing data we have been working
-with:
-
-.. code-block:: python3
-    :linenos:
-
-    #!/usr/bin/env python3
-    import json
-    import random
-    import sys
-    import names
-
-    NUM = 10
-    CLASSES = ['CI1', 'CR2-an', 'CV3', 'EH4', 'H4', 'H5', 'H6', 'L5', 'L6', 'LL3-6', 'LL5']
-
-    def main():
-
-        data = {'meteorite_landings': [{} for _ in range (NUM)]}
-
-        for i in range(NUM):
-            rand_lat = '{:.4f}'.format(random.uniform(-90.0000, 90.0000))
-            rand_lon = '{:.4f}'.format(random.uniform(-90.0000, 90.0000))
-            data['meteorite_landings'][i]['name'] = names.get_first_name()
-            data['meteorite_landings'][i]['id'] = str(10000 + 1 + i)
-            data['meteorite_landings'][i]['recclass'] = random.choice(CLASSES)
-            data['meteorite_landings'][i]['mass (g)'] = str(random.randrange(1, 10000))
-            data['meteorite_landings'][i]['reclat'] = rand_lat
-            data['meteorite_landings'][i]['reclong'] = rand_lon
-            data['meteorite_landings'][i]['GeoLocation'] = f'({rand_lat}, {rand_lon})'
-
-        with open(sys.argv[1], 'w') as o:
-            json.dump(data, o, indent=2)
-            print(f'Data written to {sys.argv[1]}!')
-
-    if __name__ == '__main__':
-        main()
-
-
-Copy that into a file called ``gen_ml_data.py``, save it, make it executable, and
-test it. You'll find that this script requires a **command line argument**. Meaning
-we have to invoke it AND pass some information on the command line in order to get
-it to work. In this case, it is expecting the name of the output file.
-
-.. code-block:: console
-
-   # copy contents into file called ``gen_ml_data.py`` and save
-   [isp02]$ chmod +rx gen_ml_data.py
-   [isp02]$ ./gen_ml_data.py
-   Traceback (most recent call last):
-     File "./gen_ml_data.py", line 29, in <module>
-       main()
-     File "./gen_ml_data.py", line 25, in main
-       with open(sys.argv[1], 'w') as o:
-   IndexError: list index out of range
-
-   [isp02]$ ./gen_ml_data.py data.json
-   Data written to data.json!
-   [isp02]$ ls
-   data.json  Dockerfile  gen_ml_data.py  Meteorite_Landings.json  ml_data_analysis.py
-   [isp02]$ head -n11 data.json
-   {
-     "meteorite_landings": [
-       {
-         "name": "Sandra",
-         "id": "10001",
-         "recclass": "EH4",
-         "mass (g)": "4119",
-         "reclat": "73.8716",
-         "reclong": "14.8207",
-         "GeoLocation": "(73.8716, 14.8207)"
-       },
-
-Containerizing this script should be easy enough - we already worked through
-containerizing another very similar script. Let's say for this new script we do
-not need the ``pytest`` dependency, because there is not really anything
-interesting to test. But, we do need a different dependency: the Python3
-``names`` library.
-
-To make things a little more clear, rename the existing Dockerfile as
-``Dockerfile-analysis``, and make a copy of it called ``Dockerfile-gen``.
-
-.. code-block:: console
-
-   [isp02]$ mv Dockerfile Dockerfile-analysis
-   [isp02]$ cp Dockerfile-analysis Dockerfile-gen
-   [isp02]$ ls
-   data.json       Dockerfile-analysis      Dockerfile-gen
-   gen_ml_data.py  Meteorite_Landings.json  ml_data_analysis.py
-
-Edit ``Dockerfile-gen`` as follows:
-
-.. code-block:: Dockerfile
-   :linenos:
-   :emphasize-lines: 6,8,10
-
-   FROM centos:7.9.2009
-
-   RUN yum update -y && \
-       yum install -y python3
-
-   RUN pip3 install names==0.3.0
-
-   COPY gen_ml_data.py /code/gen_ml_data.py
-
-   RUN chmod +rx /code/gen_ml_data.py
-
-   ENV PATH "/code:$PATH"
-
-Now that we have a Dockerfile named something other than the default name, we
-need to modify our command line a little bit to build it:
-
-.. code-block:: console
-
-   [isp02]$ docker build -t username/gen_ml_data:1.0 -f Dockerfile-gen .
-
-After the image is successfully built, change directories to a new folder just
-to be sure you are not running the local scripts or looking at the local data.
-Then, test the container as follows:
-
-.. code-block:: console
-
-   [isp02]$ mkdir test
-   [isp02]$ cd test
-   [isp02]$ ls
-   [isp02]$ docker run --rm username/gen_ml_data:1.0 gen_ml_data.py ml.json
-   Data written to ml.json!
-
-If you list your local files, can you find ``ml.json``? No! This is because
-whatever data generated inside the container is lost when the container
-completes its task. What we need to do is use the ``-v`` flag to mount a directory
-somewhere inside the container, write data into that directory, then the data will
-be captured after the container exists. For example:
-
-.. code-block:: console
-
-   [isp02]$ docker run --rm -v $PWD:/data username/gen_ml_data:1.0 gen_ml_data.py /data/ml.json
-   Data written to ml.json!
-
-.. note::
-
-   To reiterate, because we mounted our current location as a folder called "/data"
-   (``-v $PWD:/data``), and we made sure to write the output file to that location in
-   the container (``gen_ml_data.py /data/ml.json``), then we get to keep the file
-   after the container exits, and it shows up in our current location (``$PWD``).
-
-Alas, there is one more issue to address. The new file is owned by root, simply
-because it is root who created the file inside the container. This is one minor
-Docker annoyance that we run in to from time to time. The simplest fix is to use
-one more ``docker run`` flag (``-id``)to specify the user and group ID namespace
-that should be used inside the container.
-
-.. code-block:: console
-
-   [isp02]$ ls -l
-   total 4
-   -rw-r--r--. 1 root root 2098 Feb 21 22:39 ml.json
-   [isp02]$ rm ml.json
-   rm: remove write-protected regular file ml.json’? y
-   [isp02]$ docker run --rm -v $PWD:/data -u $(id -u):$(id -g) username/gen_ml_data:1.0 gen_ml_data.py /data/ml.json
-   Data written to /data/ml.json!
-   [isp02]$ ls -l
-   total 4
-   -rw-r--r--. 1 wallen G-815499 2098 Feb 21 22:41 ml.json
-
-
-
-EXERCISE
-~~~~~~~~
-
-Spend a few minutes testing both containers. Be sure you can generate data with
-one container, then read in and analyze the same data with the other. Data needs
-to persist outside the containers in order to do this.
-
+* **Design Principles:** Docker compose will further enable our use of containers 
+  to support the portability of our software projects.
 
 
 Write a Compose File
@@ -210,13 +36,12 @@ Write a Compose File
 Docker compose works by interpreting rules declared in a YAML file (typically
 called ``docker-compose.yml``). The rules we will write will replace the
 ``docker run`` commands we have been using, and which have been growing quite
-complex. For example, the commands we used to run our JSON parsing scripts in a
-container looked like the following:
+complex. Recall from the past lecture that the command we were using to start our Flask 
+application container looked like the following:
 
 .. code-block:: console
 
-   [isp02]$ docker run --rm -v $PWD:/data -u $(id -u):$(id -g) username/gen_ml_data:1.0 gen_ml_data.py /data/ml.json
-   [isp02]$ docker run --rm -v $PWD:/data username/ml_data_analysis:1.0 ml_data_analysis.py /data/ml.json
+   [user-vm]$ docker run -p 5000:5000 -v /home/ubuntu/coe332/docker2/config.yaml:/config.yaml --rm jstubbs/degrees_api
 
 The above ``docker run`` commands can be loosely translated into a YAML file.
 Navigate to the folder that contains your Python scripts and Dockerfiles, then
@@ -224,11 +49,11 @@ create a new empty file called ``docker-compose.yml``:
 
 .. code-block:: console
 
-   [isp02]$ pwd
-   /home/wallen/coe-332/docker-exercise
-   [isp02]$ touch docker-compose.yml
-   [isp02]$ ls
-   docker-compose.yml  Dockerfile-analysis  Dockerfile-gen  gen_ml_data.py  ml_data_analysis.py  test/
+   [user-vm]$ pwd
+   /home/ubuntu/coe-332/docker
+   [user-vm]$ touch docker-compose.yml
+   [user-vm]$ ls
+   Dockerfile  config.yaml  degrees_api.py  docker-compose.yml
 
 
 Next, open up ``docker-compose.yml`` with your favorite text editor and type /
@@ -236,53 +61,36 @@ paste in the following text:
 
 .. code-block:: yaml
    :linenos:
-   :emphasize-lines: 9,12,18
+   :emphasize-lines: 9
 
    ---
    version: "3"
 
    services:
-       gen-data:
+       flask-app:
            build:
                context: ./
-               dockerfile: ./Dockerfile-gen
-           image: username/gen_ml_data:1.0
+               dockerfile: ./Dockerfile
+           image: username/degrees_api:1.0
            volumes:
-               - ./test:/data
-           user: "827385:815499"
-           command: gen_ml_data.py /data/ml.json
-       analyze-data:
-           build:
-               context: ./
-               dockerfile: ./Dockerfile-analysis
-           image: username/ml_data_analysis:1.0
-           volumes:
-               - ./test:/data
-           command: ml_data_analysis.py /data/ml.json
-   ...
+               - ./config.yaml:/config.yaml
 
-.. warning::
+.. note::
 
-   The highlighted lines above need to be edited with your username / userid /
-   groupid in order for this to work. See instructions below.
+   Be suer to update the highlighted line above with your username.
 
 
 The ``version`` key must be included and simply denotes that we are using
 version 3 of Docker compose.
 
 The ``services`` section defines the configuration of individual container
-instances that we want to orchestrate. In our case, we define two called
-``gen-data`` for the gen_ml_data functionality, and ``analyze-data`` for
-the ml_data_analysis functionality.
+instances that we want to orchestrate. In our case, we define just one container
+called ``flask-app``.
 
-Each of those services is configured with its own Docker image,
-a mounted volume (equivalent to the ``-v`` option for ``docker run``), a user
-namespace (equivalent to the ``-u`` option for ``docker run``), and a default
-command to run.
-
-Please note that the image name above should be changed to use your image. Also,
-the user ID / group ID are specific to ``wallen`` - to find your user and group
-ID, execute the Linux commands ``id -u`` and ``id -g``.
+The ``flask-app`` service is configured with its own Docker image, including A
+reference to a Dockerfile to be used to ``build`` the image, 
+and a list of mounted volumes (equivalent to the ``-v`` option for ``docker run``), in 
+this case, just one volume, to mount the configuration file. 
 
 .. note::
 
@@ -307,33 +115,40 @@ command line tools, try issuing the following two commands:
 
 .. code-block:: console
 
-   [isp02]$ docker-compose version
-   [isp02]$ docker-compose config
+   [user-vm]$ docker-compose version
+   [user-vm]$ docker-compose config
 
 The first command prints the version of Docker compose installed, and the second
 searches your current directory for ``docker-compose.yml`` and checks that it
 contains only valid syntax.
 
-To run one of these services, use the ``docker-compose run`` verb, and pass the
-name of the service as defined in your YAML file:
+To run our Flask application container, we simply use the ``docker-compose up`` verb, to start up all 
+the containers. Alternatively, we could use ``docker-compose run``
+and pass the name of the service, in this case, ``flask-app``:
 
 .. code-block:: console
 
-   [isp02]$ ls test/     # currently empty
-   [isp02]$ docker-compose run gen-data
-   Data written to /data/ml.json!
-   [isp02]$ ls test/
-   ml.json               # new file!
-   [isp02]$ docker-compose run analyze-data
-   6004.5
-   Southern & Eastern
-   ... etc.
+   [user-vm]$ docker-compose up 
 
+   Creating docker_flask-app_1 ... done
+   Attaching to docker_flask-app_1
+   flask-app_1  |  * Serving Flask app 'degrees_api'
+   flask-app_1  |  * Debug mode: off
+   flask-app_1  | WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+   flask-app_1  |  * Running on all addresses (0.0.0.0)
+   flask-app_1  |  * Running on http://127.0.0.1:5000
+   flask-app_1  |  * Running on http://172.18.0.2:5000
+   flask-app_1  | Press CTRL+C to quit
 
-Now we have an easy way to run our *ad hoc* services consistently and
-reproducibly. Not only does ``docker-compose.yml`` make it easier to run our
-services, it also represents a record of how we intend to interact with this
-container.
+Note that ``docker-compose`` starts the container in the foreground and takes over our terminal. If we use 
+``Ctrl+C`` we will stop the container. We can see confirm that the container is stopped using the
+``docker ps -a`` command:
+
+.. code-block:: console
+
+   [user-vm] docker ps -a 
+   CONTAINER ID   IMAGE                      COMMAND                  CREATED              STATUS                       PORTS     NAMES
+   cd3e3df2cb84   username/degrees_api:1.0   "python degrees_api.…"   About a minute ago   Exited (137) 5 seconds ago             docker_flask-app_1
 
 
 

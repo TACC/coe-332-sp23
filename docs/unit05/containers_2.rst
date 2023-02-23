@@ -468,6 +468,169 @@ this later in the semester).
 For example, see: `Publishing Docker Images <https://docs.github.com/en/actions/publishing-packages/publishing-docker-images/>`_
 
 
+Application Configuration Files and Container Volume Mounts
+-----------------------------------------------------------
+Some times we need to provide additional files to a container that we do not want to include in the public 
+image available on Docker Hub. For example, if our application needs to use passwords or other secret information 
+we don't want to include that data in the public image because then anyone who downloaded the image could see 
+the secrets. 
+
+Moreover, it is often convenient to allow applications to be configured to run in different ways. One way 
+to allow them to be configured is with a configuration file. The configuration file contains settings and other 
+values that the software reads to know how it should run.
+
+First, we'll modify our Flask application to use a configuration file. We'll use YAML because it is easy to read and
+write, it can include comments, and it will give us some practice for when we write Kubernetes YAML files later
+in the semester. 
+
+In order to work with yaml, we'll use the ``pyyaml`` library. The ``pyyaml`` library must be installed with ``pip``,
+for example:
+
+.. code-block:: console
+
+   [user-vm] pip install pyyaml==6.0
+
+For the very first version of our configuration file, we'll accept a single configuration called ``debug`` that 
+takes a ``bool`` value (true or false). If ``debug`` is set to ``true`` in the configuration file, we'll start our 
+server in debug mode; otherwise, we'll start our server in normal mode.
+
+Our strategy will be to look for a file called ``config.yaml`` in the current working directory; that is, 
+in the same directory as our ``degress_api.py`` file. We'll use the following rules for configuring our application:
+
+* If the file doesn't exist or if the file is not valid YAML we'll simply ignore the configuration file and start 
+  the server in debug mode.
+* If the file exists and is valid YAML, we will read the file, check for a config variable called ``debug``, and use
+  the value, if it exists.
+* If the configuration file exists and is valid YAML but ``debug`` is not set in it, we will ignore it and start the 
+  server in debug mode.
+
+
+Reading the Configuration File
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Our first step is to read the configuration file. For that, we need to import the ``yaml`` package:
+
+.. code-block:: python
+   :linenos:
+   :emphasize-lines: 3
+
+   from flask import Flask, request
+   import json
+   import yaml
+
+To read the file, we'll use the ``yaml.safe_load()`` function. We'll create a function called ``get_config``. 
+Our first attempt might look something like this:
+
+.. code-block:: python
+
+   def get_config():
+      with open('config.yaml', 'r') as f:
+          return yaml.safe_load(f)
+
+However, we'll have a problem if either the file does not exist or is not valid YAML. How can we fix it?
+
+.. note:: 
+   
+   We can use exceptions to handle different kinds of errors at run time.
+
+Let's use a ``try.. except`` block to handle the different errors:
+
+.. code-block:: python
+
+    def get_config():
+        default_config = {"debug": True}
+        try:
+            with open('config.yaml', 'r') as f:
+                return yaml.safe_load(f)
+        except Exception as e:
+            print(f"Couldn't load the config file; details: {e}")
+        # if we couldn't load the config file, return the default config
+        return default_config
+
+
+Use the Configuration to Start Flask
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+We need to read the configuration file before we start the flask server so we can know
+whether to use the ``debug`` mode. We can add a call to ``get_config()`` in the main block:
+
+.. code-block:: python
+   :linenos:
+   :emphasize-lines: 2-3,5
+
+   if __name__ == '__main__':
+       config = get_config()
+       if config.get('debug', True):
+           app.run(debug=True, host='0.0.0.0')
+       else:
+           app.run(host='0.0.0.0')
+
+
+If we start up our Docker container again as before, then there will not be a configuration file, so we 
+should see the default behavior of debug mode. We should also see a message indicating that it could not
+find the configuration file:
+
+.. code-block:: console
+
+   [user-vm]  docker run -p 5000:5000 --rm -it jstubbs/c23-flask2
+    Couldn't load the config file; details: [Errno 2] No such file or directory: 'config.yaml'
+      * Serving Flask app 'degrees_api'
+      * Debug mode: on
+
+
+Using Volume Mounts to Add a Configuration File
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Now, let's test our new configuration feature by providing a configuration file.
+We won't add the configuration file to the image. Instead, we'll allow operators to write their own and 
+add it directly to the container. How will we do that?
+
+We'll use Docker volume mount. In Docker, a volume mount allows you to add files and directories from the host 
+computer to a container. To add a volume mount, use the ``-v </path/on/host:/path/in/container>`` format.
+
+
+.. note::
+
+   The host path and the container path should be provided as absolute paths.
+
+.. note::
+
+   If you mount a path on the host to a path in the container that already exists in the image, the contents 
+   in the image will be replaced by those on the host path. 
+
+Let's first create a new file called ``config.yaml`` in the current directory and place the following contents
+into it:
+
+.. code-block:: yaml
+
+   debug: false
+
+
+Now let's modify our ``docker run`` statement to include a volume mount that adds the configuration file 
+into our running container:
+
+.. code-block:: console
+
+  docker run -p 5000:5000 -v /home/ubuntu/coe332/docker2/config.yaml:/config.yaml --rm jstubbs/degrees_api
+
+Here is an explanation of the options used above:
+
+.. code-block:: text
+
+   docker run                                   # run a container
+   -p 5000:5000                                 # map the host port 5000 to the container port 5000
+   -v  /home/ubuntu/coe332/docker2/config.yaml  # mount the config.yaml file on the host into the container.
+       :/config.yaml                             
+   --rm                                         # remove the container after the program exits
+   jstubbs/degrees_api                          # image to use for the container 
+
+Now you should see output similar to:
+
+.. code-block:: console
+
+    * Serving Flask app 'degrees_api'
+    * Debug mode: off
+
+Great! It read out config file and turned off debug mode.
 
 
 Additional Resources
