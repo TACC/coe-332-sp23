@@ -2,19 +2,19 @@ Docker Compose
 ==============
 
 Using the ``docker run`` command to start containers is OK for simple commands, but as 
-we started to see in the previous material, the commands can long pretty quickly. It can be
+we started to see in the previous material, the commands can get long pretty quickly. It can be
 hard to remember all of the flags and options that we want to use when starting our
 containers. 
 
 Moreover, so far we have been looking at single-container applications. 
-But what if we want to do something more complex involving multiple containers? For example, 
-what if our goal is to orchestrate a multi-container
+But what if we want to do something more complex involving multiple containers? In this course, 
+our goal is to ultimately develop and orchestrate a multi-container
 application consisting of, e.g., a Flask app, a database, a message queue, an
 authentication service, and more.
 
 **Docker compose** is tool for managing multi-container applications that allows you to document 
 all of the options you want to use for starting the containers in a single file. A YAML
-file is used to define all of the application service, and a few simple commands
+file is used to define all of the application containers, called *services*, and a few simple commands
 can be used to spin up or tear down all of the services.
 
 In this module, we will get a first look at Docker compose. Later in this course
@@ -43,7 +43,7 @@ application container looked like the following:
 
    [user-vm]$ docker run -p 5000:5000 -v /home/ubuntu/coe332/docker2/config.yaml:/config.yaml --rm jstubbs/degrees_api
 
-The above ``docker run`` commands can be loosely translated into a YAML file.
+The above ``docker run`` command can be translated into a YAML file.
 Navigate to the folder that contains your Python scripts and Dockerfiles, then
 create a new empty file called ``docker-compose.yml``:
 
@@ -85,7 +85,8 @@ version 3 of Docker compose.
 
 The ``services`` section defines the configuration of individual container
 instances that we want to orchestrate. In our case, we define just one container
-called ``flask-app``.
+called ``flask-app``. We can use any allowable name for the services we defined, but each
+name should be unique within the docker-compose.yml file. 
 
 The ``flask-app`` service is configured with its own Docker image, including A
 reference to a Dockerfile to be used to ``build`` the image, 
@@ -122,9 +123,9 @@ The first command prints the version of Docker compose installed, and the second
 searches your current directory for ``docker-compose.yml`` and checks that it
 contains only valid syntax.
 
-To run our Flask application container, we simply use the ``docker-compose up`` verb, to start up all 
-the containers. Alternatively, we could use ``docker-compose run``
-and pass the name of the service, in this case, ``flask-app``:
+To run our Flask application container, we simply use the ``docker-compose up`` verb, which will start up all 
+containers defined in the file. Alternatively, we could use ``docker-compose run``
+and pass the name of a service to run, in this case, ``flask-app``:
 
 .. code-block:: console
 

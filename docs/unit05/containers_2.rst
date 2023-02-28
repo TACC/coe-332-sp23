@@ -584,8 +584,8 @@ Now, let's test our new configuration feature by providing a configuration file.
 We won't add the configuration file to the image. Instead, we'll allow operators to write their own and 
 add it directly to the container. How will we do that?
 
-We'll use Docker volume mount. In Docker, a volume mount allows you to add files and directories from the host 
-computer to a container. To add a volume mount, use the ``-v </path/on/host:/path/in/container>`` format.
+We'll use a Docker volume mount. In Docker, a volume mount allows you to add files and directories from the host 
+computer to a container. To add a volume mount, use the ``-v </path/on/host>:</path/in/container>`` format.
 
 
 .. note::
@@ -630,7 +630,7 @@ Now you should see output similar to:
     * Serving Flask app 'degrees_api'
     * Debug mode: off
 
-Great! It read out config file and turned off debug mode.
+Great! The flask app read our configuration file and turned off debug mode.
 
 
 Additional Resources
