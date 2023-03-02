@@ -258,13 +258,16 @@ that we each need to pull from Docker Hub:
    1:M 01 Mar 2023 22:01:28.800 * Ready to accept connections
 
 
-The Redis server is up and available. Although we could use the Redis CLI to
-interact with the server directly, in this class we will focus on the Redis
-Python library so we can interact with the server from our Python scripts.
+The Redis server is up and available on port **6379**. Although we could use
+the Redis CLI to interact with the server directly, in this class we will focus
+on the Redis Python library so we can interact with the server from our Python
+scripts.
 
-.. note::
+.. warning::
 
-   According to the log above, Redis is listening on the default port, **6379**.
+   Pause for a minute to think about why we are running ``redis:7``. In the terminal output, it
+   looks like the actual version of Redis is ``version=7.0.9``. What do you need to know about
+   `semantic versioning <https://semver.org/>`_ in order to future-proof your code?
 
 
 First install the Redis Python library in your user account:
@@ -460,10 +463,9 @@ Check that you stored the data correctly:
 EXERCISE 3
 ~~~~~~~~~~
 
-Exit the Python interactive interpreter or kill the Python script that is running your Redis client.
-In a new Python session, re-establish the Redis client. What is in the database?
-
-Now kill the Redis container. Start the Redis container again. What is in the database?
+* Exit the Python interactive interpreter or kill the Python script that is running your Redis client.
+  In a new Python session, re-establish the Redis client. What is in the database?
+* Now kill the Redis container. Start the Redis container again. What is in the database?
 
 
 Additional Resources
@@ -472,3 +474,4 @@ Additional Resources
 * `Redis Docs <https://redis.io/documentation>`_
 * `Redis Python Library <https://redis-py.readthedocs.io/en/stable/>`_
 * `Try Redis in a Browser <https://try.redis.io/>`_
+* `Semantic Versioning <https://semver.org/>`_
