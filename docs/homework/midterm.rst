@@ -74,7 +74,7 @@ Sample output from the ``/now`` route may look like:
      "seconds_from_now": -37.382118225097656,
      "location": {
        "latitude": 40.64084133393722,
-       "longitude": -255.56465621326345,
+       "longitude": 105.56465621326345,
        "altitude": {
          "value": 416.8431503828533,
          "units": "km"
