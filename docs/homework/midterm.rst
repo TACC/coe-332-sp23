@@ -40,7 +40,7 @@ described in `Homework 05 <./homework05.html>`_ plus the following new routes:
 +---------------------------------+------------+---------------------------------------------+
 | **Route**                       | **Method** | **What it should do**                       |
 +---------------------------------+------------+---------------------------------------------+
-| ``/comment``                    | GET        | Return 'comment' list obejct from ISS data  |
+| ``/comment``                    | GET        | Return 'comment' list object from ISS data  |
 +---------------------------------+------------+---------------------------------------------+
 | ``/header``                     | GET        | Return 'header' dict object from ISS data   |
 +---------------------------------+------------+---------------------------------------------+
