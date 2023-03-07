@@ -10,3 +10,5 @@ connect our containerized Flask API with a containerized Redis database.
    :maxdepth: 1
 
    intro_to_redis
+   redis_and_flask
+
