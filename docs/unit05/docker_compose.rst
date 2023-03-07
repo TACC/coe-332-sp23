@@ -77,7 +77,7 @@ paste in the following text:
 
 .. note::
 
-   Be suer to update the highlighted line above with your username.
+   Be sure to update the highlighted line above with your username.
 
 
 The ``version`` key must be included and simply denotes that we are using
