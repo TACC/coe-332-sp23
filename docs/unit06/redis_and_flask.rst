@@ -374,6 +374,15 @@ Why might this be important?
 Another question to ask yourself is why does the ``redis-db`` service omit the ``build``
 specification? Should we provide a context and Dockerfile for Redis?
 
+One slight modification to the Flask app is required to enable container-to-container
+communication over the Docker bridge network. Instead of using an IP address like '127.0.0.1'
+or an alias like 'localhost', use the docker-compose alias for the Redis service,
+``redis-db``. Specifically, in your containerized Flask app, establish a Redis client like:
+
+.. code-block:: python3
+
+    rd = redis.Redis(host='redis-db', port=6379, db=0)
+
 
 Given the above, try launching both services using the following command:
 
