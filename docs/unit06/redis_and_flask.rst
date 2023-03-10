@@ -323,9 +323,9 @@ function into a Flask API with one route that handles POST, GET, and DELETE requ
 * A GET request to ``/data`` should read the data out of Redis and return it as a JSON list.
 * A DELETE request to ``/data`` should delete the Meteorite Landings data from Redis.
 
-Access the Meteorite Landings data at `this link <https://raw.githubusercontent.com/TACC/coe-332-sp23/main/docs/unit06/scripts/Meteorite_Landings.json>`_
+Access the Meteorite Landings data `at this link1 <https://raw.githubusercontent.com/TACC/coe-332-sp23/main/docs/unit06/scripts/Meteorite_Landings.json>`_
 
-A sample template for the Flask app can be found `here <https://raw.githubusercontent.com/TACC/coe-332-sp23/main/docs/unit06/scripts/flask_app_template.py>`_
+A sample template for the Flask app can be found `at this link2 <https://raw.githubusercontent.com/TACC/coe-332-sp23/main/docs/unit06/scripts/flask_app_template.py>`_
 
 
 
@@ -388,7 +388,7 @@ Given the above, try launching both services using the following command:
 
 .. code-block:: console
 
-    [user-vm]$ docker compose up -d
+    [user-vm]$ docker-compose up -d
     Creating network "redis_default" with the default driver                                                                               
     Creating redis_flask-app_1 ... done                                                                                                    
     Creating redis_redis-db_1  ... done     
@@ -401,7 +401,7 @@ You should see the containers running. When you are ready to kill the services:
 
 .. code-block:: console
 
-   [user-vm]$ docker compose down
+   [user-vm]$ docker-compose down
    Stopping redis_redis-db_1  ... done
    Stopping redis_flask-app_1 ... done
    Removing redis_redis-db_1  ... done             
