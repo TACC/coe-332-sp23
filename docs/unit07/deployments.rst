@@ -492,14 +492,14 @@ We create this pvc object with the usual ``kubectl apply`` command:
 
 .. code-block:: bash
 
-  $ kubectl apply -f hello-pvc.yml
+  [kube] $ kubectl apply -f hello-pvc.yml
     persistentvolumeclaim/hello-jstubbs-data created
 
 Great, with the pvc created, let's check back on our pods:
 
 .. code-block:: bash
 
-  $ kubectl get pods
+  [kube] $ kubectl get pods
     NAME                                    READY   STATUS        RESTARTS   AGE
     hello-deployment-9794b4889-mk6qw        1/1     Running       46         46h
     hello-deployment-9794b4889-sx6jc        1/1     Running       46         46h
@@ -530,13 +530,13 @@ In general, one can run a command in a pod using the following:
 
 .. code-block:: bash
 
-  $ kubectl exec <options> <pod_name> -- <command>
+  [kube] $ kubectl exec <options> <pod_name> -- <command>
 
 To run a shell, we will use:
 
 .. code-block:: bash
 
-  $ kubectl exec -it <pod_name> -- /bin/bash
+  [kube] $ kubectl exec -it <pod_name> -- /bin/bash
 
 The ``-it`` flags might look familiar from Docker -- they allow us to "attach" our standard input and output to the
 command we run in the container. The command we want to run is ``/bin/bash`` for a shell.
@@ -555,11 +555,11 @@ Let's issue some commands to look around:
 
 .. code-block:: bash
 
-  $ pwd
+  [container] $ pwd
     /
     # exec put us at the root of the container's file system
 
-  $ ls -l
+  [container] $ ls -l
     total 8
     drwxr-xr-x   2 root root 4096 Jan 18 21:03 bin
     drwxr-xr-x   2 root root    6 Apr 24  2018 boot
@@ -584,11 +584,11 @@ Let's issue some commands to look around:
     # as expected, a vanilla linux file system.
     # we see the /data directory we mounted from the volume...
 
-  $ ls -l data/out.txt
+  [container] $ ls -l data/out.txt
     -rw-r--r-- 1 root root 19 Mar  4 01:12 data/out.txt
     # and there is out.txt, as expected
 
-  $ cat data/out.txt
+  [container] $ cat data/out.txt
     Hello, Kubernetes!
     # and our hello message!
 
@@ -617,10 +617,10 @@ following:
 
 .. code-block:: bash
 
-  $ kubectl delete pods hello-pvc-deployment-5b7d9775cb-xspn7
+  [kube] $ kubectl delete pods hello-pvc-deployment-5b7d9775cb-xspn7
     pod "hello-pvc-deployment-5b7d9775cb-xspn7" deleted
 
-  $ kubectl get pods
+  [kube] $ kubectl get pods
     NAME                                    READY   STATUS              RESTARTS   AGE
     hello-deployment-9794b4889-mk6qw        1/1     Running             47         47h
     hello-deployment-9794b4889-sx6jc        1/1     Running             47         47h
@@ -630,9 +630,9 @@ following:
     # wild -- a new hello-pvc-deployment pod is getting created automatically!
 
   # let's exec into the new pod and check it out!
-  $ k exec -it hello-pvc-deployment-5b7d9775cb-7nfhv -- /bin/bash
+  [kube] $ kubectl exec -it hello-pvc-deployment-5b7d9775cb-7nfhv -- /bin/bash
 
-  $ cat /data/out.txt
+  [container] $ cat /data/out.txt
     Hello, Kubernetes!
     Hello, Kubernetes!
 
