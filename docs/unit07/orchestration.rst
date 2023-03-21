@@ -7,7 +7,8 @@ module, the student should be able to:
 * Explain the challenges associated with deploying and managing distributed systems that container 
   orchestration systems are designed to help with.
 * Describe at a high level a few of the most common container orchestration systems. 
-
+* We won't touch on design principles in this small module, but there will be plenty of implications 
+  for our systems design in the subsequent modules.
 
 A typical distributed system is comprised of multiple components. You have already developed a simple HTTP application
 that includes a Python program (using the flask library) and a database. In the subsequent weeks, we will add additional
@@ -78,6 +79,13 @@ deploy actual applications. For example, Marathon is a popular Mesos framework f
 while the Mesos Hydra framework can be used for deploying MPI-powered applications, such as those used in traditional
 HPC applications.
 
+Nomad
+-----
+Nomad by Hashicorp is an orchestration system that can handle both containerized and non-containerized
+workloads. Nomad has been gaining popularity recently as an alternative to Kubernetes. Compared with 
+Kubernete, Nomad offers a significantly simpler usage model but requires more work by the user to 
+achieve some functionalities available in Kubernetes.
+
 Kubernetes
 ----------
 Kubernetes (often abbreviated as "k8s") is a container orchestration system supporting Docker as well other container
@@ -100,4 +108,5 @@ Additional Resources
  * `Apache Mesos Documentation <http://mesos.apache.org/documentation/latest/>`_
  * `Marathon <https://github.com/mesosphere/marathon>`_
  * `Mesos Hydra <https://github.com/mesosphere-backup/mesos-hydra>`_
+ * `Hashicorp Nomad <https://www.nomadproject.io/>`_
  * `Kubernetes Documentation <https://kubernetes.io/docs/home/>`_

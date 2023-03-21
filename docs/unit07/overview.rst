@@ -19,7 +19,9 @@ At the end of this unit you will:
   * Understand fundamental Kubernetes abstractions, including: ``pod``, ``deployment``, ``persistent volume``, and ``service``.
   * Write a set of scripts to deploy your flask application to a Kubernetes cluster in your own private namespace.
   * **Design Principles**. Like Docker Compose, Kubernetes improves our software portability, particularly 
-    for large distributed applications that need to run across multiple machines.
+    for large distributed applications that need to run across multiple machines. We'll also use 
+    Kubernetes abstractions like deployments and services to achieve modularity, particularly decoupling 
+    between components in our system. 
 
 .. toctree::
    :maxdepth: 1
