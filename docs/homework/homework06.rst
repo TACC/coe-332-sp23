@@ -16,13 +16,13 @@ a Flask interface.
 
 
 This homework will essentially be a re-hash of Exercise 2 and Exercise 3 from the last
-`Redis section <../unit06/redis_and_flask.html>`_).
+`Redis section <../unit06/redis_and_flask.html>`_.
 
 
 .. note::
 
    If you want to do this homework with a different data set, e.g. the data set you
-   want to work on for you final project, just get it approved with the instructors
+   want to work on for your final project, just get it approved with the instructors
    first.
 
 
@@ -197,7 +197,7 @@ homework 06:
    ├── ...
    ├── homework05
    │   └── ...
-   ├── homework05
+   ├── homework06
    │   ├── Dockerfile
    │   ├── docker-compose.yaml
    │   ├── gene_api.py             # please use this name for your file
