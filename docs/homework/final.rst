@@ -3,7 +3,7 @@ Final Project
 
 **Due Date for Part 1: Friday, March 31, by 5:00pm CDT**
 
-**Due Date for Parts 2-4: Thursday, April 26, by 11:59am CDT**
+**Due Date for Parts 2-4: Wednesday, April 26, by 11:59pm CDT**
 
 
 Only in Data
