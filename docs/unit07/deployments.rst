@@ -468,7 +468,7 @@ with your TACC username:
     spec:
       accessModes:
         - ReadWriteOnce
-      storageClassName: nfs
+      storageClassName: cinder-csi
       resources:
         requests:
           storage: 1Gi
@@ -478,14 +478,14 @@ with your TACC username:
   Again, be sure to replace **<username>** with your actual username in the YAML above. 
 
 We will use this file to create a persistent volume claim against the storage that has been set up in the TACC k8s
-cluster. In order to use this storage, you do need to know the storage class (in this case, "nfs", which is the storage
-class for utilizing the NFS storage system), and how much you want to request (in this case, just 1 Gig), but you
+cluster. In order to use this storage, you do need to know the storage class (in this case, "cinder-csi", 
+which is the storage class for utilizing the Cinder storage system), and how much you want to request (in this case, just 1 Gig), but you
 don't need to know how the storage was implemented.
 
 .. note::
 
   Different k8s clusters may offer persistent storage that utilize different storage classes. Within TACC, 
-  we also have k8s clusters that utilize the ``rbd`` storage class, for example. Be sure to check with the
+  we also have k8s clusters that utilize the ``rbd`` and ``nfs`` storage classes, for example. Be sure to check with the
   k8s administrators to see what storage class(es) might be available.
 
 We create this pvc object with the usual ``kubectl apply`` command:
