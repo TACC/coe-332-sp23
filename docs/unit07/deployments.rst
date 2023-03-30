@@ -364,34 +364,34 @@ with your username:
    :linenos:
    :emphasize-lines: 23,26,28
 
-    ---
-    apiVersion: apps/v1
-    kind: Deployment
-    metadata:
-      name: hello-pvc-deployment
-      labels:
-        app: hello-pvc-app
-    spec:
-      replicas: 1
-      selector:
-        matchLabels:
-          app: hello-pvc-app
-      template:
-        metadata:
-          labels:
-            app: hello-pvc-app
-        spec:
-          containers:
-            - name: hellos
-              image: ubuntu:18.04
-              command: ['sh', '-c', 'echo "Hello, Kubernetes!" >> /data/out.txt && sleep 3600']
-              volumeMounts:
-              - name: hello-<username>-data
-                mountPath: "/data"
-          volumes:
-          - name: hello-<username>-data
-            persistentVolumeClaim:
-              claimName: hello-<username>-data
+   ---
+   apiVersion: apps/v1
+   kind: Deployment
+   metadata:
+     name: hello-pvc-deployment
+     labels:
+       app: hello-pvc-app
+   spec:
+     replicas: 1
+     selector:
+       matchLabels:
+         app: hello-pvc-app
+     template:
+       metadata:
+         labels:
+           app: hello-pvc-app
+       spec:
+         containers:
+           - name: hellos
+             image: ubuntu:18.04
+             command: ['sh', '-c', 'echo "Hello, Kubernetes!" >> /data/out.txt && sleep 3600']
+             volumeMounts:
+             - name: hello-<username>-data
+               mountPath: "/data"
+         volumes:
+         - name: hello-<username>-data
+           persistentVolumeClaim:
+             claimName: hello-<username>-data
 
 .. note:: 
 
