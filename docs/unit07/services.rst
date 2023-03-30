@@ -338,7 +338,7 @@ Create a persistent volume claim for your Redis data. Use the following informat
     add a ``username`` label and an ``env`` label. The value for ``username`` should be your tacc username and the value
     for ``env`` should be ``test``, to indicate that this is the test environment.
   * The ``accessModes`` should include a single entry, ``ReadWriteOnce``.
-  * The ``storageClassName`` should be ``nfs``.
+  * The ``storageClassName`` should be ``cinder-csi``.
   * Be sure to request 1 GB (``1Gi``) of storage.
 
 
@@ -347,7 +347,7 @@ Step 2. Create a deployment for the Redis database. Be sure to include the follo
   * The name of your redis deployment should include your TACC username and the word "test", to indicate it is in the test environment.
   * Use the same ``username`` and ``env`` labels for both the deployment and the pod template.
   * Be sure to set ``replicas: 1`` as Redis is a stateful application.
-  * For the image, use ``redis:6``; you do not need to set a command.
+  * For the image, use ``redis:7``; you do not need to set a command.
   * Add the ``username`` and ``env`` lables to the pod as well. Also add an ``app`` label with value ``<username>-test-redis``.
     This will be important in the next step.
   * Be sure to create a ``volumeMount`` and associate it with a ``volume`` that is filled by the PVC you created in Step 1. For
