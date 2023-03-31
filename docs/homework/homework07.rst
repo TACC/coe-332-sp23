@@ -55,8 +55,8 @@ should be given for deploying the software system to a Kubernetes cluster. Pleas
 that in order for the Flask container to get deployed to Kubernetes, it must come from 
 Docker Hub. Please guide users on the steps to build their own image and push to Docker
 Hub, and guide users on using your existing image from Docker Hub. You will also need
-to guide users on any modifications required in the Kubernetes file, including image
-name and IP address.
+to guide users on any modifications required in the Kubernetes file or Python script,
+including image name and IP address.
 
 
 
