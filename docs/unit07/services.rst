@@ -390,7 +390,8 @@ regardless of the IPs that may be assigned to individual flask API pods. Be sure
   * The name of your redis service should include your TACC username and the word "test", to indicate it is in the test environment.
   * Use the same ``username`` and ``env`` labels for both the deployment and the pod template.
   * The ``type`` of service should be ``ClusterIP``.
-  * Define a ``selector`` that will select your flask API pods and only your flask API pods.
+  * Define a ``selector`` that will select your flask API pods and only your flask API pods. **Note:** The
+    selector needs to target the **label** in your Flask deployment from Step 4, **not the deployment name.**  
   * Make sure ``port`` and ``targetPort`` match the flask port.
 
 
