@@ -27,13 +27,13 @@ following form:
 
 .. code-block:: console
 
-   [isp02]$ curl localhost:5000/submit -X POST -H "Content-Type: application/json" -d '{"start", "2001", "end": "2021"}'
+   [user-vm]$ curl localhost:5000/submit -X POST -H "Content-Type: application/json" -d '{"start", "2001", "end": "2021"}'
    Job 161207aa-9fe7-4caa-95b8-27f5bcbb16e7 successfully submitted
 
 
 .. code-block:: console
 
-   [isp02]$ curl localhost:5000/jobs
+   [user-vm]$ curl localhost:5000/jobs
    {
      "161207aa-9fe7-4caa-95b8-27f5bcbb16e7": {
        "status": "submitted",
@@ -149,4 +149,3 @@ redirect the output to file like:
 
    If anyone has a way to download the image to file automatically without 
    redirecting to file, please share!
-coe332-login
