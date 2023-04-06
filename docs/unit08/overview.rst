@@ -10,3 +10,4 @@ as well as any plotting or intensive computations on the data.
    :maxdepth: 1
 
    matplotlib
+   redis_images
