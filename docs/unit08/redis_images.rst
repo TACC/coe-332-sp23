@@ -9,6 +9,7 @@ doesn't actually store the *image*, it stores the *bytes* and a key value
 
 .. code-block:: python3
    :linenos:
+   
    import redis
 
    rd=redis.Redis(host='127.0.0.1', port=6379, db=1)
