@@ -1,13 +1,16 @@
 Concurrency and Queues
 ======================
 
-We begin with an introduction to concurrency and a basic treatment of the queue data structure.
+We begin with an introduction to the concept of concurrency and a basic treatment of the queue data structure.
 By the end of this the module, the student should be able to:
 
   * Describe concurrency and some basic examples of concurrent and nonconcurrent algorithms.
   * Explain at a high level how concurrency will be used to implement a long-running task in our 
     flask-based API system.
   * Utilize Python in-memory queues as well as the hotqueue library to work with queues in Redis.
+  * **Design Principles.** The integration of a queue into our APIs will demonstrate the principle
+    of abstraction (removing the laborious and time consuming functionality of our code from our API
+    interface).
 
 
 Motivation
@@ -88,7 +91,7 @@ There are many techniques for making programs concurrent; we will primarily focu
 
 
 A First Example
-***************
+~~~~~~~~~~~~~~~
 
 Suppose we want to build a system for maintaining the balance of a bank account where multiple agents are acting on the account
 (withdrawing and/or depositing funds) at the same time. We will consider two different approaches.
@@ -133,7 +136,7 @@ a queue.
 
 
 Queues
-******
+~~~~~~
 
 A queue is data structure that maintains an ordered collection of items. The queue typically supports just two
 operations:
@@ -149,35 +152,36 @@ Sometimes queues are referred to as "FIFO Queues" for emphasis.
 
 
 Basic Queue Example
-^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~
+
 Consider the set of (abstract) operations on a Queue object.
 
-.. code-block:: bash
+.. code-block:: text
 
-  1. Enqueue 5
-  2. Enqueue 7
-  3. Enqueue A
-  4. Dequeue
-  5. Enqueue 1
-  6. Enqueue 4
-  7. Dequeue
-  8. Dequeue
+   1. Enqueue 5
+   2. Enqueue 7
+   3. Enqueue A
+   4. Dequeue
+   5. Enqueue 1
+   6. Enqueue 4
+   7. Dequeue
+   8. Dequeue
 
 The order of items returned is:
 
-.. code-block:: bash
+.. code-block:: text 
 
-  5, 7, A
+   5, 7, A
 
 And the contents of the Queue after Step 8 is
 
-.. code-block:: bash
+.. code-block:: text 
 
-  1, 4
+   1, 4
 
 
 In-memory Python Queues
-^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~
 
 The Python standard library provides an in-memory Queue data structure via its ``queue`` module. To get started, import the
 ``queue`` module and instantiate a ``queue.Queue`` object:
@@ -185,8 +189,8 @@ The Python standard library provides an in-memory Queue data structure via its `
 
 .. code-block:: python
 
-  >>> import queue
-  >>> q = queue.Queue()
+   >>> import queue
+   >>> q = queue.Queue()
 
 The Python Queue object has the following features:
 
@@ -197,17 +201,23 @@ The Python Queue object has the following features:
 
 Let's perform the operations above using the ``q`` object.
 
+EXERCISE 1
+~~~~~~~~~~
 
-**Exercise.** Use a series of ``q.put()`` and ``q.get()`` calls to perform Steps 1-8 above. Verify the the order of items returned.
+Use a series of ``q.put()`` and ``q.get()`` calls to perform Steps 1-8 above. Verify the the order of items returned.
 
-**Exercise.** Verify that arbitrary Python objects can by put onto and retrieved from the queue by inserting a list and a
+
+EXERCISE 2
+~~~~~~~~~~
+
+Verify that arbitrary Python objects can by put onto and retrieved from the queue by inserting a list and a
 dictionary.
 
 Queues are a fundamental ingredient in concurrent programming, a topic we will turn to next.
 
 
-A Concurrent Approach to Our Example
-************************************
+A Concurrent Approach to our Example
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **Approach 2.** Whenever an agent receives an order to make a withdraw or deposit, the agent simply writes the
 order to a queue; a positive number indicates a deposit while a negative number indicates a withdraw. The account
@@ -221,7 +231,7 @@ close account C, etc.).
 
 
 Queues in Redis
-***************
+---------------
 
 The Python in-memory queues are very useful for a single Python program, but we ultimately want to share queues across
 multiple Python programs/containers.
@@ -242,8 +252,8 @@ For example:
 Fortunately, we don't have to implement the queue ourselves, but know that if we needed to we could without too much effort.
 
 
-Using the hotqueue library
-**************************
+Using the hotqueue Library
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We will leverage a small, open source Python library called ``hotqueue`` which has already implemented the a Queue
 data structure in Redis using the approach outlined above. Besides not having to write it ourselves, the use of ``hotqueue``
@@ -261,7 +271,7 @@ Here are the basics of the ``hotqueue`` library:
 
 
 A Hotqueue Example
-^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~
 
 We will work this example out on the k8s cluster. You will need a Redis pod running on the cluster and you will also
 need the python debug pod you created last lecture.
@@ -301,21 +311,21 @@ You can optionally also install ``ipython`` which is a nicer Python REPL (Read, 
   The ``jstubbs/redis-client`` image has these libraries already installed.
 
 
-.. code-block:: bash
+.. code-block:: console
 
-  $ kubectl get pods -o wide
-    NAME                                    READY   STATUS    RESTARTS   AGE    IP             NODE   NOMINATED NODE   READINESS GATES
-    hello                                   1/1     Running   199        8d     10.244.5.214   c04    <none>           <none>
-    hello-deployment-55f4459bf-npdrm        1/1     Running   79         3d7h   10.244.5.5     c04    <none>           <none>
-    hello-pvc-deployment-6dbbfdc4b4-whjwb   1/1     Running   31         31h    10.244.3.143   c01    <none>           <none>
-    helloflask-848c4fb54f-9j4fd             1/1     Running   0          30h    10.244.3.188   c01    <none>           <none>
-    helloflask-848c4fb54f-gpqhb             1/1     Running   0          30h    10.244.5.75    c04    <none>           <none>
-    jstubbs-test-redis-64cbc6b8cf-f6qrl     1/1     Running   0          3m5s   10.244.3.237   c01    <none>           <none>
-    py-debug-deployment-5cc8cdd65f-tr9gq    1/1     Running   0          31h    10.244.3.177   c01    <none>           <none>
+   [kube]$ kubectl get pods -o wide
+   NAME                                    READY   STATUS    RESTARTS   AGE    IP             NODE   NOMINATED NODE   READINESS GATES
+   hello                                   1/1     Running   199        8d     10.244.5.214   c04    <none>           <none>
+   hello-deployment-55f4459bf-npdrm        1/1     Running   79         3d7h   10.244.5.5     c04    <none>           <none>
+   hello-pvc-deployment-6dbbfdc4b4-whjwb   1/1     Running   31         31h    10.244.3.143   c01    <none>           <none>
+   helloflask-848c4fb54f-9j4fd             1/1     Running   0          30h    10.244.3.188   c01    <none>           <none>
+   helloflask-848c4fb54f-gpqhb             1/1     Running   0          30h    10.244.5.75    c04    <none>           <none>
+   jstubbs-test-redis-64cbc6b8cf-f6qrl     1/1     Running   0          3m5s   10.244.3.237   c01    <none>           <none>
+   py-debug-deployment-5cc8cdd65f-tr9gq    1/1     Running   0          31h    10.244.3.177   c01    <none>           <none>
 
-  $ kubectl exec -it py-debug-deployment-5cc8cdd65f-tr9gq -- /bin/bash
+   [kube]$ kubectl exec -it py-debug-deployment-5cc8cdd65f-tr9gq -- /bin/bash
 
-  $ pip install redis hotqueue ipython
+   [kube]$ pip install redis hotqueue ipython
 
 Start the python (or ipython) shell and create the ``hotQueue.Queue`` object. You can use the Redis IP directly, or use
 the Redis service IP if you creates one.
@@ -377,7 +387,9 @@ And just like with other Redis data structures, we can connect to our queue from
 the same data.
 
 
-**Exercise.** In a second SSH shell, scale your Python debug deployment to 2 replicas, install redis, hotqueue, and
-ipython in the new replica, start iPython(or Python) and connect to the same queue. Prove that you can use get and put to
+EXERCISE 3
+~~~~~~~~~~
+In a second SSH shell, scale your Python debug deployment to 2 replicas, install redis, hotqueue, and
+ipython in the new replica, start iPython and connect to the same queue. Prove that you can use get and put to
 "communicate" between your two Python programs.
 
