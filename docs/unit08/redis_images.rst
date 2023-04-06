@@ -5,7 +5,7 @@ Storing Image Function
 ----------------------
 
 So here is a bit of code that allows you to store an image into Redis. It
-doesn't actually store the *image* it stores the *bytes* and a key value
+doesn't actually store the *image*, it stores the *bytes* and a key value
 
 .. code-block:: python3
    :linenos:
@@ -22,8 +22,8 @@ doesn't actually store the *image* it stores the *bytes* and a key value
    rd.set('key', file_bytes)
 
 
-Rerieving Image Function
-------------------------
+Retrieving Image Function
+-------------------------
 
 And here is a bit of code that allows you to *retrieve* and image frim Redis.
 Once again, we're not actually retrieving the image, we're retrieving the bytes,
