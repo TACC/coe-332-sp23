@@ -164,7 +164,7 @@ and the sum of all your data (including files) must fit into main memory on the 
     :linenos:
 
     import redis
-    rd = redis.StrictRedis(host='172.17.0.1', port=6379, db=0)
+    rd = redis.Redis(host='172.17.0.1', port=6379, db=0)
     # read the raw file bytes into a python object
     file_bytes = open('/tmp/myfile.png', 'rb').read()
     # set the file bytes as a key in Redis

@@ -264,7 +264,7 @@ Here are the basics of the ``hotqueue`` library:
   * Hotqueue is not part of the Python standard library; you can install it with ``pip install hotqueue``
   * Creating a new queue data structure or connecting to an existing queue data structure is accomplished by creating
     a ``HotQueue`` object.
-  * Constructing a ``HotQueue`` object takes very similar parameters to that of the ``StrictRedis`` but also takes a
+  * Constructing a ``HotQueue`` object takes very similar parameters to that of the ``Redis`` but also takes a
     ``name`` attribute. The ``HotQueue`` object ultimately provides a connection to the Redis server.
   * Once constructed, a ``HotQueue`` object has ``.put()`` and ``.get()`` methods that act just like the corresponding
     methods of an in-memory Python queue.
@@ -335,7 +335,7 @@ the Redis service IP if you creates one.
     >>> from hotqueue import HotQueue
     >>> q = HotQueue("queue", host="<Redis_IP>", port=6379, db=1)
 
-Note how similar the ``HotQueue()`` instantiation is to the ``StrictRedis`` instantiation. In the example above we named
+Note how similar the ``HotQueue()`` instantiation is to the ``Redis`` instantiation. In the example above we named
 the queue ``queue`` (not too creative), but it could have been anything.
 
 .. note::
@@ -377,7 +377,7 @@ Under the hood, the ``hotqueue.Queue`` is just a Redis object, which we can veri
 .. code-block:: python
 
     >>> import redis
-    >>> rd = redis.StrictRedis(host="<Redis IP>", port=6379, db=1)
+    >>> rd = redis.Redis(host="<Redis IP>", port=6379, db=1)
     >>> rd.keys()
     [b'hotqueue:queue']
 

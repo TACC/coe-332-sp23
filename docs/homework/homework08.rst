@@ -58,7 +58,7 @@ Redis client):
    redis_ip = os.environ.get('REDIS_IP')
    if not redis_ip:
        raise Exception()
-   rd=redis.StrictRedis(host=redis_ip, port=6379, db=0)
+   rd=redis.Redis(host=redis_ip, port=6379, db=0)
 
 Then, in your docker-compose.yml file, add the following attribute to your Flask 
 service:

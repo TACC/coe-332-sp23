@@ -414,7 +414,7 @@ To begin, place them in the appropriate files. Also, determine if they should be
         # 2) start the analysis job and monitor it to completion. 
         # 3) update the job status to indicate that the job has finished. 
 
-    rd = redis.StrictRedis(host='172.17.0.1', port=6379, db=0)
+    rd = redis.Redis(host='172.17.0.1', port=6379, db=0)
 
     def update_job_status(jid, status):
         """Update the status of job with job id `jid` to status `status`."""
@@ -520,7 +520,7 @@ so we can put all of these in jobs.py:
 That leaves the following:
 
   * ``q = HotQueue(..)`` 
-  * ``rd = StrictRedis(..)``
+  * ``rd = Redis(..)``
   * ``update_job_status()``
   * ``generate_job_key``
   * ``execute_job()``
@@ -562,7 +562,7 @@ Therefore, the final placement of all the functions looks like the following:
 
   # jobs.py
     q = HotQueue("queue", host='172.17.0.1', port=6379, db=1)
-    rd = redis.StrictRedis(host='172.17.0.1', port=6379, db=0)
+    rd = redis.Redis(host='172.17.0.1', port=6379, db=0)
 
     def generate_jid():
         """
@@ -662,7 +662,7 @@ own ``jobs`` module.
     # rest of the code same as above...
 
 For ``jobs.py``, there is nothing from our own code to import (which is good since the other modules will be importing
-from it, but we do need to import the ``StrictRedis`` and ``HotQueue`` classes. Also, don't forget the use of the
+from it, but we do need to import the ``Redis`` and ``HotQueue`` classes. Also, don't forget the use of the
 ``uuid`` module from the standard lib! So, ``jobs.py`` becomes:
 
 .. code-block:: python
@@ -670,7 +670,7 @@ from it, but we do need to import the ``StrictRedis`` and ``HotQueue`` classes. 
     # jobs.py
     import uuid
     from hotqueue import HotQueue
-    from redis import StrictRedis
+    from redis import Redis
 
     # rest of the code same as above...
 
@@ -773,7 +773,7 @@ hard-coded IP address but to instead read the IP address from an environment var
 .. code-block:: python
 
     q = HotQueue("queue", host='172.17.0.1', port=6379, db=1)
-    rd = redis.StrictRedis(host='172.17.0.1', port=6379, db=0)
+    rd = redis.Redis(host='172.17.0.1', port=6379, db=0)
 
 becomes
 
@@ -787,4 +787,4 @@ becomes
     redis_ip = os.environ.get('REDIS_IP', '172.17.0.1')
     # create the q and rd objects using the variable 
     q = HotQueue("queue", host=redis_ip, port=6379, db=1)
-    rd = redis.StrictRedis(host=redis_ip, port=6379, db=0)
+    rd = redis.Redis(host=redis_ip, port=6379, db=0)

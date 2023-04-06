@@ -371,7 +371,7 @@ Once you are done with Steps 1 though 3, check your work:
   * Install the redis python library.
   * Launch the python shell and import redis
   * Create a Python redis client object using the IP and port of the service, something like:
-    ``rd = redis.StrictRedis(host='10.101.101.139', port=6379, db=0)``
+    ``rd = redis.Redis(host='10.101.101.139', port=6379, db=0)``
   * Create a key and make sure you can get the key.
   * In another shell on isp02, delete the redis pod. Check that k8s creates a new redis pod.
   * Back in your python shell, check that you can still get the key using the same IP. This will show that your service is
