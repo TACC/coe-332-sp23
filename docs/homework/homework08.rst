@@ -149,7 +149,7 @@ homework 06:
    │   ├── docker-compose.yml
    │   ├── gene-api.py
    │   └── kubernetes/          # put kubernetes files in a folder to organize
-   │       └── x.yml
+   │       └── *.yml
    └── README.md
 
 
