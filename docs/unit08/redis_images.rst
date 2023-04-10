@@ -26,7 +26,7 @@ doesn't actually store the *image*, it stores the *bytes* and a key value
 Retrieving Image Function
 -------------------------
 
-And here is a bit of code that allows you to *retrieve* and image frim Redis.
+And here is a bit of code that allows you to *retrieve* and image from Redis.
 Once again, we're not actually retrieving the image, we're retrieving the bytes,
 and then writing the bytes out to a file
 
