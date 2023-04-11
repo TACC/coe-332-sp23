@@ -25,16 +25,19 @@ similar:
    :linenos:
    :emphasize-lines: 5, 9
 
-    ---
-    kind: Service
-    apiVersion: v1
-    metadata:
-        name: flasktest-service-nodeport
-    spec:
-        type: NodePort
-        selector:
-            app: flasktestapp
-        ports:
+   ---
+   kind: Service
+   apiVersion: v1
+   metadata:
+       name: flasktest-service-nodeport
+   spec:
+       type: NodePort
+       selector:
+           app: flasktestapp
+       ports:
+           - port: 5000
+             targetPort: 5000
+
 
 
 Update the highlighted lines:
@@ -53,7 +56,7 @@ As usual, create the NodePort using ``kubectl``:
 
 .. code-block:: console 
 
-    [kube] kubectl apply -f flasktest_nodeport_service.yml
+    [kube]$ kubectl apply -f flasktest_nodeport_service.yml
 
 Change the command to reference the file name you used. 
 
@@ -61,7 +64,7 @@ Check that the service was created successfully and determine the port that was 
 
 .. code-block:: console 
 
-    [kube] kubectl get service
+    [kube]$ kubectl get service
     NAME                         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
     flasktest-service-nodeport   NodePort    10.233.15.48   <none>        5000:31587/TCP   45s
 
@@ -77,15 +80,16 @@ to exercise your Flask API from the kube-access VM:
 
 .. code-block:: console
 
-    [kube] curl coe332.tacc.cloud:31587/hello-service
+    [kube]$ curl coe332.tacc.cloud:31587/hello-service
     Hello world
 
-Change the URL path (``/hello-service``) to a path your Flask API recognizes. 
+Change the port (``31587``) to the port associated with your nodeport service, and the URL path
+(``/hello-service``) to a path your Flask API recognizes. 
 
 .. note::
 
-  The curl above only works from the kube-access VM. We will open the Flask API to the public 
-  internet in the next section. 
+   The curl above only works from the kube-access VM. We will open the Flask API to the public 
+   internet in the next section. 
 
 
 Create an Ingress 
@@ -102,26 +106,26 @@ similar:
    :linenos:
    :emphasize-lines: 5, 11, 20
 
-    ---
-    kind: Ingress
-    apiVersion: networking.k8s.io/v1
-    metadata:
-    name: flasktest-ingress
-    annotations:
-        kubernetes.io/ingress.class: "nginx"
-        nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    spec:
-    rules:
-    - host: "jstubbs.coe332.tacc.cloud"
-        http:
-            paths:
-            - pathType: Prefix
-            path: "/"
-            backend:
-                service:
-                name: flasktest-service-nodeport
-                port:
-                    number: 31587
+   ---
+   kind: Ingress
+   apiVersion: networking.k8s.io/v1
+   metadata:
+   name: flasktest-ingress
+   annotations:
+       kubernetes.io/ingress.class: "nginx"
+       nginx.ingress.kubernetes.io/ssl-redirect: "false"
+   spec:
+   rules:
+   - host: "jstubbs.coe332.tacc.cloud"
+       http:
+           paths:
+           - pathType: Prefix
+           path: "/"
+           backend:
+               service:
+               name: flasktest-service-nodeport
+               port:
+                   number: 31587
 
 Be sure to update the highlighted lines:
 
@@ -135,7 +139,7 @@ Create the Ingress object:
 
 .. code-block:: console 
 
-    [kube] kubectl apply -f flasktest_ingress.yml
+    [kube]$ kubectl apply -f flasktest_ingress.yml
 
 At this point our Flask API should be available on the public internet from the domain 
 we specified in the ``host`` field. We can test by running the following curl command from 
@@ -144,5 +148,6 @@ anywhere, including our laptops.
 
 .. code-block:: console
 
-    [laptop] curl jstubbs.coe332.tacc.cloud/hello-service
+    [local]$ curl jstubbs.coe332.tacc.cloud/hello-service
     Hello world
+
