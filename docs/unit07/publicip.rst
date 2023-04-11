@@ -110,22 +110,23 @@ similar:
    kind: Ingress
    apiVersion: networking.k8s.io/v1
    metadata:
-   name: flasktest-ingress
-   annotations:
+     name: flasktest-ingress
+     annotations:
        kubernetes.io/ingress.class: "nginx"
        nginx.ingress.kubernetes.io/ssl-redirect: "false"
    spec:
-   rules:
-   - host: "jstubbs.coe332.tacc.cloud"
+     rules:
+     - host: "jstubbs.coe332.tacc.cloud"
        http:
            paths:
            - pathType: Prefix
-           path: "/"
-           backend:
+             path: "/"
+             backend:
                service:
-               name: flasktest-service-nodeport
-               port:
-                   number: 31587
+                 name: flasktest-service-nodeport
+                 port:
+                     number: 31587
+
 
 Be sure to update the highlighted lines:
 
