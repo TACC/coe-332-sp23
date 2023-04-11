@@ -142,6 +142,15 @@ Create the Ingress object:
 
     [kube]$ kubectl apply -f flasktest_ingress.yml
 
+
+Double check that the object was successfully created:
+
+.. code-block:: console
+
+    [kube]$ kubectl get ingress
+    NAME                CLASS    HOSTS                       ADDRESS   PORTS   AGE
+    flasktest-ingress   <none>   jstubbs.coe332.tacc.cloud             80      102s
+
 At this point our Flask API should be available on the public internet from the domain 
 we specified in the ``host`` field. We can test by running the following curl command from 
 anywhere, including our laptops. 
