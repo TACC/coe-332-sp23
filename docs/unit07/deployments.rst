@@ -41,28 +41,29 @@ We will use yaml to describe a deployment just like we did in the case of pods. 
 called ``deployment-basic.yml``
 
 .. code-block:: yaml
+   :linenos:
 
-    ---
-    apiVersion: apps/v1
-    kind: Deployment
-    metadata:
-      name: hello-deployment
-      labels:
-        app: hello-app
-    spec:
-      replicas: 1
-      selector:
-        matchLabels:
-          app: hello-app
-      template:
-        metadata:
-          labels:
-            app: hello-app
-        spec:
-          containers:
-            - name: hellos
-              image: ubuntu:18.04
-              command: ['sh', '-c', 'echo "Hello, Kubernetes!" && sleep 3600']
+   ---
+   apiVersion: apps/v1
+   kind: Deployment
+   metadata:
+     name: hello-deployment
+     labels:
+       app: hello-app
+   spec:
+     replicas: 1
+     selector:
+       matchLabels:
+         app: hello-app
+     template:
+       metadata:
+         labels:
+           app: hello-app
+       spec:
+         containers:
+           - name: hellos
+             image: ubuntu:18.04
+             command: ['sh', '-c', 'echo "Hello, Kubernetes!" && sleep 3600']
 
 Let's break this down. Recall that the top four attributes are common to all k8s resource descriptions, however it is
 worth noting:
@@ -97,29 +98,29 @@ Let's look at the ``spec`` stanza for the deployment above.
 
 We create a deployment in k8s using the ``apply`` command, just like when creating a pod:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl apply -f deployment-basic.yml
+  [kube]$ kubectl apply -f deployment-basic.yml
 
 If all went well, k8s response should look like:
 
-.. code-block:: bash
+.. code-block:: console
 
   deployment.apps/hello-deployment created
 
 We can list deployments, just like we listed pods:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl get deployments
+  [kube]$ kubectl get deployments
     NAME               READY   UP-TO-DATE   AVAILABLE   AGE
     hello-deployment   1/1     1            1           1m
 
 We can also list pods, and here we see that k8s has created a pod for our deployment for us:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl get pods
+  [kube]$ kubectl get pods
     NAME                               READY   STATUS    RESTARTS   AGE
     hello                              1/1     Running   0          10m
     hello-deployment-55c5b77fc-hqjwx   1/1     Running   0          50s
@@ -138,21 +139,21 @@ we have alluded to. This difference can be seen when we delete pods.
 
 To delete a pod, we use the ``kubectl delete pods <pod_name>`` command. Let's first delete our hello deployment pod:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl delete pods hello-deployment-55c5b77fc-hqjwx
+  [kube]$ kubectl delete pods hello-deployment-55c5b77fc-hqjwx
 
 It might take a little while for the response to come back, but when it does you should see:
 
-.. code-block:: bash
+.. code-block:: console
 
   pod "hello-deployment-55c5b77fc-hqjwx" deleted
 
 If we then immediately list the pods, we see something interesting:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl get pods
+  [kube]$ kubectl get pods
     NAME                               READY   STATUS    RESTARTS   AGE
     hello                              1/1     Running   0          13m
     hello-deployment-55c5b77fc-76lzz   1/1     Running   0          39s
@@ -165,12 +166,12 @@ k8s worked to change it. Remember, deployments are for programs that should *alw
 
 What do you expect to happen if we delete the original "hello" pod? Will k8s start a new one? Let's try it
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl delete pods hello
+  [kube]$ kubectl delete pods hello
     pod "hello" deleted
 
-  [kube] $ kubectl get pods
+  [kube]$ kubectl get pods
     NAME                               READY   STATUS    RESTARTS   AGE
     hello-deployment-55c5b77fc-76lzz   1/1     Running   0          19m
     hello-label                        1/1     Running   0          26m
@@ -212,16 +213,16 @@ our deployment file and apply the changes. Let's modify our "hello" deployment t
 
 Apply the changes with:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl apply -f deployment-basic.yml
+  [kube]$ kubectl apply -f deployment-basic.yml
     deployment.apps/hello-deployment configured
 
 When we list pods, we see k8s has quickly implemented our requested change:
 
-.. code-block:: bash
+.. code-block:: console
 
-    [kube] $ kubectl get pods
+    [kube]$ kubectl get pods
     NAME                               READY   STATUS    RESTARTS   AGE
     hello-deployment-55c5b77fc-76lzz   1/1     Running   0          22m
     hello-deployment-55c5b77fc-nsx6w   1/1     Running   0          9s
@@ -306,28 +307,28 @@ For example, we can add ``imagePullPolicy: Always`` to our hello-deployment as f
    :linenos:
    :emphasize-lines: 20
 
-    ---
-    apiVersion: apps/v1
-    kind: Deployment
-    metadata:
-      name: hello-deployment
-      labels:
-        app: hello-app
-    spec:
-      replicas: 1
-      selector:
-        matchLabels:
-          app: hello-app
-      template:
-        metadata:
-          labels:
-            app: hello-app
-        spec:
-          containers:
-            - name: hellos
-              imagePullPolicy: Always
-              image: ubuntu:18.04
-              command: ['sh', '-c', 'echo "Hello, Kubernetes!" && sleep 3600']
+   ---
+   apiVersion: apps/v1
+   kind: Deployment
+   metadata:
+     name: hello-deployment
+     labels:
+       app: hello-app
+   spec:
+     replicas: 1
+     selector:
+       matchLabels:
+         app: hello-app
+     template:
+       metadata:
+         labels:
+           app: hello-app
+       spec:
+         containers:
+           - name: hellos
+             imagePullPolicy: Always
+             image: ubuntu:18.04
+             command: ['sh', '-c', 'echo "Hello, Kubernetes!" && sleep 3600']
 
 and now k8s will always try to download the latest version of ``ubuntu:18.04`` from Docker Hub every time it creates
 a new pod for this deployment. As discussed above, using ``imagePullPolicy: Always`` is nice during active development
@@ -364,34 +365,34 @@ with your username:
    :linenos:
    :emphasize-lines: 23,26,28
 
-    ---
-    apiVersion: apps/v1
-    kind: Deployment
-    metadata:
-      name: hello-pvc-deployment
-      labels:
-        app: hello-pvc-app
-    spec:
-      replicas: 1
-      selector:
-        matchLabels:
-          app: hello-pvc-app
-      template:
-        metadata:
-          labels:
-            app: hello-pvc-app
-        spec:
-          containers:
-            - name: hellos
-              image: ubuntu:18.04
-              command: ['sh', '-c', 'echo "Hello, Kubernetes!" >> /data/out.txt && sleep 3600']
-              volumeMounts:
-              - name: hello-<username>-data
-                mountPath: "/data"
-          volumes:
-          - name: hello-<username>-data
-            persistentVolumeClaim:
-              claimName: hello-<username>-data
+   ---
+   apiVersion: apps/v1
+   kind: Deployment
+   metadata:
+     name: hello-pvc-deployment
+     labels:
+       app: hello-pvc-app
+   spec:
+     replicas: 1
+     selector:
+       matchLabels:
+         app: hello-pvc-app
+     template:
+       metadata:
+         labels:
+           app: hello-pvc-app
+       spec:
+         containers:
+           - name: hellos
+             image: ubuntu:18.04
+             command: ['sh', '-c', 'echo "Hello, Kubernetes!" >> /data/out.txt && sleep 3600']
+             volumeMounts:
+             - name: hello-<username>-data
+               mountPath: "/data"
+         volumes:
+         - name: hello-<username>-data
+           persistentVolumeClaim:
+             claimName: hello-<username>-data
 
 .. note:: 
 
@@ -415,10 +416,10 @@ This means that we should not expect to see the output in the logs for pod but i
 
 However, if we create this new deployment and then list pods we see something curious:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl apply -f deployment-pvc.yml
-  [kube] $ kubectl get pods
+  [kube]$ kubectl apply -f deployment-pvc.yml
+  [kube]$ kubectl get pods
     NAME                                    READY   STATUS    RESTARTS   AGE
     hello-deployment-6949f8ddbc-d6rqb       1/1     Running   0          3m13s
     hello-label                             1/1     Running   0          39m
@@ -429,9 +430,9 @@ appears to be stuck. What could be wrong?
 
 We can ask k8s to describe that pod to get more details:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl describe pods hello-pvc-deployment-7c5f879cd8-zpgq5
+  [kube]$ kubectl describe pods hello-pvc-deployment-7c5f879cd8-zpgq5
     Name:           hello-pvc-deployment-7c5f879cd8-zpgq5
     Namespace:      jstubbs
     Priority:       0
@@ -460,18 +461,18 @@ with your TACC username:
    :linenos:
    :emphasize-lines: 5
 
-    ---
-    apiVersion: v1
-    kind: PersistentVolumeClaim
-    metadata:
-      name: hello-<username>-data
-    spec:
-      accessModes:
-        - ReadWriteOnce
-      storageClassName: cinder-csi
-      resources:
-        requests:
-          storage: 1Gi
+   ---
+   apiVersion: v1
+   kind: PersistentVolumeClaim
+   metadata:
+     name: hello-<username>-data
+   spec:
+     accessModes:
+       - ReadWriteOnce
+     storageClassName: cinder-csi
+     resources:
+       requests:
+         storage: 1Gi
 
 .. note:: 
 
@@ -490,16 +491,16 @@ don't need to know how the storage was implemented.
 
 We create this pvc object with the usual ``kubectl apply`` command:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl apply -f hello-pvc.yml
+  [kube]$ kubectl apply -f hello-pvc.yml
     persistentvolumeclaim/hello-jstubbs-data created
 
 Great, with the pvc created, let's check back on our pods:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl get pods
+  [kube]$ kubectl get pods
     NAME                                    READY   STATUS        RESTARTS   AGE
     hello-deployment-9794b4889-mk6qw        1/1     Running       46         46h
     hello-deployment-9794b4889-sx6jc        1/1     Running       46         46h
@@ -528,24 +529,24 @@ In particular, it is often useful to run shell in the pod container.
 
 In general, one can run a command in a pod using the following:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl exec <options> <pod_name> -- <command>
+  [kube]$ kubectl exec <options> <pod_name> -- <command>
 
 To run a shell, we will use:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl exec -it <pod_name> -- /bin/bash
+  [kube]$ kubectl exec -it <pod_name> -- /bin/bash
 
 The ``-it`` flags might look familiar from Docker -- they allow us to "attach" our standard input and output to the
 command we run in the container. The command we want to run is ``/bin/bash`` for a shell.
 
 Let's exec a shell in our "hello-pvc-deployment-ff5759b64-sc7dk" pod and look around:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl exec -it  hello-pvc-deployment-5b7d9775cb-xspn7 -- /bin/bash
+  [kube]$ kubectl exec -it  hello-pvc-deployment-5b7d9775cb-xspn7 -- /bin/bash
     root@hello-pvc-deployment-5b7d9775cb-xspn7:/#
 
 Notice how the shell prompt changes after we issue the ``exec`` command -- we are now "inside" the container, and our
@@ -555,11 +556,11 @@ Let's issue some commands to look around:
 
 .. code-block:: bash
 
-  [container] $ pwd
+  [container]$ pwd
     /
     # exec put us at the root of the container's file system
 
-  [container] $ ls -l
+  [container]$ ls -l
     total 8
     drwxr-xr-x   2 root root 4096 Jan 18 21:03 bin
     drwxr-xr-x   2 root root    6 Apr 24  2018 boot
@@ -584,15 +585,15 @@ Let's issue some commands to look around:
     # as expected, a vanilla linux file system.
     # we see the /data directory we mounted from the volume...
 
-  [container] $ ls -l data/out.txt
+  [container]$ ls -l data/out.txt
     -rw-r--r-- 1 root root 19 Mar  4 01:12 data/out.txt
     # and there is out.txt, as expected
 
-  [container] $ cat data/out.txt
+  [container]$ cat data/out.txt
     Hello, Kubernetes!
     # and our hello message!
 
-  $ exit
+  [container]$ exit
     # we're ready to leave the pod container
 
 .. note::
@@ -617,10 +618,10 @@ following:
 
 .. code-block:: bash
 
-  [kube] $ kubectl delete pods hello-pvc-deployment-5b7d9775cb-xspn7
+  [kube]$ kubectl delete pods hello-pvc-deployment-5b7d9775cb-xspn7
     pod "hello-pvc-deployment-5b7d9775cb-xspn7" deleted
 
-  [kube] $ kubectl get pods
+  [kube]$ kubectl get pods
     NAME                                    READY   STATUS              RESTARTS   AGE
     hello-deployment-9794b4889-mk6qw        1/1     Running             47         47h
     hello-deployment-9794b4889-sx6jc        1/1     Running             47         47h
@@ -630,7 +631,7 @@ following:
     # wild -- a new hello-pvc-deployment pod is getting created automatically!
 
   # let's exec into the new pod and check it out!
-  [kube] $ kubectl exec -it hello-pvc-deployment-5b7d9775cb-7nfhv -- /bin/bash
+  [kube]$ kubectl exec -it hello-pvc-deployment-5b7d9775cb-7nfhv -- /bin/bash
 
   [container] $ cat /data/out.txt
     Hello, Kubernetes!

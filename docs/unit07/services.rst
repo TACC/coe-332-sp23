@@ -18,15 +18,15 @@ of reasons, including security, these networks are not reachable from outside k8
 
 Recall that we can learn the private network IP address for a specific pod with the following command:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl get pods <pod_name> -o wide
+  [kube]$ kubectl get pods <pod_name> -o wide
 
 For example:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl get pods hello-deployment-9794b4889-mk6qw -o wide
+  [kube]$ kubectl get pods hello-deployment-9794b4889-mk6qw -o wide
     NAME                                    READY   STATUS        RESTARTS       AGE   IP              NODE            NOMINATED NODE   READINESS GATES
     hello-deployment-6949f8ddbc-znx75       1/1     Running       21 (31m ago)   21h   10.233.116.45   kube-worker-1   <none>           <none>
 
@@ -87,9 +87,9 @@ The ``ports`` attribute is a list of k8s port descriptions. Each port in the lis
 
 Let's create the helloflask deployment using ``kubectl apply``
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl apply -f hello-flask-deployment.yml
+  [kube]$ kubectl apply -f hello-flask-deployment.yml
     deployment.apps/hello-flask-deployment configured
 
 With our deployment created, we should see a new pod.
@@ -98,9 +98,9 @@ With our deployment created, we should see a new pod.
 
 *Solution.*
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl get pods
+  [kube]$ kubectl get pods
     NAME                                READY   STATUS    RESTARTS       AGE
     hello-deployment-6949f8ddbc-znx75   1/1     Running   21 (36m ago)   21h
     hello-label                         1/1     Running   21 (57m ago)   21h
@@ -108,7 +108,7 @@ With our deployment created, we should see a new pod.
     helloflask-7bf64cc577-l7f52         1/1     Running   0              2m34s
 
 
-  [kube] $ kubectl get pods helloflask-86d4c7d8db-2rkg5 -o wide
+  [kube]$ kubectl get pods helloflask-86d4c7d8db-2rkg5 -o wide
     NAME                          READY   STATUS    RESTARTS   AGE     IP              NODE            NOMINATED NODE   READINESS GATES
     helloflask-7bf64cc577-l7f52   1/1     Running   0          3m46s   10.233.116.59   kube-worker-1   <none>           <none>
 
@@ -118,9 +118,9 @@ With our deployment created, we should see a new pod.
 We found the IP address for our flask container, but if we try to communicate with it from the k8s API node, 
 we will either find that it hangs indefinitely or possible gives an error:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ curl 10.233.116.59:5000
+  [kube]$ curl 10.233.116.59:5000
     curl: (7) Failed connect to 10.233.116.59:5000; Network is unreachable
 
 This is because the 10.233.*.* private k8s network is not available from the outside, not even from the API node.
@@ -178,7 +178,7 @@ the IP and port for the flask server were determined above to be 10.244.7.95:500
 
 If we try to access it using curl from within the debug container, we get:
 
-.. code-block:: bash
+.. code-block:: console
 
     root@py-debug-deployment-5cc8cdd65f-xzhzq: $ curl 10.233.116.59:5000
     <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
@@ -192,7 +192,7 @@ doesn't have a route for the root path (``/``).
 The ``jstubbs/hello-flask`` image does not define a route for the root path (``/``) but it does define a route for the
 path  ``/hello-service``. If we try that path, we should get a response:
 
-.. code-block:: bash
+.. code-block:: console
 
   root@py-debug-deployment-5cc8cdd65f-xzhzq: $ curl 10.233.116.59:5000/hello-service
   Hello world
@@ -249,16 +249,16 @@ Let's look at the ``spec`` description for this service.
 
 We create this service using the ``kubectl apply`` command, as usual:
 
-.. code-block:: bash
+.. code-block:: console
 
-  $ kubectl apply -f hello-flask-service.yml
+  [kube]$ kubectl apply -f hello-flask-service.yml
     service/hello-service configured
 
 We can list the services:
 
-.. code-block:: bash
+.. code-block:: console
 
-    $ kubectl get services
+    [kube]$ kubectl get services
       NAME            TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
       hello-service   ClusterIP   10.233.12.76   <none>        5000/TCP   11s
 
@@ -266,9 +266,9 @@ We see k8s created a new service with IP ``10.233.12.76``. We should be able to 
 communicate with our flask server. Let's try it. Remember that we have to be on the k8s private network, so we need to
 exec into our debug deployment pod first.
 
-.. code-block:: bash
+.. code-block:: console
 
-  $ kubectl exec -it py-debug-deployment-5cc8cdd65f-xzhzq -- /bin/bash
+  [kube]$ kubectl exec -it py-debug-deployment-5cc8cdd65f-xzhzq -- /bin/bash
 
   # from inside the container ---
   root@py-debug-deployment-5cc8cdd65f-xzhzq:/ $ curl 10.233.12.76:5000/hello-service
@@ -280,18 +280,18 @@ automatically route requests to the new pod. Let's try it.
 .. code-block:: bash
 
   # remove the pod ---
-  $ kubectl delete pods helloflask-86d4c7d8db-2rkg5
+  [kube]$ kubectl delete pods helloflask-86d4c7d8db-2rkg5
     pod "helloflask-86d4c7d8db-2rkg5" deleted
 
   # see that a new one was created ---
-  $ kubectl get pods
+  [kube]$ kubectl get pods
     NAME                                    READY   STATUS    RESTARTS   AGE
     hello-deployment-9794b4889-w4jlq        1/1     Running   2          175m
     hello-pvc-deployment-6dbbfdc4b4-sxk78   1/1     Running   233        9d
     helloflask-86d4c7d8db-vbn4g             1/1     Running   0          62s
 
   # it has a new IP ---
-  $ kubectl get pods helloflask-86d4c7d8db-vbn4g -o wide
+  [kube]$ kubectl get pods helloflask-86d4c7d8db-vbn4g -o wide
     NAME                          READY   STATUS    RESTARTS   AGE    IP            NODE   NOMINATED NODE   READINESS GATES
     helloflask-86d4c7d8db-vbn4g   1/1     Running   0          112s   10.233.12.96   c05    <none>           <none>
   # Yep, 10.233.12.96 -- that's different; the first pod had IP 10.233.116.59

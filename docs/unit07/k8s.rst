@@ -84,7 +84,7 @@ is the case by running the following:
 
 .. code-block:: console
 
-  [kube] $ kubectl version -o yaml
+  [kube]$ kubectl version -o yaml
 
 You should see output similar to the following:
 
@@ -144,7 +144,7 @@ the following command
 
 .. code-block:: console 
 
-    [kube] $ kubectl get pods
+    [kube]$ kubectl get pods
 
 You will get an error like the following:
 
@@ -163,13 +163,13 @@ command line using the ``--namespace`` argument. Let's try that now:
 
 .. code-block:: console
 
-    [kube] kubectl get pods --namespace=[your tacc username] 
+    [kube]$ kubectl get pods --namespace=[your tacc username] 
 
 Be sure to change ``[your tacc username]`` to your actual username. For example, I would run:
 
 .. code-block:: console
 
-    [kube] kubectl get pods --namespace=jstubbs
+    [kube]$ kubectl get pods --namespace=jstubbs
     No resources found in jstubbs namespace.
 
 This is the output we expect because we haven't created anything in our namespace yet. 
@@ -183,22 +183,22 @@ right below an existing line with the text ``user: [tacc_username]`` about halfw
 
 For example, here is how mine will look:
 
-.. code-block:: bash
-  :linenos:
-  :emphasize-lines: 10
+.. code-block:: console
+   :linenos:
+   :emphasize-lines: 10
   
-  apiVersion: v1
-  clusters:
-  - cluster:
-  . . .
-
-  contexts:
-  - context:
-      cluster: cluster.local
-      user: jstubbs
-      namespace: jstubbs
-    name: jstubbs@cluster.local
-  . . . 
+   apiVersion: v1
+   clusters:
+   - cluster:
+   . . .
+ 
+   contexts:
+   - context:
+       cluster: cluster.local
+       user: jstubbs
+       namespace: jstubbs
+     name: jstubbs@cluster.local
+   . . . 
 
 
 .. warning::
@@ -212,7 +212,7 @@ specifying the namespace:
 
 .. code-block:: console 
 
-    [kube] $ kubectl get pods
+    [kube]$ kubectl get pods
     No resources found in jstubbs namespace.
 
 Introduction to Pods
@@ -299,13 +299,13 @@ a description of a resource that you want to create or update in k8s, the ``kube
 
 In this case, our description is contained in a file, so we use the ``-f`` flag. Try this now:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl apply -f pod-basic.yml
+  [kube]$ kubectl apply -f pod-basic.yml
 
 If all went well and k8s accepted your request, you should see an output like this:
 
-.. code-block:: bash
+.. code-block:: console
 
   pod/hello created
 
@@ -340,9 +340,9 @@ Listing Pods
 For example, we can list the pods on the cluster with ``kubectl get <object_type>`` -- in this case, the object type
 is "pods":
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl get pods
+  [kube]$ kubectl get pods
 
     NAME    READY   STATUS    RESTARTS   AGE
     hello   1/1     Running   0          64s
@@ -358,17 +358,17 @@ Getting and Describing Pods
 We can pass the pod name to the ``get`` command -- i.e., ``kubectl get pods <pod_name>`` -- to just get information on
 a single pod
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl get pods hello
+  [kube]$ kubectl get pods hello
     NAME    READY   STATUS    RESTARTS   AGE
     hello   1/1     Running   0          3m1s
 
 The ``-o wide`` flag can be used to get more information:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl get pods hello -o wide
+  [kube]$ kubectl get pods hello -o wide
     NAME    READY   STATUS    RESTARTS   AGE     IP              NODE            NOMINATED NODE   READINESS GATES
     hello   1/1     Running   0          2m56s   10.233.85.195   kube-worker-2   <none>           <none>
 
@@ -376,9 +376,9 @@ Finally, the ``kubectl describe <resource_type> <resource_name>`` command gives 
 k8s events at the bottom. While we won't go into the details now, this information can be helpful when troubleshooting
 a pod that has failed:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl describe pods hello 
+  [kube]$ kubectl describe pods hello 
     Name:         hello
     Namespace:    jstubbs
     Priority:     0
@@ -442,9 +442,9 @@ Getting Pod Logs
 
 Finally, we can use ``kubectl logs <pod_name>`` command to get the logs associated with a pod:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl logs hello
+  [kube]$ kubectl logs hello
     Hello, Kubernetes!
 
 Note that the ``logs`` command does not include the resource name ("pods") because it only can be applied to pods. The
@@ -486,16 +486,16 @@ Create a file called ``pod-label.yml``, open it up in an editor and paste the fo
 
 Let's create this pod using ``kubectl apply``:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl apply -f pod-label.yml
+  [kube]$ kubectl apply -f pod-label.yml
   pod/hello-label created
 
 Now when we list our pods, we should see it
 
 .. code-block::
 
-  [kube] $ kubectl get pods
+  [kube]$ kubectl get pods
     NAME          READY   STATUS    RESTARTS   AGE
     hello         1/1     Running   0          22m
     hello-label   1/1     Running   0          22s
@@ -509,9 +509,9 @@ a label name and value, use the following syntax: ``--selector "<label_name>=<la
 
 For instance, we can search for pods with the version 1.0 label like so:
 
-.. code-block:: bash
+.. code-block:: console
 
-  [kube] $ kubectl get pods  --selector "version=1.0"
+  [kube]$ kubectl get pods  --selector "version=1.0"
     NAME          READY   STATUS    RESTARTS   AGE
     hello-label   1/1     Running   0          4m58s
 
