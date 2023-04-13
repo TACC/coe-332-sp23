@@ -62,8 +62,7 @@ The basic syntax of the consume method is this:
 
 In this case, the ``item`` object is the message that was retrieved from the task queue. 
 
-**Exercises.** Complete the following, either in Kubernetes or directly on isp02. (see k8s files
-below.)
+**Exercises.** Complete the following in your JetStream VM.
 
   1. Start/scale two python debug containers with redis and hotqueue installed (you can use the ``jstubbs/redis-client`` image
      if you prefer). In two separate shells, exec into each debug container and start ipython.
@@ -74,8 +73,59 @@ below.)
   6. Back in the first terminal, check the length of the queue; add some more objects to the queue.
   7. Confirm the newly added objects are "instantaneously" printed to the screen back in the second terminal.
 
-If you want, you can use the following k8s files for the exercise above (but if you already have a 
-redis deployment, you don't need to create a new one.)
+Remember, you will need a Python container and a Redis container to complete this exercise. 
+We suggest setting this up with Docker Compose:
+
+.. code-block:: yaml
+
+  ---
+
+  version: "3"
+
+  services:
+      flask-app:
+          build:
+            context: ./
+            dockerfile: ./Dockerfile
+          ports:
+            - 5000:5000
+          image: jstubbs/degrees_api
+          volumes:
+            - ./config.yaml:/config.yaml
+
+      redis-db:
+          image: redis:7
+          volumes:
+            - ./data:/data
+          ports:
+            - 6379:6379
+          command: ["--save", "1", "1"]
+
+Remember also that you need to make sure your Python container has both ``redis`` and the 
+``hotqueue`` package installed (these are both third-party packages). Be sure to update your
+Dockerfile with these packages (how do I know the exact versions to install?):
+
+.. code-block:: bash
+  :linenos:
+  :emphasize-lines: 7,8
+
+  # Image: jstubbs/degrees_api
+
+  FROM python:3.8.10
+
+  RUN pip install Flask==2.2.2
+  RUN pip install pyyaml==6.0
+  RUN pip install redis==4.5.4
+  RUN pip install hotqueue==0.2.8
+
+  COPY degrees_api.py /degrees_api.py
+
+  CMD ["python", "degrees_api.py"]
+
+
+Once you have that working on your JetStream VM, you may want to move it to Kubernetes.
+You can use the following yaml files to reproduce the exercise above in Kubernetes, but if you 
+already have a Redis deployment, you don't need to create a new one.
 
 Content for the ``redis-client-debug-deployment.yml`` file: 
 
@@ -327,6 +377,21 @@ of public and private objects and methods.
 
 **Exercise.** Create three files, ``api.py``, ``worker.py`` and ``jobs.py`` in your local repository, and update
 them by working through the following example.
+
+.. code-block:: console
+  :linenos:
+  :emphasize-lines: 6,8,9
+  
+  [user-vm] ubuntu@jstubbs-vm:~/coe332/jobs$ ls -l 
+  
+  -rw-rw-r-- 1 ubuntu           ubuntu  296 Apr 13 12:38 Dockerfile
+  -rw-rw-r-- 1 ubuntu           ubuntu   13 Apr 13 12:32 config.yaml
+  drwxrwxrwx 2 systemd-coredump ubuntu 4096 Apr 13 12:37 data
+  -rw-rw-r-- 1 ubuntu           ubuntu 1995 Apr 13 12:32 degrees_api.py
+  -rw-rw-r-- 1 ubuntu           ubuntu  402 Apr 13 12:34 docker-compose.yml
+  -rw-rw-r-- 1 ubuntu           ubuntu    0 Apr 13 12:41 jobs.py
+  -rw-rw-r-- 1 ubuntu           ubuntu    0 Apr 13 12:40 worker.py
+
 
 Here are some function and variable definitions, some of which have incomplete implementations and/or have invalid syntax.
 
