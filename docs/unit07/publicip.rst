@@ -75,7 +75,7 @@ Here we see that port ``31587`` was created for my service. Your port will be di
   You will use the port identified above when creating the Ingress object in the next section. 
 
 
-You can test that the NodePort service is working by using the special domain ``coe-332.tacc.cloud``
+You can test that the NodePort service is working by using the special domain ``coe332.tacc.cloud``
 to exercise your Flask API from the kube-access VM:
 
 .. code-block:: console
