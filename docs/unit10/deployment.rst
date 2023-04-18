@@ -28,31 +28,31 @@ something similar to the following:
 
     my-api/
     ├── data
-    │   └── dump.rdb
+    │   └── dump.rdb
     ├── docker
-    │   ├── Dockerfile.api
-    │   └── Dockerfile.wrk
+    │   ├── Dockerfile.api
+    │   └── Dockerfile.wrk
     ├── kubernetes
-    │   ├── prod
-    │   │   ├── api-deployment.yml
-    │   │   ├── api-service.yml
-    │   │   ├── db-deployment.yml
-    │   │   ├── db-pvc.yml
-    │   │   ├── db-service.yml
-    │   │   └── wrk-deployment.yml
-    │   └── test
-    │       ├── api-deployment.yml
-    │       ├── api-service.yml
-    │       ├── db-deployment.yml
-    │       ├── db-pvc.yml
-    │       ├── db-service.yml
-    │       └── wrk-deployment.yml
+    │   ├── prod
+    │   │   ├── api-deployment.yml
+    │   │   ├── api-service.yml
+    │   │   ├── db-deployment.yml
+    │   │   ├── db-pvc.yml
+    │   │   ├── db-service.yml
+    │   │   └── wrk-deployment.yml
+    │   └── test
+    │       ├── api-deployment.yml
+    │       ├── api-service.yml
+    │       ├── db-deployment.yml
+    │       ├── db-pvc.yml
+    │       ├── db-service.yml
+    │       └── wrk-deployment.yml
     ├── Makefile
     ├── README.md
     └── src
-        ├── api.py
+        ├── api.py
         ├── jobs.py
-        └── worker.py
+        └── worker.py
 
 
 
@@ -79,7 +79,7 @@ into production.
 
 Generally the process to get code into testing follows these steps:
 
-1. Develop / test code in the development environment (ISP) as described in the
+1. Develop / test code in the development environment (Jetstream) as described in the
    previous module
 2. Push code to GitHub and tag it with an appropriate version number (avoid
    using "latest" - see Versioning section below)
@@ -95,7 +95,7 @@ like the following:
 
 .. code-block:: console
 
-   [kube-2]$ kubectl apply -f kubernetes/test/
+   [kube]$ kubectl apply -f kubernetes/test/
 
 Kubernetes will apply all the files found in the test folder. Be careful, however,
 about the order in which things are applied. For example, the Redis DB deployment
@@ -112,52 +112,52 @@ see more on automating integration tests later in this unit.
 Syncing Git Repos
 -----------------
 
-A challenge you might encounter while working between the class VM (ISP) and the
-Kubernetes cluster (kube-2) is keeping your Git repository in sync. If you are
-doing most of your development ISP, you will need to commit and push those files
-to GitHub, then clone them on to kube-2. In practice, we will likely be editing
-different sets of files on the two machines (YAML files on kube-2, everything else
-on ISP), but it is a good idea to stay organized and keep everything in sync. A
+A challenge you might encounter while working between the Jetstream VM (user-vm) and the
+Kubernetes cluster (kube) is keeping your Git repository in sync. If you are
+doing most of your development on Jetstream, you will need to commit and push those files
+to GitHub, then clone them on to Kubernetes. In practice, we will likely be editing
+different sets of files on the two machines (YAML files on kube, everything else
+on user-vm), but it is a good idea to stay organized and keep everything in sync. A
 sample workflow may resemble:
 
 
-1) Imagine the repository on GitHub is newly cloned to ISP and kube-2, and
-   everything is in sync. Then, edit some files on ISP, commit changes, and push
+1) Imagine the repository on GitHub is newly cloned to Jetstream and Kubernetes, and
+   everything is in sync. Then, edit some files on Jetstream, commit changes, and push
    to GitHub:
 
 .. code-block:: console
 
-   [isp02]$ git add .
-   [isp02]$ git commit -m "message"
-   [isp02]$ git push
+   [user-vm]$ git add .
+   [user-vm]$ git commit -m "message"
+   [user-vm]$ git push
 
 
-2) Now we would say GitHub is one commit ahead of the remote repository on kube-2.
-   Log in to kube-2, and pull in the remote changes:
+2) Now we would say GitHub is one commit ahead of the remote repository on Kubernetes.
+   Log in to Kubernetes, and pull in the remote changes:
 
 .. code-block:: console
 
-   [kube-2]$ git remote update
-   [kube-2]$ git pull
+   [kube]$ git remote update
+   [kube]$ git pull
 
 
-3) Everything is back in sync again. Next, edit some files on kube-2, commit
+3) Everything is back in sync again. Next, edit some files on the Kubernetes cluster, commit
    changes, and push to GitHub:
 
 .. code-block:: console
 
-   [kube-2]$ git add .
-   [kube-2]$ git commit -m "message"
-   [kube-2]$ git push
+   [kube]$ git add .
+   [kube]$ git commit -m "message"
+   [kube]$ git push
 
 
-4) Now we would say GitHub is one commit ahead of the report repository on ISP.
-   Log back in to ISP, and pull in the remote changes:
+4) Now we would say GitHub is one commit ahead of the report repository on Jetstream.
+   Log back in to Jetstream, and pull in the remote changes:
 
 .. code-block:: console
 
-   [isp02]$ git remote update
-   [isp02]$ git pull
+   [user-vm]$ git remote update
+   [user-vm]$ git pull
 
 
 Finally the origin (GitHub) and both remote copies of the repository are in sync
@@ -194,8 +194,8 @@ doing:
 
 .. code-block:: console
 
-   [isp02]$ git tag -a 0.1.0 -m "first release"
-   [isp02]$ git push origin 0.1.0
+   [user-vm]$ git tag -a 0.1.0 -m "first release"
+   [user-vm]$ git push origin 0.1.0
 
 
 .. tip::
@@ -203,61 +203,6 @@ doing:
    Do you have a new software system that just kind of works and has a little bit
    of functionality, but you don't know what version tag to assign it? A good
    place to start is version 0.1.0.
-
-
-NodePort Service
-----------------
-
-So far we have only been able to interact with our deployed APIs via another
-pod that is running on the Kubernetes cluster. We can also reach our deployed
-APIs from the outside world (public URLs) using a NodePort Service.
-
-In Kubernetes, a range of ports, called NodePorts, are open on every node of the
-cluster. We have assigned two unique ports to each student (for test and prod), and 
-proxied those ports to two public URLs, exposing your test and prod APIs to the 
-outside world.
-
-On the Kubernetes cluster, we created a file called ``portinfo`` in each student's
-home directories. Cat the file to see the contents (every student's file is slightly 
-different):
-
-.. code-block:: console
-
-   [kube-2]$ cat ~/portinfo
-   docker port: 5042
-   kube port 1: 30042
-   kube port 2: 30142
-   public url 1: "https://isp-proxy.tacc.utexas.edu/USERNAME-1/"
-   public url 2: "https://isp-proxy.tacc.utexas.edu/USERNAME-2/"
-
-The important info from the example above is that using NodePort ``30042`` will expose
-an interface to the API at public URL ``https://isp-proxy.tacc.utexas.edu/USERNAME-1/``,
-and using NodePort ``30142`` will expose an interface to the API at public URL
-``https://isp-proxy.tacc.utexas.edu/USERNAME-2/``. In practice, one of these ports
-should be attached to your test deployment, and the other should be attached to your
-production deployment.
-
-An example NodePort service YAML file may include (be sure to use an app selector that
-matches the correct deployment):
-
-.. code-block:: yaml
-
-   ---
-   apiVersion: v1
-   kind: Service
-   metadata:
-     name: hello-service
-   spec:
-     type: NodePort
-     selector:
-       app: hello-app
-     ports:
-     - name: hello-app
-       port: 5000
-       targetPort: 5000
-       nodePort: 30042
-
-
 
 
 Production Deployment

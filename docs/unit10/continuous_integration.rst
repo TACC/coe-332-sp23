@@ -123,7 +123,7 @@ To set up GitHub Actions in an existing repository, create a new folder as follo
 
 .. code-block:: console
 
-   [isp02]$ mkdir -p .github/workflows/
+   [user-vm]$ mkdir -p .github/workflows/
 
 Within that folder we will put YAML files describing when, how, and what workflows
 should be triggered. For instance, create a new YAML file (``.github/workflows/integration-test.yml``)
@@ -214,9 +214,9 @@ and push to GitHub.
 
 .. code-block:: console
 
-   [isp02]$ git add *
-   [isp02]$ git commit -m "added a new route to do something"
-   [isp02]$ git push
+   [user-vm]$ git add *
+   [user-vm]$ git commit -m "added a new route to do something"
+   [user-vm]$ git push
 
 Then navigate to the repo on GitHub and click the 'Actions' tab to watch the
 progress of the Action. You can click on your saved workflows to narrow the view,
@@ -342,11 +342,11 @@ new tag is appropriate) to trigger another automated build:
 
 .. code-block:: console
 
-   [isp02]$ git add *
-   [isp02]$ git commit -m "added a new route to do something"
-   [isp02]$ git push
-   [isp02]$ git tag -a 0.1.1 -m "release version 0.1.1"
-   [isp02]$ git push origin 0.1.1
+   [user-vm]$ git add *
+   [user-vm]$ git commit -m "added a new route to do something"
+   [user-vm]$ git push
+   [user-vm]$ git tag -a 0.1.1 -m "release version 0.1.1"
+   [user-vm]$ git push origin 0.1.1
 
 By default, the git push command does not transfer tags, so we are explicitly
 telling git to push the tag we created (0.1.1) to the remote (origin).

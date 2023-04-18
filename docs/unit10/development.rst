@@ -2,7 +2,8 @@ Development Environment
 =======================
 
 Development of the software systems for our final projects should be performed
-on the ISP server. The containers built and run on ISP02 will be ephemeral - only
+on the Jetstream VMs. The containers built and run on individual user VMs will
+be ephemeral - only
 lasting long enough to test and debug new features. They should never be seen by
 end users. After going through this module, students should be able to:
 
@@ -29,16 +30,16 @@ An example file organization scheme for developing this API may look like:
 
     my-api/
     ├── data
-    │   └── dump.rdb
+    │   └── dump.rdb
     ├── docker
-    │   ├── Dockerfile.api
-    │   └── Dockerfile.wrk
+    │   ├── Dockerfile.api
+    │   └── Dockerfile.wrk
     ├── Makefile
     ├── README.md
     └── src
-        ├── api.py
+        ├── api.py
         ├── jobs.py
-        └── worker.py
+        └── worker.py
 
 
 In this example, the ``data/`` subfolder is mounted inside a Redis container. All
@@ -46,7 +47,14 @@ the data is captured in regular intervals in `dump.rdb` for testing purposes onl
 (real end users will not see this copy of the data).
 
 The `docker/` subfolder contains a Dockerfile for each service. We don't need a
-Dockerfile for the redis container because we will use the stock ``redis:6``.
+Dockerfile for the redis container because we will use the stock ``redis:7``.
+
+.. note:: 
+
+   In this example, two different Docker images are built - one for the Flask API
+   and one for the worker. Since they share almost all dependencies, and in order
+   to simplify things, one could just as easily built one Docker image containing
+   both scripts and used different commands to call the desired script.
 
 The ``Makefile`` will be an essential part of our development cycle (revisited
 below).
@@ -127,7 +135,7 @@ you simply need to type:
 
 .. code-block:: console
 
-    [isp02]$ make ps-me
+    [user-vm]$ make ps-me
 
 And that will list all the docker containers with the username 'wallen' either
 in the image name or the container name. Makefiles can be further abstracted with
@@ -153,14 +161,14 @@ the other two targets. So these two are equivalent:
 .. code-block:: console
 
    # make all targets
-   [isp02]$ make all
+   [user-vm]$ make all
 
    # or make them one-by-one
-   [isp02]$ make ps-me
-   [isp02]$ make im-me
+   [user-vm]$ make ps-me
+   [user-vm]$ make im-me
 
    # Try this out:
-   [isp02]$ NAME="redis" make all
+   [user-vm]$ NAME="redis" make all
 
 
 EXERCISE
@@ -171,3 +179,11 @@ Write a Makefile that, at a minimum:
 1. Builds all necessary images for your app from Dockerfile(s)
 2. Starts up new containers / services
 3. Removes running containers in your namespace (be careful!)
+
+.. note:: 
+
+   Docker-compose automates much of the build and run process for us. But it 
+   is limited in scope. Makefiles can be used to automate any arbitrary command
+   that is part of your development cycle.
+
+   

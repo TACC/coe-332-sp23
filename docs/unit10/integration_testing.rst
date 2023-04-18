@@ -80,25 +80,25 @@ into a subdirectory similar to:
 
     my-api/
     ├── data
-    │   └── dump.rdb
+    │   └── dump.rdb
     ├── docker
-    │   ├── Dockerfile.api
-    │   └── Dockerfile.wrk
+    │   ├── Dockerfile.api
+    │   └── Dockerfile.wrk
     ├── Makefile
     ├── README.md
     ├── src
     │   ├── api.py
     │   ├── jobs.py
-    │   └── worker.py
+    │   └── worker.py
     └── test
-        └── test_api.py
+        └── test_api.py
 
 
 Run the test simply by typing this in the top (``my-api/``) directory:
 
 .. code-block:: console
 
-   [isp02]$ pytest
+   [user-vm]$ pytest
    ========================= test session starts ==========================
    platform linux -- Python 3.6.8, pytest-6.2.3, py-1.10.0, pluggy-0.13.1
    rootdir: /home/wallen/coe-332/my-api
@@ -128,7 +128,7 @@ endpoint and check the response for, e.g.:
 * The response can be decoded to a Python dictionary
 * Each element of the decoded list is a Python dictionary
 * Each dictionary in the result has two keys
-* Verify that the type of each key’s value is correct
+* Verify that the type of each key's value is correct
 
 Remember, your services should be running and as much as possible, functional tests
 should be testing the end-to-end functionality of your entire app.
