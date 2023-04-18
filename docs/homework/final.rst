@@ -73,9 +73,13 @@ given in previous class assignments. This README should emphasize two sections:
 instructions for deploying and testing the application, and instructions for
 using the application.
 
-Other files including Kubernetes configuration files, Dockerfile(s), Makefile(s),
-and functional test file(s) will be expected (see 'What to Turn In' below).
+Other files including Kubernetes configuration files, Dockerfile(s), and a 
+docker-compose.yml file will be expected (see 'What to Turn In' below).
 
+.. note::
+
+   A previous version of the above sentence said 'Makefile(s), and functional test file(s)'
+   would be expected. That requirement has been changed to 'a docker-compose.yml file'.
 
 
 
