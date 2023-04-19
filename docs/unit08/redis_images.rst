@@ -27,7 +27,7 @@ following form:
 
 .. code-block:: console
 
-   [user-vm]$ curl localhost:5000/submit -X POST -H "Content-Type: application/json" -d '{"start", "2001", "end": "2021"}'
+   [user-vm]$ curl localhost:5000/submit -X POST -H "Content-Type: application/json" -d '{"start": "2001", "end": "2021"}'
    Job 161207aa-9fe7-4caa-95b8-27f5bcbb16e7 successfully submitted
 
 
