@@ -111,7 +111,7 @@ Prepare a < 10 minute video demo of the application. Use zoom to screen share
 and record your narration of the process. At a minimum, we want to see you deploy
 the application to Kubernetes, curl various routes to display select data, describe
 the data that you are showing and the importance of it,
-curl the appropriate routes to submit a an analysis job and retrieve and display
+curl the appropriate routes to submit an analysis job and retrieve and display
 the results, and highlight anything else you think is interesting or unique about
 your application.
 
